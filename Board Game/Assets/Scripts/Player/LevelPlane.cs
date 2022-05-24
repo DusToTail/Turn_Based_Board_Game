@@ -39,7 +39,8 @@ public class LevelPlane : MonoBehaviour
 
         grid = new GameObject[controller.gridSize.y, controller.gridSize.z, controller.gridSize.x];
         int count = 0;
-        for (int h = 0; h < controller.gridSize.y; h++)
+        // Only height 1 as a base for level design
+        for (int h = 0; h < 1; h++)
         {
             for (int l = 0; l < controller.gridSize.z; l++)
             {
