@@ -60,7 +60,8 @@ public class LevelPlane : MonoBehaviour
             }
         }
         Debug.Log($"In total, grid intialized with {count} blocks");
-        OnLevelPlaneInitialized(this);
+        if(OnLevelPlaneInitialized != null)
+            OnLevelPlaneInitialized(this);
     }
 
 }

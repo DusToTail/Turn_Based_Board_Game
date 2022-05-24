@@ -43,7 +43,9 @@ public class BlockUtilities
     public static GridDirection GetGridDirectionFromBlockInLevelFromCursor()
     {
         RaycastHit hit;
-        Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, LayerMask.GetMask(Tags.SELECTABLE_LAYER));
+        Vector3 origin = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition).origin;
+        Vector3 direction = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition).direction.normalized;
+        Physics.Raycast(origin, direction, out hit, 1000f, LayerMask.GetMask(Tags.SELECTABLE_LAYER), QueryTriggerInteraction.Ignore);
         if (hit.collider == null) { return GridDirection.None; }
         if (hit.collider.transform.parent == null) { return GridDirection.None; }
         if (hit.collider.transform.parent.gameObject.GetComponent<Block>() == null) { return GridDirection.None; }
@@ -56,7 +58,9 @@ public class BlockUtilities
     public static GameObject GetBlockInLevelFromCursor()
     {
         RaycastHit hit;
-        Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, LayerMask.GetMask(Tags.SELECTABLE_LAYER));
+        Vector3 origin = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition).origin;
+        Vector3 direction = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition).direction.normalized;
+        Physics.Raycast(origin, direction, out hit, 1000f, LayerMask.GetMask(Tags.SELECTABLE_LAYER), QueryTriggerInteraction.Ignore);
         if (hit.collider == null) { return null; }
         if (hit.collider.transform.parent == null) { return null; }
         if (hit.collider.transform.parent.gameObject.GetComponent<Block>() == null) { return null; }

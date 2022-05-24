@@ -19,7 +19,19 @@ public class GridController : MonoBehaviour
     public Cell GetCellFromCellWithDirection(Cell cell, GridDirection direction)
     {
         Vector3Int newGridPosition = cell.gridPosition + direction;
-        return grid[newGridPosition.y, newGridPosition.z, newGridPosition.x];
+        if(IsWithinGrid(newGridPosition))
+            return grid[newGridPosition.y, newGridPosition.z, newGridPosition.x];
+
+        return cell;
+    }
+
+    public bool IsWithinGrid(Vector3Int gridPosition)
+    {
+        bool xWithinGrid = gridPosition.x >= 0 && gridPosition.x < gridSize.x;
+        bool yWithinGrid = gridPosition.y >= 0 && gridPosition.y < gridSize.y;
+        bool zWithinGrid = gridPosition.z >= 0 && gridPosition.z < gridSize.z;
+
+        return xWithinGrid && yWithinGrid && zWithinGrid;
     }
 
     /// <summary>

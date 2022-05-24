@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
-using UnityEngine.UIElements;
 
-
-
-public class LevelEditorToolsManager : Editor
+[ExecuteAlways]
+public class LevelEditorToolsManager : MonoBehaviour
 {
-    [SerializeField] private PaintBlockBehaviour paintTool;
-    [SerializeField] private EraseBlockBehaviour eraseTool;
+    public PaintBlockBehaviour paintTool;
+    public EraseBlockBehaviour eraseTool;
+    public Transform pool;
 
-    private GridController gridController;
-    private LevelPlane levelPlane;
+    public GridController gridController;
+    public LevelPlane levelPlane;
+
+    public enum ToolTypes
+    {
+        Paint,
+        Erase
+    }
+    public ToolTypes toolType;
+    [HideInInspector]
+    public int objectIndex;
+    public GameObject[] objectList;
+    
 
     private void OnEnable()
     {
@@ -26,35 +35,15 @@ public class LevelEditorToolsManager : Editor
         LevelPlane.OnLevelPlaneInitialized -= InitializeLevelPlane;
     }
 
-    private void OnSceneGUI()
-    {
-        ToolScriptableObject.ToolType toolType = Resources.Load<ToolScriptableObject>("LevelEditor/Tool Data Asset").toolType;
-
-        if(Event.current.type == EventType.MouseDown)
-        {
-            Debug.Log("MouseDown");
-            if(toolType == ToolScriptableObject.ToolType.Paint)
-            {
-                paintTool.PaintBlockAtCursor(gridController, levelPlane);
-            }
-        }
-
-
-        if(Event.current.type == EventType.MouseUp)
-        {
-            Debug.Log("MouseUp");
-        }
-    }
-
     private void InitializeGridController(GridController gridController)
     {
         this.gridController = gridController;
+        Debug.Log("Listened and intialized grid control");
     }
 
     private void InitializeLevelPlane(LevelPlane levelPlane)
     {
         this.levelPlane = levelPlane;
+        Debug.Log("Listened and intialized block grid");
     }
-
-
 }
