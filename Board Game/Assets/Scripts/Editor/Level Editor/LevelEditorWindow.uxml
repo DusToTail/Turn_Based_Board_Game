@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Assets/Scripts/Editor/Level%20Editor/LevelEditorWindow.uss?fileID=7433441132597879392&amp;guid=d51726b432861504aa6a22da942bd68b&amp;type=3#LevelEditorWindow" />
     <ui:VisualElement name="toolbar" picking-mode="Ignore" class="toolbar_area" style="width: 100%; height: 21px; align-items: flex-start; flex-direction: row; font-size: 8px; min-height: 21px;" />
-    <ui:VisualElement name="drop_area" picking-mode="Ignore" class="drop_area" style="width: 100%; height: 95%; max-height: none; max-width: none; min-width: auto; min-height: auto; align-items: flex-start;" />
+    <ui:VisualElement name="display_area" picking-mode="Ignore" focusable="false" class="display_area" style="width: 100%; height: 80%; max-height: none; max-width: none; min-width: auto; min-height: auto; align-items: flex-start;" />
+    <ui:VisualElement name="drop_area" focusable="false" class="drop_area" style="width: 100%; height: 20%; max-height: none; max-width: none; min-width: auto; min-height: auto; align-items: flex-start;" />
     <ui:Label text="Drop here!" display-tooltip-when-elided="true" name="drop_label" picking-mode="Ignore" class="drop_label" style="font-size: 10px; height: 8px; min-height: 8px;" />
 </ui:UXML>

@@ -8,13 +8,14 @@ public partial class LevelEditorWindow : EditorWindow
 {
     [SerializeField]
     VisualTreeAsset uxmlAsset;
-    //DragAndDropManipulator manipulator;
+    
     private static List<GameObject> objectList = new List<GameObject>();
-
     private static GUIContent[] toolbarGUIArray = new GUIContent[4];
     private static GUIContent[] objectGUIArray = new GUIContent[9];
-    private int objectInt = 0;
-    private int toolbarInt = 0;
+
+    private DragAndDropManipulator _dragAndDropManipulator;
+    private int _objectInt = 0;
+    private int _toolbarInt = 0;
 
     [MenuItem("Window/LevelEditor")]
     public static void ShowWindow()
@@ -41,14 +42,14 @@ public partial class LevelEditorWindow : EditorWindow
         if (uxmlAsset != null)
             uxmlAsset.CloneTree(rootVisualElement);
 
-        //manipulator = new(rootVisualElement);
+        _dragAndDropManipulator = new(rootVisualElement);
         InitializeToolBarGUI();
         InitializeObjectGUI();
     }
 
     private void OnDisable()
     {
-        //manipulator.target.RemoveManipulator(manipulator);
+        _dragAndDropManipulator.target.RemoveManipulator(_dragAndDropManipulator);
     }
 
     /// <summary>
@@ -87,7 +88,7 @@ public partial class LevelEditorWindow : EditorWindow
     private void OnGUI()
     {
         DrawToolBar();
-        DrawDropArea();
+        DrawDisplayArea();
     }
 
     /// <summary>
@@ -96,18 +97,23 @@ public partial class LevelEditorWindow : EditorWindow
     private void DrawToolBar()
     {
         GUILayout.BeginArea(rootVisualElement.Q<VisualElement>(className: "toolbar_area").layout);
-        toolbarInt = GUILayout.Toolbar(toolbarInt, toolbarGUIArray, GUILayout.MinHeight(21),GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false));
+        _toolbarInt = GUILayout.Toolbar(_toolbarInt, toolbarGUIArray, GUILayout.MinHeight(21),GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false));
         GUILayout.EndArea();
     }
 
     /// <summary>
     /// English: Draw the drop area on the screen
     /// </summary>
-    private void DrawDropArea()
+    private void DrawDisplayArea()
     {
-        GUILayout.BeginArea(rootVisualElement.Q<VisualElement>(className: "drop_area").layout);
-        objectInt = GUILayout.SelectionGrid(objectInt, objectGUIArray, 3, GUILayout.MinHeight(200), GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+        GUILayout.BeginArea(rootVisualElement.Q<VisualElement>(className: "display_area").layout);
+        _objectInt = GUILayout.SelectionGrid(_objectInt, objectGUIArray, 3, GUILayout.MinHeight(200), GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
         GUILayout.EndArea();
     }
 
+
+
+    
+
+    
 }
