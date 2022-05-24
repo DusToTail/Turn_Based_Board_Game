@@ -5,28 +5,28 @@ using UnityEngine;
 [ExecuteAlways]
 public class PaintBlockBehaviour : MonoBehaviour
 {
-    public void PaintBlockAtCursor(GameObject prefab, GridController gridController, LevelPlane plane)
+    public void PaintBlockAtCursor(GameObject prefab, GridController gridController, LevelPlane plane, LayerMask mask)
     {
         // Get block at cursor to ensure continuity of blocks
-        GameObject block = BlockUtilities.GetBlockInLevelFromCursor();
+        GameObject block = BlockUtilities.GetBlockInLevelFromCursor(mask);
         if (block == null) { return; }
 
         // Get direction to get the neighboring cell
-        GridDirection direction = BlockUtilities.GetGridDirectionFromBlockInLevelFromCursor();
+        GridDirection direction = BlockUtilities.GetGridDirectionFromBlockInLevelFromCursor(mask);
         Cell cell = gridController.GetCellFromCellWithDirection(block.GetComponent<Block>().cell, direction);
 
         // Place block at cell
         PlaceBlockAtCell(prefab, plane, cell);
     }
 
-    public void DisplayPredictedBlockAtCursor(GridController gridController, LevelPlane plane)
+    public void DisplayPredictedBlockAtCursor(GridController gridController, LevelPlane plane, LayerMask mask)
     {
         // Get block at cursor to ensure continuity of blocks
-        GameObject block = BlockUtilities.GetBlockInLevelFromCursor();
+        GameObject block = BlockUtilities.GetBlockInLevelFromCursor(mask);
         if(block == null) { return; }
 
         // Get direction to get the neighboring cell
-        GridDirection direction = BlockUtilities.GetGridDirectionFromBlockInLevelFromCursor();
+        GridDirection direction = BlockUtilities.GetGridDirectionFromBlockInLevelFromCursor(mask);
         Cell cell = gridController.GetCellFromCellWithDirection(block.GetComponent<Block>().cell, direction);
         if(cell == null) { return; }
 

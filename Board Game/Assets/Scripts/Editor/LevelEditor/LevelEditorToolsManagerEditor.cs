@@ -21,24 +21,24 @@ public class LevelEditorToolsManagerEditor : Editor
 
         if(manager.toolType == LevelEditorToolsManager.ToolTypes.Paint)
         {
-            manager.paintTool.DisplayPredictedBlockAtCursor(manager.gridController, manager.levelPlane);
+            manager.paintTool.DisplayPredictedBlockAtCursor(manager.gridController, manager.levelPlane, manager.editingLayers);
 
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
             {
                 // May need to reimplement to use pooling instead of instantiation
                 if(Event.current.control)
-                    manager.paintTool.PaintBlockAtCursor(manager.objectList[manager.objectIndex], manager.gridController, manager.levelPlane);
+                    manager.paintTool.PaintBlockAtCursor(manager.objectList[manager.objectIndex], manager.gridController, manager.levelPlane, manager.editingLayers);
             }
         }
 
         if (manager.toolType == LevelEditorToolsManager.ToolTypes.Erase)
         {
-            manager.paintTool.DisplayPredictedBlockAtCursor(manager.gridController, manager.levelPlane);
+            manager.paintTool.DisplayPredictedBlockAtCursor(manager.gridController, manager.levelPlane, manager.editingLayers);
 
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
             {
                 if( Event.current.control)
-                    manager.eraseTool.EraseBlockAtCursor(manager.levelPlane, manager.pool);
+                    manager.eraseTool.EraseBlockAtCursor(manager.levelPlane, manager.pool, manager.editingLayers);
             }
         }
 

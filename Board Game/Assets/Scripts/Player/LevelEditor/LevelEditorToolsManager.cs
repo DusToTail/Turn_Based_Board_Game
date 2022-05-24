@@ -5,6 +5,7 @@ using UnityEngine;
 [ExecuteAlways]
 public class LevelEditorToolsManager : MonoBehaviour
 {
+    public LayerMask editingLayers;
     public PaintBlockBehaviour paintTool;
     public EraseBlockBehaviour eraseTool;
     public Transform pool;
@@ -17,6 +18,7 @@ public class LevelEditorToolsManager : MonoBehaviour
         Paint,
         Erase
     }
+
     public ToolTypes toolType;
     [HideInInspector]
     public int objectIndex;
