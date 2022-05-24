@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// English: A Utility class that is designed to manipulate position and to pool blocks
 /// </summary>
-public class BlockPlacer
+public class BlockUtilities
 {
     public static List<GameObject> blockPool  = new List<GameObject>();
 

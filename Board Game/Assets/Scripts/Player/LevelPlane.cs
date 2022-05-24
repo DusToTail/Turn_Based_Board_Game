@@ -49,7 +49,7 @@ public class LevelPlane : MonoBehaviour
                     GameObject block = Instantiate(baseBlock, transform, true);
                     block.name = $"Block {cell.gridPosition}";
                     block.GetComponent<Block>().Initialize(cell, GridDirection.Up, Vector3Int.one);
-                    BlockPlacer.PlaceBlockAtCell(block, this, cell);
+                    BlockUtilities.PlaceBlockAtCell(block, this, cell);
                     count++;
                     Debug.Log($"Created Block {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
                 }
