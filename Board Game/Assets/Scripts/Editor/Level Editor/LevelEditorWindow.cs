@@ -2,25 +2,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements;
 
 
 public partial class LevelEditorWindow : EditorWindow
 {
     [SerializeField]
     VisualTreeAsset uxmlAsset;
-    DragAndDropManipulator manipulator;
+    //DragAndDropManipulator manipulator;
     private static List<GameObject> objectList = new List<GameObject>();
 
-    private GUIContent[] toolbarGUIArray = new GUIContent[4];
-    private GUIContent[] objectGUIArray = new GUIContent[9];
+    private static GUIContent[] toolbarGUIArray = new GUIContent[4];
+    private static GUIContent[] objectGUIArray = new GUIContent[9];
     private int objectInt = 0;
     private int toolbarInt = 0;
 
     [MenuItem("Window/LevelEditor")]
     public static void ShowWindow()
     {
-        // Create the windows.
+        // Create the window.
         var window = GetWindow<LevelEditorWindow>("Level Editor");
     }
 
@@ -42,14 +41,14 @@ public partial class LevelEditorWindow : EditorWindow
         if (uxmlAsset != null)
             uxmlAsset.CloneTree(rootVisualElement);
 
-        manipulator = new(rootVisualElement);
+        //manipulator = new(rootVisualElement);
         InitializeToolBarGUI();
         InitializeObjectGUI();
     }
 
     private void OnDisable()
     {
-        manipulator.target.RemoveManipulator(manipulator);
+        //manipulator.target.RemoveManipulator(manipulator);
     }
 
     /// <summary>
@@ -88,7 +87,6 @@ public partial class LevelEditorWindow : EditorWindow
     private void OnGUI()
     {
         DrawToolBar();
-
         DrawDropArea();
     }
 

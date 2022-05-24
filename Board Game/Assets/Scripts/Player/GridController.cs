@@ -12,7 +12,6 @@ public class GridController : MonoBehaviour
 
     [SerializeField]
     private bool displayGizmos;
-
     /// <summary>
     /// English: Initialize the 3 dimensional grid with [height, Length, Width] corresponding to [y, z, x] in world coordinates
     /// </summary>
