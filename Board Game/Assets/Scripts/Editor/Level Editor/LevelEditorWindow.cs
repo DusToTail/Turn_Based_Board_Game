@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public partial class LevelEditorWindow : EditorWindow
 {
     [SerializeField] private VisualTreeAsset uxmlAsset;
-    [SerializeField] private BlockScriptableObject blockAsset;
+    [SerializeField] private ToolScriptableObject blockAsset;
 
     private static List<GameObject> objectList = new List<GameObject>();
     private static GUIContent[] toolbarGUIArray = new GUIContent[4];
@@ -39,7 +39,7 @@ public partial class LevelEditorWindow : EditorWindow
 
     public void UpdateBlockPrefab(int index)
     {
-        blockAsset.prefab = objectList[index];
+        blockAsset.paintPrefab = objectList[index];
     }
 
     private void OnEnable()
@@ -113,6 +113,7 @@ public partial class LevelEditorWindow : EditorWindow
     {
         GUILayout.BeginArea(rootVisualElement.Q<VisualElement>(className: "display_area").layout);
         _objectInt = GUILayout.SelectionGrid(_objectInt, objectGUIArray, 3, GUILayout.MinHeight(200), GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+        UpdateBlockPrefab(_objectInt);
         GUILayout.EndArea();
     }
 

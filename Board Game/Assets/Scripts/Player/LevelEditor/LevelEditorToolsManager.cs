@@ -10,6 +10,7 @@ public class LevelEditorToolsManager : Editor
 {
     [SerializeField] private PaintBlockBehaviour paintTool;
     [SerializeField] private EraseBlockBehaviour eraseTool;
+
     private GridController gridController;
     private LevelPlane levelPlane;
 
@@ -27,10 +28,15 @@ public class LevelEditorToolsManager : Editor
 
     private void OnSceneGUI()
     {
+        ToolScriptableObject.ToolType toolType = Resources.Load<ToolScriptableObject>("LevelEditor/Tool Data Asset").toolType;
+
         if(Event.current.type == EventType.MouseDown)
         {
             Debug.Log("MouseDown");
-            paintTool.PaintBlockAtCursor(gridController, levelPlane);
+            if(toolType == ToolScriptableObject.ToolType.Paint)
+            {
+                paintTool.PaintBlockAtCursor(gridController, levelPlane);
+            }
         }
 
 

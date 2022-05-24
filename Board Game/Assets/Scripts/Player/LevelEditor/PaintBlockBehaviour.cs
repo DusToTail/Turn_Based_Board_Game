@@ -36,7 +36,7 @@ public class PaintBlockBehaviour : MonoBehaviour
         if(plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x] != null) { return; }
 
         // Use a copy from the scriptable object, updated via Level Editor Window
-        GameObject prefab = Resources.Load<BlockScriptableObject>("LevelEditor/BlockData").prefab;
+        GameObject prefab = Resources.Load<ToolScriptableObject>("LevelEditor/Tool Data Asset").paintPrefab;
         GameObject block = Instantiate(prefab, plane.transform, true);
         block.name = $"Block {cell.gridPosition}";
         block.GetComponent<Block>().Initialize(cell, GridDirection.Up, Vector3Int.one);
