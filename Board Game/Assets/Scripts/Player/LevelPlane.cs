@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// English: A plane made out of blocks, used to define the terrains on the board game
+/// English: A plane made out of terrain blocks, used to define the terrains on the board game
 /// </summary>
 [ExecuteAlways]
 public class LevelPlane : MonoBehaviour
@@ -54,6 +54,7 @@ public class LevelPlane : MonoBehaviour
                     block.name = $"Block {cell.gridPosition}";
                     block.GetComponent<Block>().Initialize(cell, GridDirection.Up, Vector3Int.one);
                     BlockUtilities.PlaceBlockAtCell(block, this, cell);
+                    grid[h, l, w] = block;
                     count++;
                     Debug.Log($"Created Block {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
                 }
