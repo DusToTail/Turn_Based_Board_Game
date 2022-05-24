@@ -10,8 +10,12 @@ public class GridController : MonoBehaviour
 
     public Cell[,,] grid { get; private set; }
 
+    public delegate void GridInitialized(GridController controller);
+    public static event GridInitialized OnGridInitialized;
+
     [SerializeField]
     private bool displayGizmos;
+
     /// <summary>
     /// English: Initialize the 3 dimensional grid with [height, Length, Width] corresponding to [y, z, x] in world coordinates
     /// </summary>
@@ -28,9 +32,14 @@ public class GridController : MonoBehaviour
                     Vector3 worldPosition = transform.position + new Vector3(w * cellSize.x, h * cellSize.y, l * cellSize.z) + 0.5f * cellSize;
                     Cell cell = new Cell(worldPosition, gridPosition);
                     grid[h,l,w] = cell;
-                    Debug.Log($"Created Cell [{cell.gridPosition}] at worldPosition [{cell.worldPosition}]");
+                    Debug.Log($"Created Cell {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
                 }
             }
+        }
+
+        if(OnGridInitialized != null)
+        {
+            OnGridInitialized(this);
         }
     }
 
