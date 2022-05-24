@@ -36,13 +36,25 @@ public class CharacterBlock : Block
 
     public void MoveFoward()
     {
-        GetComponent<Rigidbody>().AddForce(forwardDirection);
+        // Get one forward cell
+        Cell moveCell = _gameManager.gridController.GetCellFromCellWithDirection(cell, forwardDirection);
+
+        // Anticipate obstacles, enemies, end goal
+
+        // Animation and Sound effect
+
+
     }
 
     public void AttackForward(int damageAmount)
     {
+        // Get an array of cells basing on the weapons
         Cell attackCell = _gameManager.gridController.GetCellFromCellWithDirection(cell, forwardDirection);
+        // Use those cells from the gridController to query the characterPlane to check for those that is occupied
 
+        // Animation and Sound effect
+
+        // Trigger the occupants' TriggerHit method.
     }
 
     public void TakeDamage(int damageAmount)
@@ -71,4 +83,23 @@ public class CharacterBlock : Block
 
     private bool HealthIsZero() { return _curHealth == 0; }
 
+    private void MinusMoves(int movesNum)
+    {
+        if (movesNum < 0) { return; }
+        _curMovesLeft -= movesNum;
+        if (_curHealth < 0) { _curHealth = 0; }
+    }
+
+    private void PlusMoves(int movesNum)
+    {
+        if (movesNum < 0) { return; }
+        _curMovesLeft += movesNum;
+    }
+
+    private void ResetMovesPerTurn()
+    {
+        _curMovesLeft = movesPerTurn;
+    }
+
+    private bool NoMoreMoves() { return _curMovesLeft == 0; }
 }
