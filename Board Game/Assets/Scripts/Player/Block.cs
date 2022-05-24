@@ -7,9 +7,9 @@ using UnityEngine;
 /// </summary>
 public abstract class Block : MonoBehaviour
 {
-    protected Cell cell;
-    protected GridDirection forwardDirection;
-    protected Vector3Int cellBasedSize;
+    public Cell cell { get; private set; }
+    public GridDirection forwardDirection { get; private set; }
+    public Vector3Int cellBasedSize { get; private set; }
 
     public enum Rotations
     {

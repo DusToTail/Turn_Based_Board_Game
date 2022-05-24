@@ -29,15 +29,29 @@ public class BlockUtilities
         plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x] = null;
     }
 
+    
+
+    public static GridDirection GetGridDirectionFromBlockInLevelFromCursor()
+    {
+        RaycastHit hit;
+        Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, LayerMask.GetMask(Tags.SELECTABLE_LAYER));
+        if (hit.collider == null) { return GridDirection.None; }
+        if (hit.collider.transform.parent == null) { return GridDirection.None; }
+        if (hit.collider.transform.parent.gameObject.GetComponent<Block>() == null) { return GridDirection.None; }
+
+        Vector3 vector3 = hit.collider.transform.localPosition.normalized;
+        Vector3Int vector3Int = new Vector3Int((int)vector3.x, (int)vector3.y, (int)vector3.z);
+        return GridDirection.GetDirectionFromVector3Int(vector3Int);
+    }
+
     public static GameObject GetBlockInLevelFromCursor()
     {
         RaycastHit hit;
         Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, LayerMask.GetMask(Tags.SELECTABLE_LAYER));
-        if(hit.collider == null) { return null; }
+        if (hit.collider == null) { return null; }
+        if (hit.collider.transform.parent == null) { return null; }
+        if (hit.collider.transform.parent.gameObject.GetComponent<Block>() == null) { return null; }
 
-        if(hit.collider.gameObject.GetComponent<Block>() == null) { return null; }
-
-        return hit.collider.gameObject;
+        return hit.collider.transform.parent.gameObject;
     }
-
 }

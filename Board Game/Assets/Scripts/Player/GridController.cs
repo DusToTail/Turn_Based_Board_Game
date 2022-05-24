@@ -16,6 +16,12 @@ public class GridController : MonoBehaviour
     [SerializeField]
     private bool displayGizmos;
 
+    public Cell GetCellFromCellWithDirection(Cell cell, GridDirection direction)
+    {
+        Vector3Int newGridPosition = cell.gridPosition + direction;
+        return grid[newGridPosition.y, newGridPosition.z, newGridPosition.x];
+    }
+
     /// <summary>
     /// English: Initialize the 3 dimensional grid with [height, Length, Width] corresponding to [y, z, x] in world coordinates
     /// </summary>
@@ -43,7 +49,7 @@ public class GridController : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (!displayGizmos) { return; }
         if(grid == null)
