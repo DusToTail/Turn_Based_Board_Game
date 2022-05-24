@@ -12,9 +12,10 @@ public class GridController : MonoBehaviour
 
     public delegate void GridInitialized(GridController controller);
     public static event GridInitialized OnGridInitialized;
-
     [SerializeField]
     private bool displayGizmos;
+    [SerializeField]
+    private int untilHeightIndex;
 
     public Cell GetCellFromCellWithDirection(Cell cell, GridDirection direction)
     {
@@ -71,6 +72,7 @@ public class GridController : MonoBehaviour
 
         for (int h = 0; h < gridSize.y; h++)
         {
+            if(h > untilHeightIndex) { return; }
             for (int l = 0; l < gridSize.z; l++)
             {
                 for (int w = 0; w < gridSize.x; w++)
