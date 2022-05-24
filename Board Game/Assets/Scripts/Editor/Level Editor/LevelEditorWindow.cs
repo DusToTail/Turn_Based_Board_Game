@@ -7,7 +7,9 @@ using UnityEngine.UIElements;
 public partial class LevelEditorWindow : EditorWindow
 {
     [SerializeField]
-    VisualTreeAsset uxmlAsset;
+    private VisualTreeAsset uxmlAsset;
+    [SerializeField]
+    private BlockScriptableObject blockAsset;
     
     private static List<GameObject> objectList = new List<GameObject>();
     private static GUIContent[] toolbarGUIArray = new GUIContent[4];
@@ -35,6 +37,16 @@ public partial class LevelEditorWindow : EditorWindow
     {
         objectList.Remove(removedObject);
         Debug.Log($"Removed {removedObject.name}");
+    }
+
+    public void PaintObjectOnToGrid(GridController target, Vector3Int gridPosition)
+    {
+
+    }
+
+    public void UpdateBlockPrefab(int index)
+    {
+        blockAsset.prefab = objectList[index];
     }
 
     private void OnEnable()
