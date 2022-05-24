@@ -29,4 +29,15 @@ public class BlockUtilities
         plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x] = null;
     }
 
+    public static GameObject GetBlockInLevelFromCursor()
+    {
+        RaycastHit hit;
+        Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, LayerMask.GetMask(Tags.SELECTABLE_LAYER));
+        if(hit.collider == null) { return null; }
+
+        if(hit.collider.gameObject.GetComponent<Block>() == null) { return null; }
+
+        return hit.collider.gameObject;
+    }
+
 }
