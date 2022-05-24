@@ -18,6 +18,19 @@ public class PaintBlockBehaviour : MonoBehaviour
         PlaceBlockAtCell(plane, cell);
     }
 
+    public void DisplayPredictedBlockAtCursor(GridController gridController, LevelPlane plane)
+    {
+        // Get block at cursor to ensure continuity of blocks
+        GameObject block = BlockUtilities.GetBlockInLevelFromCursor();
+
+        // Get direction to get the neighboring cell
+        GridDirection direction = BlockUtilities.GetGridDirectionFromBlockInLevelFromCursor();
+        Cell cell = gridController.GetCellFromCellWithDirection(block.GetComponent<Block>().cell, direction);
+
+        // Draw a wireframe at the cell in Editor mode
+        BlockUtilities.DrawWireframeAtCell(cell);
+    }
+
     public void PlaceBlockAtCell(LevelPlane plane, Cell cell)
     {
         if(plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x] != null) { return; }

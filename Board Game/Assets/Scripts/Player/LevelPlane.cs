@@ -8,6 +8,9 @@ using UnityEngine;
 [ExecuteAlways]
 public class LevelPlane : MonoBehaviour
 {
+    public delegate void LevelPlaneInitialized(LevelPlane levelPlane);
+    public static event LevelPlaneInitialized OnLevelPlaneInitialized;
+
     public GameObject[,,] grid { get; private set; }
     [SerializeField]
     private GameObject baseBlock;
@@ -57,7 +60,7 @@ public class LevelPlane : MonoBehaviour
             }
         }
         Debug.Log($"In total, grid intialized with {count} blocks");
-
+        OnLevelPlaneInitialized(this);
     }
 
 }

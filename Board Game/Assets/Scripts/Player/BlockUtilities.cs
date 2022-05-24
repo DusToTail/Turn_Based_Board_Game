@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 /// <summary>
 /// English: A Utility class that is designed to manipulate position and to pool blocks
@@ -29,6 +30,14 @@ public class BlockUtilities
         plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x] = null;
     }
 
+    public static void DrawWireframeAtCell(Cell cell)
+    {
+        if(cell == null) { return; }
+        if (Application.isPlaying) { return; }
+        Handles.color = Color.magenta;
+        Handles.DrawWireCube(cell.worldPosition, Vector3.one);
+
+    }
     
 
     public static GridDirection GetGridDirectionFromBlockInLevelFromCursor()
