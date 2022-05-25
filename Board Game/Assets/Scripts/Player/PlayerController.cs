@@ -61,6 +61,7 @@ public class PlayerController : MonoBehaviour
         else if(Input.GetKeyDown(KeyCode.Escape))
         {
 
+            PreventInput();
         }
 
     }
@@ -89,6 +90,7 @@ public class PlayerController : MonoBehaviour
     private void InitializePlayerBlock(CharacterPlane plane)
     {
         playerBlock = plane.GetPlayerBlock();
+        AllowInput();
     }
 
 }

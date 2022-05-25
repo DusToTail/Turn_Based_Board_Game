@@ -32,6 +32,11 @@ public class GameManager : MonoBehaviour
     public delegate void PlayerTurnStarted();
     public event PlayerTurnStarted OnPlayerTurnStarted;
 
+    private void Start()
+    {
+        CallLevelLoadingStarted();
+    }
+
     public void UpdateCharacterBlockPosition(Cell fromCell, Cell toCell)
     {
         GameObject block = characterPlane.grid[fromCell.gridPosition.y, fromCell.gridPosition.z, fromCell.gridPosition.z].block;
