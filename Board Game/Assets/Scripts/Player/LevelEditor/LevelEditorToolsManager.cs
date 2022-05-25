@@ -122,23 +122,33 @@ public class LevelEditorToolsManager : MonoBehaviour
         editingDesign.gridLength = 10;
         editingDesign.gridWidth = 10;
         editingDesign.terrainGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
-        System.Array.Fill(editingDesign.terrainGrid, 100);
         editingDesign.characterGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
-        System.Array.Fill(editingDesign.characterGrid, 0);
+
+        int count = 0;
+        for (int h = 0; h < 1; h++)
+        {
+            for (int l = 0; l < editingDesign.gridLength; l++)
+            {
+                for (int w = 0; w < editingDesign.gridWidth; w++)
+                {
+                    editingDesign.terrainGrid[count] = 100;
+                    count++;
+                }
+            }
+        }
+        editingDesign.characterGrid[editingDesign.gridLength * editingDesign.gridWidth] = 1;
+
 
         levelPlane.idGrid = new int[editingDesign.gridHeight,  editingDesign.gridLength, editingDesign.gridWidth];
         characterPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
 
-        int count = 0;
+        count = 0;
         for (int h = 0; h < editingDesign.gridHeight; h++)
         {
             for (int l = 0; l < editingDesign.gridLength; l++)
             {
                 for (int w = 0; w < editingDesign.gridWidth; w++)
                 {
-                    Debug.Log(count);
-                    Debug.Log(levelPlane.idGrid[h, l, w]);
-                    Debug.Log(editingDesign.terrainGrid[count]);
                     levelPlane.idGrid[h, l, w] = editingDesign.terrainGrid[count];
                     characterPlane.idGrid[h, l, w] = editingDesign.characterGrid[count];
                     count++;
