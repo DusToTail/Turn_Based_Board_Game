@@ -18,6 +18,8 @@ public class CharacterBlock : Block
     [SerializeField] private int maxHealth;
     [SerializeField] private int attackDamage;
 
+    [SerializeField] private bool displayGizmos;
+
     private int _curHealth;
     private int _curMovesLeft;
     private GameManager _gameManager;
@@ -28,6 +30,9 @@ public class CharacterBlock : Block
         _gameManager = FindObjectOfType<GameManager>();
         _movementController = FindObjectOfType<BlockMovementController>();
         OnPositionUpdated += _gameManager.UpdateCharacterBlockPosition;
+
+        // May need to reimplement (use when importing level design)
+        forwardDirection = GridDirection.Forward;
 
     }
 
@@ -99,36 +104,43 @@ public class CharacterBlock : Block
         float t = 0;
         if(_movementController.movementType == BlockMovementController.MovementType.BasicHop)
         {
+            Transform one = _movementController.transform.GetChild(0);
             Transform second = _movementController.transform.GetChild(1);
             Transform third = _movementController.transform.GetChild(2);
 
             while (true)
             {
                 yield return null;
+                Debug.Log(t);
+
                 if (t >= 1)
                 {
                     t = 1;
-                    MovementUtilities.QuadraticBezierLerp(transform, third, second, t, true);
+                    MovementUtilities.QuadraticBezierLerp(transform, one, third, second, t, true);
                     break;
                 }
-                t += Time.deltaTime;
-                MovementUtilities.QuadraticBezierLerp(transform, third, second, t, true);
+                t += Time.deltaTime * _movementController.speed * (1+t);
+                Debug.Log(t);
+                MovementUtilities.QuadraticBezierLerp(transform, one, third, second, t, true);
             }
         }
         else if(_movementController.movementType == BlockMovementController.MovementType.Slide)
         {
+            Transform one = _movementController.transform.GetChild(0);
             Transform second = _movementController.transform.GetChild(1);
             while (true)
             {
                 yield return null;
+                Debug.Log(t);
+
                 if (t >= 1)
                 {
                     t = 1;
-                    MovementUtilities.LinearLerp(transform, second, t, true);
+                    MovementUtilities.LinearLerp(transform, one, second, t, true);
                     break;
                 }
-                t += Time.deltaTime;
-                MovementUtilities.LinearLerp(transform, second, t, true);
+                t += Time.deltaTime * _movementController.speed * (1 + t);
+                MovementUtilities.LinearLerp(transform, one, second, t, true);
             }
         }
 
@@ -194,4 +206,13 @@ public class CharacterBlock : Block
     }
 
     private bool NoMoreMoves() { return _curMovesLeft == 0; }
+
+    private void OnDrawGizmos()
+    {
+        if (!displayGizmos) { return; }
+        if(forwardDirection == null) { return; }
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(transform.position, transform.position + forwardDirection);
+
+    }
 }

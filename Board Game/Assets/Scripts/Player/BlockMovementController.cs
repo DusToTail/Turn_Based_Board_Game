@@ -10,6 +10,8 @@ public class BlockMovementController : MonoBehaviour
     public Transform[] transforms;
     public float upwardOffset;
     public MovementType movementType;
+    public float speed;
+    [SerializeField] private bool displayGizmos;
 
     public enum MovementType
     {
@@ -19,14 +21,15 @@ public class BlockMovementController : MonoBehaviour
 
     public void InitializeMovement(Transform currentTransform, GridDirection direction, Cell fromCell, Cell toCell, MovementType type)
     {
-        if(currentTransform == null) { return; }
-        if(toCell == null) { return; }
+        if(currentTransform == null) { Debug.Log("Transform to be moved is missing"); return; }
+        if (direction == null) { Debug.Log("Grid Direction is missing"); return; }
+        if (fromCell == null) { Debug.Log("From Cell is missing"); return; }
+        if (toCell == null) { Debug.Log("To Cell is missing"); return; }
         movementType = type;
-
         if (type == MovementType.BasicHop)
         {
             // Use QuadraticBezierLerp
-            transforms[0].position = fromCell.worldPosition;
+            transforms[0].position = currentTransform.position;
             transforms[0].rotation = currentTransform.rotation;
 
             transforms[2].position = toCell.worldPosition;
@@ -39,13 +42,23 @@ public class BlockMovementController : MonoBehaviour
         else if (type == MovementType.Slide)
         {
             // Use LinearLerp
-            transforms[0].position = fromCell.worldPosition;
+            transforms[0].position = currentTransform.position;
             transforms[0].rotation = currentTransform.rotation;
 
             transforms[1].position = toCell.worldPosition;
             transforms[1].rotation = Quaternion.LookRotation(toCell.worldPosition - fromCell.worldPosition, currentTransform.up);
 
         }
+        Debug.Log($"{currentTransform.name} initialized Movement");
+
     }
 
+    private void OnDrawGizmos()
+    {
+        if (!displayGizmos) { return; }
+        Gizmos.color = Color.magenta;
+        for (int i = 0; i < transforms.Length; i++)
+            Gizmos.DrawIcon(transforms[i].position, transforms[i].name, true);
+
+    }
 }
