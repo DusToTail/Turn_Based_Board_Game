@@ -30,9 +30,6 @@ public class GridController : MonoBehaviour
 
     public Cell GetCellFromCellWithDirection(Cell cell, GridDirection direction)
     {
-        Debug.Log(cell.gridPosition);
-        Debug.Log(direction);
-
         Vector3Int newGridPosition = cell.gridPosition + direction;
         if(IsWithinGrid(newGridPosition))
             return grid[newGridPosition.y, newGridPosition.z, newGridPosition.x];

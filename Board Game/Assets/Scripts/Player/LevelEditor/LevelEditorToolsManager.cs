@@ -6,8 +6,10 @@ public class LevelEditorToolsManager : MonoBehaviour
 {
     public string saveFileName;
     public LayerMask editingLayers;
+    public Planes editingPlane;
     public PaintBlockBehaviour paintTool;
     public EraseBlockBehaviour eraseTool;
+    public RotateBlockBehaviour rotateTool;
     public Transform pool;
 
     public GridController gridController;
@@ -19,7 +21,16 @@ public class LevelEditorToolsManager : MonoBehaviour
     public enum ToolTypes
     {
         Paint,
-        Erase
+        Rotate,
+        Erase,
+        None
+    }
+
+    public enum Planes
+    {
+        Terrain,
+        Character,
+        Object
     }
 
     public ToolTypes toolType;
@@ -141,7 +152,6 @@ public class LevelEditorToolsManager : MonoBehaviour
                 }
             }
         }
-        editingDesign.characterGrid[editingDesign.gridLength * editingDesign.gridWidth] = 1;
 
 
         levelPlane.idGrid = new int[editingDesign.gridHeight,  editingDesign.gridLength, editingDesign.gridWidth];

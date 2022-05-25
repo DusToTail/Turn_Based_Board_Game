@@ -8,8 +8,18 @@ public class LevelEditorToolsManagerEditor : Editor
     public override void OnInspectorGUI()
     {
         LevelEditorToolsManager manager = (LevelEditorToolsManager)target;
+        GUILayout.Label("***Tools***");
+        GUILayout.Label("--Paint--");
+        GUILayout.Label("Paint: Ctrl + LMC");
+        GUILayout.Label("--Erase--");
+        GUILayout.Label("Erase: Ctrl + LMC");
+        GUILayout.Label("--Rotate--");
+        GUILayout.Label("Select/Rotate: Ctrl +LMC");
+        GUILayout.Label("***********");
+
+
         DrawDefaultInspector();
-        manager.objectIndex = EditorGUILayout.IntSlider("Block Index", manager.objectIndex, 0, manager.objectList.Length);
+        manager.objectIndex = EditorGUILayout.IntSlider("Block Index", manager.objectIndex, 0, manager.objectList.Length - 1);
         if(GUILayout.Button("Save"))
         {
             manager.SaveDesign();
@@ -30,32 +40,40 @@ public class LevelEditorToolsManagerEditor : Editor
     {
         LevelEditorToolsManager manager = (LevelEditorToolsManager)target;
 
+        if (manager.toolType == LevelEditorToolsManager.ToolTypes.Rotate)
+        {
+            if(Event.current.type == EventType.MouseDown)
+            {
+                if (Event.current.control)
+                {
+                    if (Event.current.button == 0)
+                    {
+                        manager.rotateTool.currentBlock = BlockUtilities.GetBlockInLevelFromCursor(manager.editingLayers).GetComponent<Block>();
+                        manager.rotateTool.RotateSelectedBlock(manager.rotateTool.currentBlock, Block.Rotations.Left);
+                    }
+                }
+            }
+        }
         
 
         if (manager.toolType == LevelEditorToolsManager.ToolTypes.Paint)
         {
-            if (((1 << LayerMask.NameToLayer(Tags.TERRAIN_LAYER)) & manager.editingLayers) != 0)
-            {
-                manager.paintTool.DisplayPredictedBlockAtCursor(manager.gridController, manager.levelPlane, manager.editingLayers);
-            }
-            else if (((1 << LayerMask.NameToLayer(Tags.CHARACTER_LAYER)) & manager.editingLayers) != 0)
-            {
-                manager.paintTool.DisplayPredictedBlockAtCursor(manager.gridController, manager.characterPlane, manager.editingLayers);
-            }
+            manager.paintTool.DisplayPredictedBlockAtCursor(manager.gridController, manager.editingLayers);
 
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
             {
                 // May need to reimplement to use pooling instead of instantiation
                 if(Event.current.control)
                 {
-                    if (((1 << LayerMask.NameToLayer(Tags.TERRAIN_LAYER)) & manager.editingLayers) != 0)
+                    if (manager.editingPlane == LevelEditorToolsManager.Planes.Character)
+                    {
+                        manager.paintTool.PaintBlockAtCursor(manager.objectList[manager.objectIndex], manager.gridController, manager.levelPlane, manager.characterPlane, manager.editingLayers);
+                    }
+                    else if (manager.editingPlane == LevelEditorToolsManager.Planes.Terrain)
                     {
                         manager.paintTool.PaintBlockAtCursor(manager.objectList[manager.objectIndex], manager.gridController, manager.levelPlane, manager.editingLayers);
                     }
-                    else if (((1 << LayerMask.NameToLayer(Tags.CHARACTER_LAYER)) & manager.editingLayers) != 0)
-                    {
-                        manager.paintTool.PaintBlockAtCursor(manager.objectList[manager.objectIndex], manager.gridController, manager.characterPlane, manager.editingLayers);
-                    }
+                    
                 }
 
             }
@@ -63,24 +81,24 @@ public class LevelEditorToolsManagerEditor : Editor
 
         if (manager.toolType == LevelEditorToolsManager.ToolTypes.Erase)
         {
-            manager.paintTool.DisplayPredictedBlockAtCursor(manager.gridController, manager.levelPlane, manager.editingLayers);
+            manager.paintTool.DisplayPredictedBlockAtCursor(manager.gridController, manager.editingLayers);
 
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
             {
                 if( Event.current.control)
                 {
-                    if (((1 << LayerMask.NameToLayer(Tags.TERRAIN_LAYER)) & manager.editingLayers) != 0)
-                    {
-                        manager.eraseTool.EraseBlockAtCursor(manager.levelPlane, manager.pool, manager.editingLayers);
-                    }
-                    else if (((1 << LayerMask.NameToLayer(Tags.CHARACTER_LAYER)) & manager.editingLayers) != 0)
+                    if (manager.editingPlane == LevelEditorToolsManager.Planes.Character)
                     {
                         manager.eraseTool.EraseBlockAtCursor(manager.characterPlane, manager.pool, manager.editingLayers);
                     }
+                    else if (manager.editingPlane == LevelEditorToolsManager.Planes.Terrain)
+                    {
+                        manager.eraseTool.EraseBlockAtCursor(manager.levelPlane, manager.pool, manager.editingLayers);
+                    }
+                    
                 }
             }
         }
-
 
     }
 
