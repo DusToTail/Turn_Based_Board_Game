@@ -10,7 +10,7 @@ public class BlockUtilities
 {
     public static List<GameObject> blockPool  = new List<GameObject>();
 
-    public static void PlaceBlockAtCell(GameObject block, LevelPlane plane, Cell cell)
+    public static void PlaceTerrainBlockAtCell(GameObject block, LevelPlane plane, Cell cell)
     {
         if(plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x] != null) { return; }
 
@@ -18,7 +18,15 @@ public class BlockUtilities
         plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x] = block;
     }
 
-    public static void MoveBlockAtCellToPool(LevelPlane plane, Cell cell, Transform pool)
+    public static void PlaceCharacterBlockAtCell(GameObject block, CharacterPlane plane, Cell cell)
+    {
+        if (plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block != null) { return; }
+
+        block.GetComponent<Block>().SnapToCell(cell);
+        plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block = block;
+    }
+
+    public static void MoveTerrainBlockAtCellToPool(LevelPlane plane, Cell cell, Transform pool)
     {
         GameObject block = plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x];
         if(block == null) { return; }
@@ -28,6 +36,18 @@ public class BlockUtilities
         block.SetActive(false);
         blockPool.Add(block);
         plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x] = null;
+    }
+
+    public static void MoveCharacterBlockAtCellToPool(CharacterPlane plane, Cell cell, Transform pool)
+    {
+        GameObject block = plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block;
+        if (block == null) { return; }
+
+        block.transform.parent = pool;
+        block.transform.localPosition = Vector3.zero;
+        block.SetActive(false);
+        blockPool.Add(block);
+        plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block = null;
     }
 
     public static void DrawWireframeAtCell(Cell cell)

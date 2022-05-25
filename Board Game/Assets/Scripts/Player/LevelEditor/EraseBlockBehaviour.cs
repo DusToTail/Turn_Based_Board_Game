@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteAlways]
+[ExecuteInEditMode]
 public class EraseBlockBehaviour : MonoBehaviour
 {
 
@@ -12,7 +10,16 @@ public class EraseBlockBehaviour : MonoBehaviour
         GameObject block = BlockUtilities.GetBlockInLevelFromCursor(mask);
 
         // Move the block the the bool and disable it
-        BlockUtilities.MoveBlockAtCellToPool(plane, block.GetComponent<Block>().cell, poolTransform);
+        BlockUtilities.MoveTerrainBlockAtCellToPool(plane, block.GetComponent<Block>().cell, poolTransform);
+    }
+
+    public void EraseBlockAtCursor(CharacterPlane plane, Transform poolTransform, LayerMask mask)
+    {
+        // Get block at cursor to ensure continuity of blocks
+        GameObject block = BlockUtilities.GetBlockInLevelFromCursor(mask);
+
+        // Move the block the the bool and disable it
+        BlockUtilities.MoveCharacterBlockAtCellToPool(plane, block.GetComponent<Block>().cell, poolTransform);
     }
 
 }

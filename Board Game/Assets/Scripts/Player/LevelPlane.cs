@@ -12,8 +12,9 @@ public class LevelPlane : MonoBehaviour
     public static event LevelPlaneInitialized OnLevelPlaneInitialized;
 
     public GameObject[,,] grid { get; private set; }
+    public int[,,] idGrid { get; set; }
     [SerializeField]
-    private GameObject baseBlock;
+    private BlockIDContainer blockIDs;
 
     public bool CheckIfCellIsOccupied(Cell cell)
     {
@@ -32,7 +33,7 @@ public class LevelPlane : MonoBehaviour
     }
 
     /// <summary>
-    /// English: Initialize the grid of base blocks defined in the Inspector and the injected grid from GridController class
+    /// English: Initialize the default grid of blocks
     /// </summary>
     /// <param name="controller"></param>
     private void InitializeGrid(GridController controller)
@@ -45,23 +46,26 @@ public class LevelPlane : MonoBehaviour
             else { DestroyImmediate(transform.GetChild(i).gameObject); }
         }
 
+        if(idGrid == null) { idGrid = new int[controller.gridSize.y, controller.gridSize.z, controller.gridSize.x]; }
         grid = new GameObject[controller.gridSize.y, controller.gridSize.z, controller.gridSize.x];
+
         int count = 0;
-        // Only height 1 as a base for level design
-        for (int h = 0; h < 1; h++)
+        for (int h = 0; h < controller.gridSize.y; h++)
         {
             for (int l = 0; l < controller.gridSize.z; l++)
             {
                 for (int w = 0; w < controller.gridSize.x; w++)
                 {
                     Cell cell = controller.grid[h, l, w];
-                    GameObject block = Instantiate(baseBlock, transform, true);
+                    if(idGrid[h, l, w] == 0) { continue; }
+                    GameObject block = blockIDs.GetCopyFromID(idGrid[h, l, w]);
+                    block.transform.parent = transform;
                     block.name = $"Block {cell.gridPosition}";
-                    block.GetComponent<Block>().Initialize(cell, GridDirection.Up, Vector3Int.one);
-                    BlockUtilities.PlaceBlockAtCell(block, this, cell);
+                    block.GetComponent<Block>().Initialize(cell, GridDirection.Forward, Vector3Int.one);
+                    BlockUtilities.PlaceTerrainBlockAtCell(block, this, cell);
                     grid[h, l, w] = block;
                     count++;
-                    Debug.Log($"Created Block {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
+                    Debug.Log($"Created Block id {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
                 }
             }
         }
@@ -69,5 +73,7 @@ public class LevelPlane : MonoBehaviour
         if(OnLevelPlaneInitialized != null)
             OnLevelPlaneInitialized(this);
     }
+
+
 
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// English: A plane made out of character blocks, used to keep track of all character in the level
 /// </summary>
+[ExecuteAlways]
 public class CharacterPlane : MonoBehaviour
 {
     public delegate void CharacterPlaneInitialized(CharacterPlane characterPlane);
@@ -13,6 +14,11 @@ public class CharacterPlane : MonoBehaviour
     public int activeCharacterCount = 0;
 
     public CellAndBlock[,,] grid { get; private set; }
+    public int[,,] idGrid { get; set; }
+
+    [SerializeField]
+    private BlockIDContainer blockIDs;
+
 
     public bool CheckIfCellIsOccupied(Cell cell)
     {
@@ -49,7 +55,9 @@ public class CharacterPlane : MonoBehaviour
             else { DestroyImmediate(transform.GetChild(i).gameObject); }
         }
 
+        if (idGrid == null) { idGrid = new int[controller.gridSize.y, controller.gridSize.z, controller.gridSize.x]; }
         grid = new CellAndBlock[controller.gridSize.y, controller.gridSize.z, controller.gridSize.x];
+
         for (int h = 0; h < controller.gridSize.y; h++)
         {
             for (int l = 0; l < controller.gridSize.z; l++)
@@ -59,6 +67,16 @@ public class CharacterPlane : MonoBehaviour
                     Cell cell = controller.grid[h, l, w];
                     CellAndBlock cellAndBlock = new CellAndBlock(cell, null);
                     grid[h, l, w] = cellAndBlock;
+
+                    if (idGrid[h, l, w] == 0) { continue; }
+
+                    GameObject block = blockIDs.GetCopyFromID(idGrid[h, l, w]);
+                    block.transform.parent = transform;
+                    block.name = $"Block {cell.gridPosition}";
+                    block.GetComponent<Block>().Initialize(cell, GridDirection.Forward, Vector3Int.one);
+                    BlockUtilities.PlaceCharacterBlockAtCell(block, this, cell);
+
+                    Debug.Log($"Created Block id {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
                 }
             }
         }
