@@ -58,6 +58,12 @@ public class GameManager : MonoBehaviour
             OnLevelFinished();
     }
 
+    public void CallPlayerTurnStarted()
+    {
+        if (OnPlayerTurnStarted != null)
+            OnPlayerTurnStarted();
+    }
+
     private void OnEnable()
     {
         GridController.OnGridInitialized += InitializeGridController;
