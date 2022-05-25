@@ -10,6 +10,11 @@ public class CharacterBlock : Block
     public delegate void CharacterRemoved();
     public static event CharacterRemoved OnCharacterRemoved;
 
+    public delegate void CharacterRanOutOfMoves(CharacterBlock thisBlock);
+    public event CharacterRanOutOfMoves OnCharacterRanOutOfMoves;
+    public delegate void NextMoveRequired(CharacterBlock thisBlock);
+    public event NextMoveRequired OnNextMoveRequired;
+
     public delegate void PositionUpdated(Cell currentCell, Cell targetCell);
     public event PositionUpdated OnPositionUpdated;
     
@@ -30,6 +35,8 @@ public class CharacterBlock : Block
         _gameManager = FindObjectOfType<GameManager>();
         _movementController = FindObjectOfType<BlockMovementController>();
         OnPositionUpdated += _gameManager.UpdateCharacterBlockPosition;
+        OnCharacterRanOutOfMoves += _gameManager.CallCharacterRanOutOfMoves;
+        OnNextMoveRequired += _gameManager.CallNextMoveRequired;
 
         // May need to reimplement (use when importing level design)
         forwardDirection = GridDirection.Forward;
@@ -39,6 +46,10 @@ public class CharacterBlock : Block
     private void OnDestroy()
     {
         OnPositionUpdated -= _gameManager.UpdateCharacterBlockPosition;
+        OnCharacterRanOutOfMoves -= _gameManager.CallCharacterRanOutOfMoves;
+        OnNextMoveRequired -= _gameManager.CallNextMoveRequired;
+
+
     }
 
     private void OnEnable()
@@ -75,8 +86,8 @@ public class CharacterBlock : Block
 
         // Set up movement controller
         _movementController.InitializeMovement(transform, forwardDirection, cell, cell, BlockMovementController.MovementType.BasicHop);
-        // Movement
-        StartCoroutine(MovementCoroutine());
+        // Movement no cost
+        StartCoroutine(MovementCoroutine(0));
 
     }
 
@@ -95,11 +106,11 @@ public class CharacterBlock : Block
         _movementController.InitializeMovement(transform, forwardDirection, cell, toCell, BlockMovementController.MovementType.BasicHop);
         OnPositionUpdated(cell, toCell);
         cell = toCell;
-        // Movement
-        StartCoroutine(MovementCoroutine());
+        // Movement 1 cost
+        StartCoroutine(MovementCoroutine(1));
     }
 
-    private IEnumerator MovementCoroutine()
+    private IEnumerator MovementCoroutine(int moveCost)
     {
         float t = 0;
         if(_movementController.movementType == BlockMovementController.MovementType.BasicHop)
@@ -148,6 +159,8 @@ public class CharacterBlock : Block
 
         // Finish movement
         _gameManager.CallBlockEndedBehaviour(this);
+
+        MinusMoves(moveCost);
     }
 
     public void AttackForward(int damageAmount)
@@ -171,6 +184,26 @@ public class CharacterBlock : Block
         PlusHealth(healAmount);
     }
 
+    public void ResetCurrentMoves()
+    {
+        _curMovesLeft = movesPerTurn;
+    }
+
+    public void CheckForLeftOverMoves()
+    {
+        if(_curMovesLeft <= 0)
+        {
+            if(OnCharacterRanOutOfMoves != null)
+                OnCharacterRanOutOfMoves(this);
+        }
+        else
+        {
+            if (OnNextMoveRequired != null)
+                OnNextMoveRequired(this);
+        }
+
+    }
+
     private void MinusHealth(int amount)
     {
         if (amount < 0) { return; }
@@ -192,6 +225,8 @@ public class CharacterBlock : Block
         if (movesNum < 0) { return; }
         _curMovesLeft -= movesNum;
         if (_curHealth < 0) { _curHealth = 0; }
+
+        CheckForLeftOverMoves();
     }
 
     private void PlusMoves(int movesNum)

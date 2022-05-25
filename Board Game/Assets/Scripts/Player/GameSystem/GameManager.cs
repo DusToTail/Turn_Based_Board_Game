@@ -39,6 +39,10 @@ public class GameManager : MonoBehaviour
     public delegate void AITurnEnded();
     public event AITurnEnded OnAITurnEnded;
 
+    public delegate void CharacterRanOutOfMoves(CharacterBlock noMovesBlock);
+    public event CharacterRanOutOfMoves OnCharacterRanOutOfMoves;
+    public delegate void NextMoveRequired(CharacterBlock needMovesBlock);
+    public event NextMoveRequired OnNextMoveRequired;
 
     private void Start()
     {
@@ -149,6 +153,18 @@ public class GameManager : MonoBehaviour
     {
         if (OnAITurnEnded != null)
             OnAITurnEnded();
+    }
+
+    public void CallCharacterRanOutOfMoves(CharacterBlock noMovesBlock)
+    {
+        if(OnCharacterRanOutOfMoves != null)
+            OnCharacterRanOutOfMoves(noMovesBlock);
+    }
+
+    public void CallNextMoveRequired(CharacterBlock needMovesBlock)
+    {
+        if(OnNextMoveRequired != null)
+            OnNextMoveRequired(needMovesBlock);
     }
 
     public void CallBlockStartedBehaviour(Block behavingBlock)

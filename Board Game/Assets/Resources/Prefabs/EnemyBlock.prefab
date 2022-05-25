@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5677545340336260882}
   - component: {fileID: 5677545340336261102}
   - component: {fileID: 5677545340336261103}
+  - component: {fileID: -6608869597593452130}
   m_Layer: 0
   m_Name: EnemyBlock
   m_TagString: Enemy
@@ -125,6 +126,21 @@ MonoBehaviour:
   maxHealth: 3
   attackDamage: 1
   displayGizmos: 1
+--- !u!114 &-6608869597593452130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5677545340336260885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17f0cef215360414f9d86db76a9edd3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionSortingID: 1
+  controlBlock: {fileID: 5677545340336261103}
+  isFinished: 0
 --- !u!1 &9018452999187204696
 GameObject:
   m_ObjectHideFlags: 0

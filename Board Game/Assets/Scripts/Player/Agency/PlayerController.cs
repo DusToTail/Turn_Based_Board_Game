@@ -14,19 +14,24 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        _gameManager = FindObjectOfType<GameManager>();
-        _gameManager.OnPlayerTurnStarted += AllowInput;
         CharacterPlane.OnCharacterPlaneInitialized += InitializePlayerBlock;
-        // Temp
+        _gameManager = FindObjectOfType<GameManager>();
+
+        _gameManager.OnPlayerTurnStarted += AllowInput;
         _gameManager.OnLevelStarted += AllowInput;
+        _gameManager.OnCharacterRanOutOfMoves += CallPlayerIsFinished;
+        _gameManager.OnNextMoveRequired += ContinueToMoveIfAllowed;
     }
 
     private void OnDestroy()
     {
-        _gameManager.OnPlayerTurnStarted -= AllowInput;
         CharacterPlane.OnCharacterPlaneInitialized -= InitializePlayerBlock;
-        // Temp
+
+        _gameManager.OnPlayerTurnStarted -= AllowInput;
         _gameManager.OnLevelStarted -= AllowInput;
+        _gameManager.OnCharacterRanOutOfMoves -= CallPlayerIsFinished;
+        _gameManager.OnNextMoveRequired -= ContinueToMoveIfAllowed;
+
     }
 
 
@@ -37,10 +42,13 @@ public class PlayerController : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.W))
         {
+            // Move forward
+            MovePlayerForward();
             PreventInput();
         }
         else if(Input.GetKeyDown(KeyCode.S))
         {
+            // Guard or Use items?
             PreventInput();
         }
         else if(Input.GetKeyDown(KeyCode.D))
@@ -57,13 +65,12 @@ public class PlayerController : MonoBehaviour
         }
         else if(Input.GetKeyDown(KeyCode.Space))
         {
-            // Move forward
-            MovePlayerForward();
+            // Attack forward
             PreventInput();
         }
         else if(Input.GetKeyDown(KeyCode.Escape))
         {
-
+            // Menu or Cancel something
             PreventInput();
         }
 
@@ -79,7 +86,6 @@ public class PlayerController : MonoBehaviour
         playerBlock.MoveFoward();
     }
 
-
     private void AllowInput()
     {
         _canControl = true;
@@ -88,6 +94,20 @@ public class PlayerController : MonoBehaviour
     private void PreventInput()
     {
         _canControl = false;
+    }
+
+    private void ContinueToMoveIfAllowed(CharacterBlock compareBlock)
+    {
+        if(compareBlock != playerBlock) { return; }
+        AllowInput();
+    }
+
+    private void CallPlayerIsFinished(CharacterBlock compareBlock)
+    {
+        if(compareBlock != playerBlock) { return ; }
+        playerBlock.ResetCurrentMoves();
+        if(OnPlayerIsFinished != null)
+            OnPlayerIsFinished();
     }
 
     private void InitializePlayerBlock(CharacterPlane plane)
