@@ -14,9 +14,9 @@ public class CharacterBlock : Block
     public event PositionUpdated OnPositionUpdated;
     
 
-    [SerializeField] private int movesPerTurn;
-    [SerializeField] private int maxHealth;
-    [SerializeField] private int attackDamage;
+    public int movesPerTurn;
+    public int maxHealth;
+    public int attackDamage;
 
     [SerializeField] private bool displayGizmos;
 

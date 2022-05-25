@@ -6,6 +6,9 @@ public class PlayerController : MonoBehaviour
 {
     public CharacterBlock playerBlock;
 
+    public delegate void PlayerIsFinished();
+    public static event PlayerIsFinished OnPlayerIsFinished;
+
     private bool _canControl = false;
     private GameManager _gameManager;
 

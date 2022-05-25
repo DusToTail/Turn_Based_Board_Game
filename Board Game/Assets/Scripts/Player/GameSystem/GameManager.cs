@@ -31,10 +31,44 @@ public class GameManager : MonoBehaviour
 
     public delegate void PlayerTurnStarted();
     public event PlayerTurnStarted OnPlayerTurnStarted;
+    public delegate void PlayerTurnEnded();
+    public event PlayerTurnEnded OnPlayerTurnEnded;
+
+    public delegate void AITurnStarted();
+    public event AITurnStarted OnAITurnStarted;
+    public delegate void AITurnEnded();
+    public event AITurnEnded OnAITurnEnded;
+
 
     private void Start()
     {
         CallLevelLoadingStarted();
+    }
+
+    private void OnEnable()
+    {
+        GridController.OnGridInitialized += InitializeGridController;
+        LevelPlane.OnLevelPlaneInitialized += InitializeLevelPlane;
+        CharacterPlane.OnCharacterPlaneInitialized += InitializeCharacterPlane;
+
+        AIController.OnAIsAreFinished += CallAITurnEnded;
+        OnAITurnEnded += CallPlayerTurnStarted;
+        PlayerController.OnPlayerIsFinished += CallPlayerTurnEnded;
+        OnPlayerTurnEnded += CallAITurnStarted;
+
+    }
+
+    private void OnDisable()
+    {
+        GridController.OnGridInitialized -= InitializeGridController;
+        LevelPlane.OnLevelPlaneInitialized -= InitializeLevelPlane;
+        CharacterPlane.OnCharacterPlaneInitialized -= InitializeCharacterPlane;
+
+        AIController.OnAIsAreFinished -= CallAITurnEnded;
+        OnAITurnEnded -= CallPlayerTurnStarted;
+        PlayerController.OnPlayerIsFinished -= CallPlayerTurnEnded;
+        OnPlayerTurnEnded -= CallAITurnStarted;
+
     }
 
     public void UpdateCharacterBlockPosition(Cell fromCell, Cell toCell)
@@ -42,18 +76,6 @@ public class GameManager : MonoBehaviour
         GameObject block = characterPlane.grid[fromCell.gridPosition.y, fromCell.gridPosition.z, fromCell.gridPosition.z].block;
         characterPlane.grid[toCell.gridPosition.y, toCell.gridPosition.z, toCell.gridPosition.z].block = block;
         characterPlane.grid[fromCell.gridPosition.y, fromCell.gridPosition.z, fromCell.gridPosition.z].block = null;
-    }
-
-    public void CallBlockStartedBehaviour(Block behavingBlock)
-    {
-        if(OnBlockStartedBehaviour != null)
-            OnBlockStartedBehaviour(behavingBlock);
-    }
-
-    public void CallBlockEndedBehaviour(Block behavingBlock)
-    {
-        if(OnBlockEndedBehaviour != null)
-            OnBlockEndedBehaviour(behavingBlock);
     }
 
     public void CallLevelLoadingStarted()
@@ -111,43 +133,62 @@ public class GameManager : MonoBehaviour
             OnPlayerTurnStarted();
     }
 
-    private void OnEnable()
+    public void CallPlayerTurnEnded()
     {
-        GridController.OnGridInitialized += InitializeGridController;
-        LevelPlane.OnLevelPlaneInitialized += InitializeLevelPlane;
-        CharacterPlane.OnCharacterPlaneInitialized += InitializeCharacterPlane;
-
+        if (OnPlayerTurnEnded != null)
+            OnPlayerTurnEnded();
     }
 
-    private void OnDisable()
+    public void CallAITurnStarted()
     {
-        GridController.OnGridInitialized -= InitializeGridController;
-        LevelPlane.OnLevelPlaneInitialized -= InitializeLevelPlane;
-        CharacterPlane.OnCharacterPlaneInitialized -= InitializeCharacterPlane;
+        if (OnAITurnStarted != null)
+            OnAITurnStarted();
     }
 
-    private void IncrementPrepCount()
+    public void CallAITurnEnded()
     {
-        currentPrepCount++;
-        if(currentPrepCount == prepCount)
-        {
-            if(OnLevelStarted != null)
-                OnLevelStarted();
-        }
+        if (OnAITurnEnded != null)
+            OnAITurnEnded();
+    }
+
+    public void CallBlockStartedBehaviour(Block behavingBlock)
+    {
+        if (OnBlockStartedBehaviour != null)
+            OnBlockStartedBehaviour(behavingBlock);
+    }
+
+    public void CallBlockEndedBehaviour(Block behavingBlock)
+    {
+        if (OnBlockEndedBehaviour != null)
+            OnBlockEndedBehaviour(behavingBlock);
     }
 
     private void InitializeGridController(GridController gridController)
     {
         this.gridController = gridController;
+        IncrementPrepCount();
     }
 
     private void InitializeLevelPlane(LevelPlane plane)
     {
         levelPlane = plane;
+        IncrementPrepCount();
+
     }
 
     private void InitializeCharacterPlane(CharacterPlane plane)
     {
         characterPlane = plane;
+        IncrementPrepCount();
+
+    }
+
+    private void IncrementPrepCount()
+    {
+        currentPrepCount++;
+        if (currentPrepCount == prepCount)
+        {
+            CallLevelStarted();
+        }
     }
 }
