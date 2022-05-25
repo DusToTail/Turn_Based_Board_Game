@@ -25,16 +25,14 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool LoadLevelDesign(string fileName, LevelDesign loadToLevel)
+    public static LevelDesign LoadLevelDesign(string fileName)
     {
-        if(loadToLevel == null) { return false; }
-
         string path = Application.dataPath + "/Resources" + LEVEL_DESIGN_SAVE_FOLDER_NAME + $"{fileName}.txt";
         // Test if save folder exists
         if (!Directory.Exists(Application.dataPath + "/Resources" + LEVEL_DESIGN_SAVE_FOLDER_NAME))
         {
             Debug.Log($"No file at {path}");
-            return false;
+            return null;
         }
 
         // Test if overlapping file exists
@@ -43,15 +41,15 @@ public static class SaveSystem
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
             string saveString = File.ReadAllText(path);
             fs.Close();
-            loadToLevel = JsonUtility.FromJson<LevelDesign>(saveString);
             Debug.Log($"Loaded from {path}");
+            return JsonUtility.FromJson<LevelDesign>(saveString);
         }
         else
         {
             Debug.Log($"No file at {path}");
+            return null;
         }
 
-        return true;
     }
 
 

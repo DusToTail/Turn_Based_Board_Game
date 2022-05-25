@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     {
         _gameManager = FindObjectOfType<GameManager>();
         _gameManager.OnPlayerTurnStarted += AllowInput;
+        CharacterPlane.OnCharacterPlaneInitialized += InitializePlayerBlock;
         // Temp
         _gameManager.OnLevelStarted += AllowInput;
     }
@@ -20,9 +21,12 @@ public class PlayerController : MonoBehaviour
     private void OnDestroy()
     {
         _gameManager.OnPlayerTurnStarted -= AllowInput;
+        CharacterPlane.OnCharacterPlaneInitialized -= InitializePlayerBlock;
         // Temp
         _gameManager.OnLevelStarted -= AllowInput;
     }
+
+
 
     private void Update()
     {
@@ -80,6 +84,11 @@ public class PlayerController : MonoBehaviour
     private void PreventInput()
     {
         _canControl = false;
+    }
+
+    private void InitializePlayerBlock(CharacterPlane plane)
+    {
+        playerBlock = plane.GetPlayerBlock();
     }
 
 }

@@ -38,7 +38,7 @@ public class PaintBlockBehaviour : MonoBehaviour
         if(prefab == null) { return;}
         GameObject block = Instantiate(prefab, plane.transform, true);
         block.name = $"Block {cell.gridPosition}";
-        block.GetComponent<Block>().Initialize(cell, GridDirection.Up, Vector3Int.one);
+        block.GetComponent<Block>().Initialize(cell, GridDirection.Up);
         BlockUtilities.PlaceTerrainBlockAtCell(block, plane, cell);
         Debug.Log($"Created Block {cell.gridPosition} at worldPosition {cell.worldPosition}");
     }
@@ -80,7 +80,7 @@ public class PaintBlockBehaviour : MonoBehaviour
         if (prefab == null) { return; }
         GameObject block = Instantiate(prefab, plane.transform, true);
         block.name = $"Block {cell.gridPosition}";
-        block.GetComponent<Block>().Initialize(cell, GridDirection.Up, Vector3Int.one);
+        block.GetComponent<Block>().Initialize(cell, GridDirection.Up);
         BlockUtilities.PlaceCharacterBlockAtCell(block, plane, cell);
         Debug.Log($"Created Block {cell.gridPosition} at worldPosition {cell.worldPosition}");
     }

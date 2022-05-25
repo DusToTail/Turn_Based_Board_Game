@@ -86,8 +86,13 @@ public class LevelEditorToolsManager : MonoBehaviour
             Debug.Log("Grid is not initialized in the editor");
             return;
         }
-
-        SaveSystem.LoadLevelDesign(saveFileName, editingDesign);
+        editingDesign = new LevelDesign();
+        LevelDesign saved = SaveSystem.LoadLevelDesign(saveFileName);
+        editingDesign.gridHeight = saved.gridHeight;
+        editingDesign.gridLength = saved.gridLength;
+        editingDesign.gridWidth = saved.gridWidth;
+        editingDesign.terrainGrid = saved.terrainGrid;
+        editingDesign.characterGrid = saved.characterGrid;
 
         levelPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
         characterPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];

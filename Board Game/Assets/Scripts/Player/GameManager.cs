@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GridController gridController { get; private set; }
-    public LevelPlane levelPlane { get; private set; }
-    public CharacterPlane characterPlane { get; private set; }
-    public PlayerController playerController { get; private set; }
+    public GridController gridController;
+    public LevelPlane levelPlane;
+    public CharacterPlane characterPlane;
+    public PlayerController playerController;
     // Need to prepare grid controller
     // Need to prepare level plane
     // Need to prepare character plane
     public int prepCount = 3;
     public int currentPrepCount;
+
+    public string fileName;
+    public LevelDesign currentLevel;
+    public delegate void LevelLoadingStarted(LevelDesign levelDesign);
+    public event LevelLoadingStarted OnLevelLoadingStarted;
 
     public delegate void LevelStarted();
     public event LevelStarted OnLevelStarted;
@@ -44,6 +49,43 @@ public class GameManager : MonoBehaviour
     {
         if(OnBlockEndedBehaviour != null)
             OnBlockEndedBehaviour(behavingBlock);
+    }
+
+    public void CallLevelLoadingStarted()
+    {
+        if (gridController == null || levelPlane == null || characterPlane == null)
+        {
+            Debug.Log("Grid is not initialized in the editor");
+            return;
+        }
+
+        currentLevel = new LevelDesign();
+        LevelDesign saved = SaveSystem.LoadLevelDesign(fileName);
+        currentLevel.gridHeight = saved.gridHeight;
+        currentLevel.gridLength = saved.gridLength;
+        currentLevel.gridWidth = saved.gridWidth;
+        currentLevel.terrainGrid = saved.terrainGrid;
+        currentLevel.characterGrid = saved.characterGrid;
+
+        levelPlane.idGrid = new int[currentLevel.gridHeight, currentLevel.gridLength, currentLevel.gridWidth];
+        characterPlane.idGrid = new int[currentLevel.gridHeight, currentLevel.gridLength, currentLevel.gridWidth];
+
+        int count = 0;
+        for (int h = 0; h < currentLevel.gridHeight; h++)
+        {
+            for (int l = 0; l < currentLevel.gridLength; l++)
+            {
+                for (int w = 0; w < currentLevel.gridWidth; w++)
+                {
+                    levelPlane.idGrid[h, l, w] = currentLevel.terrainGrid[count];
+                    characterPlane.idGrid[h, l, w] = currentLevel.characterGrid[count];
+                    count++;
+                }
+            }
+        }
+
+        Vector3Int gridSize = new Vector3Int(currentLevel.gridWidth, currentLevel.gridHeight, currentLevel.gridLength);
+        gridController.InitializeGrid(gridSize);
     }
 
     public void CallLevelStarted()

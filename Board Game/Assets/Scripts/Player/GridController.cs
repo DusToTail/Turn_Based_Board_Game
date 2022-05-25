@@ -18,6 +18,16 @@ public class GridController : MonoBehaviour
     [SerializeField]
     private int untilHeightIndex;
 
+    private void OnEnable()
+    {
+        
+    }
+
+    private void OnDisable()
+    {
+        
+    }
+
     public Cell GetCellFromCellWithDirection(Cell cell, GridDirection direction)
     {
         Debug.Log(cell.gridPosition);

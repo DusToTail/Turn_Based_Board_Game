@@ -9,8 +9,11 @@ public class GameManagerEditor : Editor
         GameManager manager = (GameManager)target;
         DrawDefaultInspector();
 
-        if(GUILayout.Button("LevelStart"))
+
+
+        if(GUILayout.Button("LoadLevel"))
         {
+            manager.CallLevelLoadingStarted();
             manager.CallLevelStarted();
         }
 

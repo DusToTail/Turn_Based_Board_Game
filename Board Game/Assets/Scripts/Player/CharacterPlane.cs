@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 /// <summary>
 /// English: A plane made out of character blocks, used to keep track of all character in the level
@@ -26,6 +25,30 @@ public class CharacterPlane : MonoBehaviour
         return false;
     }
 
+    public CharacterBlock GetPlayerBlock()
+    {
+        for (int h = 0; h < grid.GetLength(0); h++)
+        {
+            for (int l = 0; l < grid.GetLength(1); l++)
+            {
+                for (int w = 0; w < grid.GetLength(2); w++)
+                {
+                    if(grid[h, l, w].block != null)
+                    {
+                        if (grid[h, l, w].block.GetComponent<CharacterBlock>() != null)
+                        {
+                            if (grid[h, l, w].block.GetComponent<CharacterBlock>().id == 1)
+                                return grid[h, l, w].block.GetComponent<CharacterBlock>();
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    
+
     private void OnEnable()
     {
         GridController.OnGridInitialized += InitializeGrid;
@@ -40,6 +63,8 @@ public class CharacterPlane : MonoBehaviour
         CharacterBlock.OnCharacterAdded -= IncrementActiveCount;
         CharacterBlock.OnCharacterRemoved -= DecrementActiveCount;
     }
+
+    
 
     private void IncrementActiveCount() { activeCharacterCount++; }
     private void DecrementActiveCount() { activeCharacterCount--; }
@@ -73,7 +98,7 @@ public class CharacterPlane : MonoBehaviour
                     GameObject block = blockIDs.GetCopyFromID(idGrid[h, l, w]);
                     block.transform.parent = transform;
                     block.name = $"Block {cell.gridPosition}";
-                    block.GetComponent<Block>().Initialize(cell, GridDirection.Forward, Vector3Int.one);
+                    block.GetComponent<Block>().Initialize(cell, GridDirection.Forward);
                     BlockUtilities.PlaceCharacterBlockAtCell(block, this, cell);
 
                     Debug.Log($"Created Block id {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");

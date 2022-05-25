@@ -57,11 +57,11 @@ public class LevelPlane : MonoBehaviour
                 for (int w = 0; w < controller.gridSize.x; w++)
                 {
                     Cell cell = controller.grid[h, l, w];
-                    if(idGrid[h, l, w] == 0) { continue; }
+                    if(idGrid[h, l, w] == 0) { Debug.Log($"({w} {h} {l}) is 0 or null"); continue; }
                     GameObject block = blockIDs.GetCopyFromID(idGrid[h, l, w]);
                     block.transform.parent = transform;
                     block.name = $"Block {cell.gridPosition}";
-                    block.GetComponent<Block>().Initialize(cell, GridDirection.Forward, Vector3Int.one);
+                    block.GetComponent<Block>().Initialize(cell, GridDirection.Forward);
                     BlockUtilities.PlaceTerrainBlockAtCell(block, this, cell);
                     grid[h, l, w] = block;
                     count++;

@@ -51,10 +51,9 @@ public abstract class Block : MonoBehaviour
         transform.position = cell.worldPosition;
     }
 
-    public void Initialize(Cell cell, GridDirection forwardDirection, Vector3Int cellBasedSize)
+    public void Initialize(Cell cell, GridDirection forwardDirection)
     {
         this.cell = cell;
         this.forwardDirection = forwardDirection;
-        this.cellBasedSize = cellBasedSize;
     }
 }
