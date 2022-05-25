@@ -44,6 +44,9 @@ public class GameManager : MonoBehaviour
     public delegate void NextMoveRequired(CharacterBlock needMovesBlock);
     public event NextMoveRequired OnNextMoveRequired;
 
+    public delegate void CharacterChangedPosition(CharacterBlock movedBlock, Cell toCell);
+    public event CharacterChangedPosition OnCharacterChangedPosition;
+
     private void Start()
     {
         CallLevelLoadingStarted();
@@ -75,12 +78,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void UpdateCharacterBlockPosition(Cell fromCell, Cell toCell)
-    {
-        GameObject block = characterPlane.grid[fromCell.gridPosition.y, fromCell.gridPosition.z, fromCell.gridPosition.z].block;
-        characterPlane.grid[toCell.gridPosition.y, toCell.gridPosition.z, toCell.gridPosition.z].block = block;
-        characterPlane.grid[fromCell.gridPosition.y, fromCell.gridPosition.z, fromCell.gridPosition.z].block = null;
-    }
+    
 
     public void CallLevelLoadingStarted()
     {
@@ -165,6 +163,15 @@ public class GameManager : MonoBehaviour
     {
         if(OnNextMoveRequired != null)
             OnNextMoveRequired(needMovesBlock);
+    }
+
+    public void CallCharacterChangedPosition(CharacterBlock block, Cell toCell)
+    {
+        characterPlane.UpdateCharacterPosition(block, toCell);
+
+        // Currently not used Event
+        if(OnCharacterChangedPosition != null)
+            OnCharacterChangedPosition(block, toCell);
     }
 
     public void CallBlockStartedBehaviour(Block behavingBlock)

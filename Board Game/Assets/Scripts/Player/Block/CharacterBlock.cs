@@ -15,7 +15,7 @@ public class CharacterBlock : Block
     public delegate void NextMoveRequired(CharacterBlock thisBlock);
     public event NextMoveRequired OnNextMoveRequired;
 
-    public delegate void PositionUpdated(Cell currentCell, Cell targetCell);
+    public delegate void PositionUpdated(CharacterBlock thisBlock, Cell targetCell);
     public event PositionUpdated OnPositionUpdated;
     
 
@@ -34,7 +34,7 @@ public class CharacterBlock : Block
     {
         _gameManager = FindObjectOfType<GameManager>();
         _movementController = FindObjectOfType<BlockMovementController>();
-        OnPositionUpdated += _gameManager.UpdateCharacterBlockPosition;
+        OnPositionUpdated += _gameManager.CallCharacterChangedPosition;
         OnCharacterRanOutOfMoves += _gameManager.CallCharacterRanOutOfMoves;
         OnNextMoveRequired += _gameManager.CallNextMoveRequired;
 
@@ -45,7 +45,7 @@ public class CharacterBlock : Block
 
     private void OnDestroy()
     {
-        OnPositionUpdated -= _gameManager.UpdateCharacterBlockPosition;
+        OnPositionUpdated -= _gameManager.CallCharacterChangedPosition;
         OnCharacterRanOutOfMoves -= _gameManager.CallCharacterRanOutOfMoves;
         OnNextMoveRequired -= _gameManager.CallNextMoveRequired;
 
@@ -104,7 +104,7 @@ public class CharacterBlock : Block
 
         // Set up movement controller
         _movementController.InitializeMovement(transform, forwardDirection, cell, toCell, BlockMovementController.MovementType.BasicHop);
-        OnPositionUpdated(cell, toCell);
+        OnPositionUpdated(this, toCell);
         cell = toCell;
         // Movement 1 cost
         StartCoroutine(MovementCoroutine(1));

@@ -18,6 +18,34 @@ public class CharacterPlane : MonoBehaviour
     [SerializeField]
     private BlockIDContainer blockIDs;
 
+    private void OnEnable()
+    {
+        GridController.OnGridInitialized += InitializeGrid;
+        CharacterBlock.OnCharacterAdded += IncrementActiveCount;
+        CharacterBlock.OnCharacterRemoved += DecrementActiveCount;
+
+    }
+
+    private void OnDisable()
+    {
+        GridController.OnGridInitialized -= InitializeGrid;
+        CharacterBlock.OnCharacterAdded -= IncrementActiveCount;
+        CharacterBlock.OnCharacterRemoved -= DecrementActiveCount;
+    }
+
+    public void UpdateCharacterPosition(CharacterBlock block, Cell toCell)
+    {
+        GameObject b = block.gameObject;
+        Cell fromCell = b.GetComponent<Block>().cell;
+        grid[fromCell.gridPosition.y, fromCell.gridPosition.z, fromCell.gridPosition.x].block = null;
+        grid[toCell.gridPosition.y, toCell.gridPosition.z, toCell.gridPosition.x].block = b;
+        string[] oldNameArray = b.name.Split(' ');
+        b.name = oldNameArray[0] + toCell.gridPosition.ToString();
+
+        idGrid[fromCell.gridPosition.y, fromCell.gridPosition.z, fromCell.gridPosition.x] = 0;
+        idGrid[fromCell.gridPosition.y, fromCell.gridPosition.z, fromCell.gridPosition.x] = b.GetComponent<Block>().id;
+
+    }
 
     public bool CheckIfCellIsOccupied(Cell cell)
     {
@@ -47,28 +75,9 @@ public class CharacterPlane : MonoBehaviour
         return null;
     }
 
-    
-
-    private void OnEnable()
-    {
-        GridController.OnGridInitialized += InitializeGrid;
-        CharacterBlock.OnCharacterAdded += IncrementActiveCount;
-        CharacterBlock.OnCharacterRemoved += DecrementActiveCount;
-
-    }
-
-    private void OnDisable()
-    {
-        GridController.OnGridInitialized -= InitializeGrid;
-        CharacterBlock.OnCharacterAdded -= IncrementActiveCount;
-        CharacterBlock.OnCharacterRemoved -= DecrementActiveCount;
-    }
-
-    
 
     private void IncrementActiveCount() { activeCharacterCount++; }
     private void DecrementActiveCount() { activeCharacterCount--; }
-
 
     private void InitializeGrid(GridController controller)
     {
@@ -97,11 +106,11 @@ public class CharacterPlane : MonoBehaviour
 
                     GameObject block = blockIDs.GetCopyFromID(idGrid[h, l, w]);
                     block.transform.parent = transform;
-                    block.name = $"Block {cell.gridPosition}";
+                    block.name = $"{block.name} {cell.gridPosition}";
                     block.GetComponent<Block>().Initialize(cell, GridDirection.Forward);
                     BlockUtilities.PlaceCharacterBlockAtCell(block, this, cell);
 
-                    Debug.Log($"Created Block id {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
+                    Debug.Log($"Created {block.name} {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
                 }
             }
         }
