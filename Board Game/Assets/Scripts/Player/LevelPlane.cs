@@ -15,6 +15,12 @@ public class LevelPlane : MonoBehaviour
     [SerializeField]
     private GameObject baseBlock;
 
+    public bool CheckIfCellIsOccupied(Cell cell)
+    {
+        if(grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x] != null) { return true; }
+        return false;
+    }
+
     private void OnEnable()
     {
         GridController.OnGridInitialized += InitializeGrid;
@@ -24,7 +30,6 @@ public class LevelPlane : MonoBehaviour
     {
         GridController.OnGridInitialized -= InitializeGrid;
     }
-
 
     /// <summary>
     /// English: Initialize the grid of base blocks defined in the Inspector and the injected grid from GridController class

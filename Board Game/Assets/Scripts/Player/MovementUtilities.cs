@@ -36,7 +36,7 @@ public class MovementUtilities
 
     }
 
-    public static void CubicQuadraticBezierLerp(Transform moveTransform, Transform toPosition, Transform[] controlPoints, float t, bool lerpRotation = false)
+    public static void CubicBezierLerp(Transform moveTransform, Transform toPosition, Transform[] controlPoints, float t, bool lerpRotation = false)
     {
         if (moveTransform == null) { return; }
         if (toPosition == null) { return; }

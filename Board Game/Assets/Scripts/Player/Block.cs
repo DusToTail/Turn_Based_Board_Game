@@ -7,9 +7,9 @@ using UnityEngine;
 /// </summary>
 public abstract class Block : MonoBehaviour
 {
-    public Cell cell { get; private set; }
-    public GridDirection forwardDirection { get; private set; }
-    public Vector3Int cellBasedSize { get; private set; }
+    public Cell cell { get; protected set; }
+    public GridDirection forwardDirection { get; protected set; }
+    public Vector3Int cellBasedSize { get; protected set; }
 
     public enum Rotations
     {
@@ -21,7 +21,7 @@ public abstract class Block : MonoBehaviour
     /// English: Rotate the block horizontally
     /// </summary>
     /// <param name="rotation"></param>
-    public void RotateHorizontally(Rotations rotation)
+    public virtual void RotateHorizontally(Rotations rotation)
     {
         if(rotation != Rotations.Left && rotation != Rotations.Right) { return; }
 
@@ -43,7 +43,7 @@ public abstract class Block : MonoBehaviour
     /// English: Snap the block to the position of the cell
     /// </summary>
     /// <param name="cell"></param>
-    public void SnapToCell(Cell cell)
+    public virtual void SnapToCell(Cell cell)
     {
         if (cell == null) { return; }
         this.cell = cell;

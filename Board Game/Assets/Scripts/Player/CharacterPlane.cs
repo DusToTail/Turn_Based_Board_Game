@@ -10,18 +10,34 @@ public class CharacterPlane : MonoBehaviour
     public delegate void CharacterPlaneInitialized(CharacterPlane characterPlane);
     public static event CharacterPlaneInitialized OnCharacterPlaneInitialized;
 
+    public int activeCharacterCount = 0;
+
     public CellAndBlock[,,] grid { get; private set; }
 
+    public bool CheckIfCellIsOccupied(Cell cell)
+    {
+        if (grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block != null) { return true; }
+        return false;
+    }
 
     private void OnEnable()
     {
         GridController.OnGridInitialized += InitializeGrid;
+        CharacterBlock.OnCharacterAdded += IncrementActiveCount;
+        CharacterBlock.OnCharacterRemoved += DecrementActiveCount;
+
     }
 
     private void OnDisable()
     {
         GridController.OnGridInitialized -= InitializeGrid;
+        CharacterBlock.OnCharacterAdded -= IncrementActiveCount;
+        CharacterBlock.OnCharacterRemoved -= DecrementActiveCount;
     }
+
+    private void IncrementActiveCount() { activeCharacterCount++; }
+    private void DecrementActiveCount() { activeCharacterCount--; }
+
 
     private void InitializeGrid(GridController controller)
     {
