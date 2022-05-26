@@ -40,7 +40,7 @@ public class CharacterPlane : MonoBehaviour
         grid[fromCell.gridPosition.y, fromCell.gridPosition.z, fromCell.gridPosition.x].block = null;
         grid[toCell.gridPosition.y, toCell.gridPosition.z, toCell.gridPosition.x].block = b;
         string[] oldNameArray = b.name.Split(' ');
-        b.name = oldNameArray[0] + toCell.gridPosition.ToString();
+        b.name = oldNameArray[0] + " " + toCell.gridPosition.ToString();
 
         idGrid[fromCell.gridPosition.y, fromCell.gridPosition.z, fromCell.gridPosition.x] = 0;
         idGrid[fromCell.gridPosition.y, fromCell.gridPosition.z, fromCell.gridPosition.x] = b.GetComponent<Block>().id;

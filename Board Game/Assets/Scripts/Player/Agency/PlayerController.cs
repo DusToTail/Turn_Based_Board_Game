@@ -17,8 +17,9 @@ public class PlayerController : MonoBehaviour
         CharacterPlane.OnCharacterPlaneInitialized += InitializePlayerBlock;
         _gameManager = FindObjectOfType<GameManager>();
 
-        _gameManager.OnPlayerTurnStarted += AllowInput;
+        _gameManager.OnLevelStarted += ResetStats;
         _gameManager.OnLevelStarted += AllowInput;
+        _gameManager.OnPlayerTurnStarted += AllowInput;
         _gameManager.OnCharacterRanOutOfMoves += CallPlayerIsFinished;
         _gameManager.OnNextMoveRequired += ContinueToMoveIfAllowed;
     }
@@ -27,8 +28,9 @@ public class PlayerController : MonoBehaviour
     {
         CharacterPlane.OnCharacterPlaneInitialized -= InitializePlayerBlock;
 
-        _gameManager.OnPlayerTurnStarted -= AllowInput;
+        _gameManager.OnLevelStarted -= ResetStats;
         _gameManager.OnLevelStarted -= AllowInput;
+        _gameManager.OnPlayerTurnStarted -= AllowInput;
         _gameManager.OnCharacterRanOutOfMoves -= CallPlayerIsFinished;
         _gameManager.OnNextMoveRequired -= ContinueToMoveIfAllowed;
 
@@ -86,6 +88,12 @@ public class PlayerController : MonoBehaviour
         playerBlock.MoveFoward();
     }
 
+    private void ResetStats()
+    {
+        playerBlock.ResetHealth();
+        playerBlock.ResetCurrentMoves();
+    }
+
     private void AllowInput()
     {
         _canControl = true;
@@ -98,7 +106,7 @@ public class PlayerController : MonoBehaviour
 
     private void ContinueToMoveIfAllowed(CharacterBlock compareBlock)
     {
-        if(compareBlock != playerBlock) { return; }
+        if (compareBlock != playerBlock) { return; }
         AllowInput();
     }
 
@@ -106,6 +114,7 @@ public class PlayerController : MonoBehaviour
     {
         if(compareBlock != playerBlock) { return ; }
         playerBlock.ResetCurrentMoves();
+        Debug.Log($"Player of {playerBlock.name} is finished with his/her moves");
         if(OnPlayerIsFinished != null)
             OnPlayerIsFinished();
     }

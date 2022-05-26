@@ -122,7 +122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   cellBasedSize: {x: 1, y: 1, z: 1}
-  movesPerTurn: 1
+  movesPerTurn: 2
   maxHealth: 3
   attackDamage: 1
   displayGizmos: 1
@@ -140,7 +140,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionSortingID: 1
   controlBlock: {fileID: 5677545340336261103}
-  isFinished: 0
 --- !u!1 &9018452999187204696
 GameObject:
   m_ObjectHideFlags: 0

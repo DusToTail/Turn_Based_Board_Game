@@ -23,6 +23,10 @@ public class CharacterBlock : Block
     public int maxHealth;
     public int attackDamage;
 
+    public int curHealth { get { return _curHealth; }}
+    public int curMovesLeft { get { return _curMovesLeft; } }
+
+
     [SerializeField] private bool displayGizmos;
 
     private int _curHealth;
@@ -87,7 +91,7 @@ public class CharacterBlock : Block
         // Set up movement controller
         _movementController.InitializeMovement(transform, forwardDirection, cell, cell, BlockMovementController.MovementType.BasicHop);
         // Movement no cost
-        StartCoroutine(MovementCoroutine(0));
+        StartCoroutine(MovementCoroutine(1));
 
     }
 
@@ -98,8 +102,18 @@ public class CharacterBlock : Block
 
         // Anticipate obstacles, enemies, end goal
         // May refactor to have the validation check be calculated before hand for obstacles. Keep for enemies to trigger hit and goal to clear level
-        if (_gameManager.levelPlane.CheckIfCellIsOccupied(toCell)) { Debug.Log($"{toCell.gridPosition} is terrain, cant move"); return; }
-        if (_gameManager.characterPlane.CheckIfCellIsOccupied(toCell)) { Debug.Log($"{toCell.gridPosition} is character, cant move"); return; }
+        if (_gameManager.levelPlane.CheckIfCellIsOccupied(toCell)) 
+        { 
+            Debug.Log($"{toCell.gridPosition} is terrain, cant move");
+            CheckForLeftOverMoves();
+            return; 
+        }
+        if (_gameManager.characterPlane.CheckIfCellIsOccupied(toCell)) 
+        { 
+            Debug.Log($"{toCell.gridPosition} is character, cant move");
+            CheckForLeftOverMoves();
+            return; 
+        }
 
 
         // Set up movement controller
@@ -122,16 +136,13 @@ public class CharacterBlock : Block
             while (true)
             {
                 yield return null;
-                Debug.Log(t);
-
                 if (t >= 1)
                 {
                     t = 1;
                     MovementUtilities.QuadraticBezierLerp(transform, one, third, second, t, true);
                     break;
                 }
-                t += Time.deltaTime * _movementController.speed * (1+t);
-                Debug.Log(t);
+                t += Time.deltaTime * _movementController.speed * (1 + t);
                 MovementUtilities.QuadraticBezierLerp(transform, one, third, second, t, true);
             }
         }
@@ -142,8 +153,6 @@ public class CharacterBlock : Block
             while (true)
             {
                 yield return null;
-                Debug.Log(t);
-
                 if (t >= 1)
                 {
                     t = 1;
@@ -184,6 +193,11 @@ public class CharacterBlock : Block
         PlusHealth(healAmount);
     }
 
+    public void ResetHealth()
+    {
+        _curHealth = maxHealth;
+    }
+
     public void ResetCurrentMoves()
     {
         _curMovesLeft = movesPerTurn;
@@ -194,12 +208,16 @@ public class CharacterBlock : Block
         if(_curMovesLeft <= 0)
         {
             if(OnCharacterRanOutOfMoves != null)
+            {
                 OnCharacterRanOutOfMoves(this);
+            }
         }
         else
         {
             if (OnNextMoveRequired != null)
+            {
                 OnNextMoveRequired(this);
+            }
         }
 
     }
@@ -224,7 +242,7 @@ public class CharacterBlock : Block
     {
         if (movesNum < 0) { return; }
         _curMovesLeft -= movesNum;
-        if (_curHealth < 0) { _curHealth = 0; }
+        if (_curMovesLeft < 0) { _curMovesLeft = 0; }
 
         CheckForLeftOverMoves();
     }

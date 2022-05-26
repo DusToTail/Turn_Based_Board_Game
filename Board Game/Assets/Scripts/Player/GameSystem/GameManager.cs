@@ -63,6 +63,9 @@ public class GameManager : MonoBehaviour
         PlayerController.OnPlayerIsFinished += CallPlayerTurnEnded;
         OnPlayerTurnEnded += CallAITurnStarted;
 
+        OnLevelStarted += AIController.ResetAIsStats;
+        OnAITurnStarted += AIController.ResetAIsMoves;
+
     }
 
     private void OnDisable()
@@ -76,6 +79,8 @@ public class GameManager : MonoBehaviour
         PlayerController.OnPlayerIsFinished -= CallPlayerTurnEnded;
         OnPlayerTurnEnded -= CallAITurnStarted;
 
+        OnLevelStarted -= AIController.ResetAIsStats;
+        OnAITurnStarted -= AIController.ResetAIsMoves;
     }
 
     
@@ -119,69 +124,82 @@ public class GameManager : MonoBehaviour
 
     public void CallLevelStarted()
     {
+        Debug.Log("Level Started");
         if (OnLevelStarted != null)
             OnLevelStarted();
     }
 
     public void CallLevelFinished()
     {
-        if(OnLevelFinished != null)
+        Debug.Log("Level Finished");
+        if (OnLevelFinished != null)
             OnLevelFinished();
+
     }
 
     public void CallPlayerTurnStarted()
     {
+        Debug.Log("Player Turn Started");
         if (OnPlayerTurnStarted != null)
             OnPlayerTurnStarted();
+
     }
 
     public void CallPlayerTurnEnded()
     {
+        Debug.Log("Player Turn Ended");
         if (OnPlayerTurnEnded != null)
             OnPlayerTurnEnded();
     }
 
     public void CallAITurnStarted()
     {
+        Debug.Log("AI Turn Started");
         if (OnAITurnStarted != null)
             OnAITurnStarted();
     }
 
     public void CallAITurnEnded()
     {
+        Debug.Log("AI Turn Ended");
         if (OnAITurnEnded != null)
             OnAITurnEnded();
     }
 
     public void CallCharacterRanOutOfMoves(CharacterBlock noMovesBlock)
     {
-        if(OnCharacterRanOutOfMoves != null)
+        Debug.Log($"{noMovesBlock.name} ran out of moves");
+        if (OnCharacterRanOutOfMoves != null)
             OnCharacterRanOutOfMoves(noMovesBlock);
     }
 
     public void CallNextMoveRequired(CharacterBlock needMovesBlock)
     {
-        if(OnNextMoveRequired != null)
+        Debug.Log($"{needMovesBlock.name} need more moves");
+        if (OnNextMoveRequired != null)
             OnNextMoveRequired(needMovesBlock);
     }
 
     public void CallCharacterChangedPosition(CharacterBlock block, Cell toCell)
     {
+        Debug.Log($"{block.name}'s position is updated in Character Plane");
         characterPlane.UpdateCharacterPosition(block, toCell);
 
         // Currently not used Event
-        if(OnCharacterChangedPosition != null)
+        if (OnCharacterChangedPosition != null)
             OnCharacterChangedPosition(block, toCell);
     }
 
     public void CallBlockStartedBehaviour(Block behavingBlock)
     {
+        Debug.Log($"{behavingBlock.name}'s behaviour started");
         if (OnBlockStartedBehaviour != null)
             OnBlockStartedBehaviour(behavingBlock);
     }
 
     public void CallBlockEndedBehaviour(Block behavingBlock)
     {
+        Debug.Log($"{behavingBlock.name}'s behaviour ended");
         if (OnBlockEndedBehaviour != null)
             OnBlockEndedBehaviour(behavingBlock);
     }

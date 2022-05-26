@@ -11,6 +11,7 @@ public class BlockMovementController : MonoBehaviour
     public float upwardOffset;
     public MovementType movementType;
     public float speed;
+    public GameObject currentMoveObject;
     [SerializeField] private bool displayGizmos;
 
     public enum MovementType
@@ -26,6 +27,7 @@ public class BlockMovementController : MonoBehaviour
         if (fromCell == null) { Debug.Log("From Cell is missing"); return; }
         if (toCell == null) { Debug.Log("To Cell is missing"); return; }
         movementType = type;
+        currentMoveObject = currentTransform.gameObject;
         if (type == MovementType.BasicHop)
         {
             // Use QuadraticBezierLerp
@@ -49,7 +51,6 @@ public class BlockMovementController : MonoBehaviour
             transforms[1].rotation = Quaternion.LookRotation(toCell.worldPosition - fromCell.worldPosition, currentTransform.up);
 
         }
-        Debug.Log($"{currentTransform.name} initialized Movement");
 
     }
 

@@ -391,7 +391,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   cellBasedSize: {x: 1, y: 1, z: 1}
-  movesPerTurn: 1
+  movesPerTurn: 2
   maxHealth: 3
   attackDamage: 1
   displayGizmos: 1

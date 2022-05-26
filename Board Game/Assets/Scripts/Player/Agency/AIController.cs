@@ -5,7 +5,6 @@ using UnityEngine;
 public class AIController : MonoBehaviour
 {
     public static List<AIController> AIs = new List<AIController>();
-    public static List<AIController> finishedAIs = new List<AIController>();
     public static int completedAICount = 0;
 
     public delegate void AIsAreFinished();
@@ -14,25 +13,23 @@ public class AIController : MonoBehaviour
     public delegate void AIIsFinished(AIController finishedAI);
     public static event AIIsFinished OnAIIsFinished;
 
+
     public int actionSortingID;
     public CharacterBlock controlBlock;
-    public bool isFinished;
 
     private GameManager _gameManager;
 
     private void Start()
     {
         _gameManager = FindObjectOfType<GameManager>();
-        _gameManager.OnAITurnStarted += ResetAIs;
+        controlBlock = GetComponent<CharacterBlock>();
+
         _gameManager.OnCharacterRanOutOfMoves += CallAIIsFinished;
         _gameManager.OnNextMoveRequired += ContinueToMoveIfAllowed;
-
-        controlBlock = GetComponent<CharacterBlock>();
     }
 
     private void OnDestroy()
     {
-        _gameManager.OnAITurnStarted -= ResetAIs;
         _gameManager.OnCharacterRanOutOfMoves -= CallAIIsFinished;
         _gameManager.OnNextMoveRequired -= ContinueToMoveIfAllowed;
     }
@@ -42,6 +39,8 @@ public class AIController : MonoBehaviour
         AIs.Add(this);
         AIs.Sort(CompareActionSortingID);
         AIs.TrimExcess();
+
+        OnAIIsFinished += IncrementCompletedAICount;
     }
 
     private void OnDisable()
@@ -49,13 +48,15 @@ public class AIController : MonoBehaviour
         AIs.Remove(this);
         AIs.Sort(CompareActionSortingID);
         AIs.TrimExcess();
+
+        OnAIIsFinished -= IncrementCompletedAICount;
     }
 
     public void PerformAction()
     {
-        Debug.Log($"AI perform something");
+        //Debug.Log($"AI perform something");
         // Need to program an AI and strategies
-        MoveForward();
+        RotateSelf(Block.Rotations.Left);
     }
 
     public void RotateSelf(Block.Rotations rotation)
@@ -70,40 +71,67 @@ public class AIController : MonoBehaviour
 
     public void ContinueToMoveIfAllowed(CharacterBlock compareBlock)
     {
+        Debug.Log(compareBlock + " vs " + controlBlock);
         if (compareBlock != controlBlock) { return; }
         PerformAction();
     }
 
     public void CallAIIsFinished(CharacterBlock compareBlock)
     {
+        Debug.Log(compareBlock + " vs " + controlBlock);
         if(compareBlock != controlBlock) { return; }
-        IncrementCompletedAICount();
+        Debug.Log($"AI of {controlBlock.name} is finished with his/her moves");
+        if (OnAIIsFinished != null)
+            OnAIIsFinished(this);
     }
 
-    public void IncrementCompletedAICount()
+    public void IncrementCompletedAICount(AIController ai)
     {
+        Debug.Log($"{this.name} tried to increment");
+        if(ai != this) { return; }
+        Debug.Log($"{this.name} is incrementing");
+
         completedAICount++;
-        finishedAIs.Add(this);
+        Debug.Log(completedAICount);
         if (completedAICount >= AIs.Count)
         {
             if (OnAIsAreFinished != null)
                 OnAIsAreFinished();
         }
-    }
-
-    public static void ResetAIs()
-    {
-        foreach (AIController ai in AIs)
+        else
         {
-            ai.isFinished = false;
-            ai.controlBlock.ResetCurrentMoves();
+            StartNextAIPerform();
         }
     }
 
-    public static int GetCompletedAICount()
+    public static void ResetAIsStats()
     {
-        return finishedAIs.Count;
+        foreach (AIController ai in AIs)
+        {
+            ai.controlBlock.ResetCurrentMoves();
+            ai.controlBlock.ResetHealth();
+        }
+        completedAICount = 0;
     }
+
+    public static void ResetAIsMoves()
+    {
+        foreach (AIController ai in AIs)
+        {
+            ai.controlBlock.ResetCurrentMoves();
+        }
+
+        completedAICount = 0;
+
+        StartNextAIPerform();
+    }
+
+
+    public static void StartNextAIPerform()
+    {
+        AIs[completedAICount].PerformAction();
+    }
+
 
     private static int CompareActionSortingID(AIController A, AIController B)
     {
