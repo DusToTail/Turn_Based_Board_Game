@@ -5,34 +5,41 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public CharacterBlock playerBlock;
-
+    public GameManager gameManager;
     public delegate void PlayerIsFinished();
     public static event PlayerIsFinished OnPlayerIsFinished;
 
     private bool _canControl = false;
-    private GameManager _gameManager;
+
+    private void OnEnable()
+    {
+        CharacterPlane.OnCharacterPlaneInitialized += InitializePlayerBlock;
+    }
+
+    private void OnDisable()
+    {
+        CharacterPlane.OnCharacterPlaneInitialized -= InitializePlayerBlock;
+    }
 
     private void Start()
     {
-        CharacterPlane.OnCharacterPlaneInitialized += InitializePlayerBlock;
-        _gameManager = FindObjectOfType<GameManager>();
+        gameManager = FindObjectOfType<GameManager>();
 
-        _gameManager.OnLevelStarted += ResetStats;
-        _gameManager.OnLevelStarted += AllowInput;
-        _gameManager.OnPlayerTurnStarted += AllowInput;
-        _gameManager.OnCharacterRanOutOfMoves += CallPlayerIsFinished;
-        _gameManager.OnNextMoveRequired += ContinueToMoveIfAllowed;
+        gameManager.OnLevelStarted += ResetStats;
+        gameManager.OnLevelStarted += AllowInput;
+        gameManager.OnPlayerTurnStarted += AllowInput;
+        gameManager.OnCharacterRanOutOfMoves += CallPlayerIsFinished;
+        gameManager.OnNextMoveRequired += ContinueToMoveIfAllowed;
     }
 
     private void OnDestroy()
     {
-        CharacterPlane.OnCharacterPlaneInitialized -= InitializePlayerBlock;
 
-        _gameManager.OnLevelStarted -= ResetStats;
-        _gameManager.OnLevelStarted -= AllowInput;
-        _gameManager.OnPlayerTurnStarted -= AllowInput;
-        _gameManager.OnCharacterRanOutOfMoves -= CallPlayerIsFinished;
-        _gameManager.OnNextMoveRequired -= ContinueToMoveIfAllowed;
+        gameManager.OnLevelStarted -= ResetStats;
+        gameManager.OnLevelStarted -= AllowInput;
+        gameManager.OnPlayerTurnStarted -= AllowInput;
+        gameManager.OnCharacterRanOutOfMoves -= CallPlayerIsFinished;
+        gameManager.OnNextMoveRequired -= ContinueToMoveIfAllowed;
 
     }
 
