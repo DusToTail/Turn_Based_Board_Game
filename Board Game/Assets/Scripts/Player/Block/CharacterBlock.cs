@@ -100,22 +100,6 @@ public class CharacterBlock : Block
         // Get one forward cell
         Cell toCell = _gameManager.gridController.GetCellFromCellWithDirection(cell, forwardDirection);
 
-        // Anticipate obstacles, enemies, end goal
-        // May refactor to have the validation check be calculated before hand for obstacles. Keep for enemies to trigger hit and goal to clear level
-        if (_gameManager.levelPlane.CheckIfCellIsOccupied(toCell)) 
-        { 
-            Debug.Log($"{toCell.gridPosition} is terrain, cant move");
-            CheckForLeftOverMoves();
-            return; 
-        }
-        if (_gameManager.characterPlane.CheckIfCellIsOccupied(toCell)) 
-        { 
-            Debug.Log($"{toCell.gridPosition} is character, cant move");
-            CheckForLeftOverMoves();
-            return; 
-        }
-
-
         // Set up movement controller
         _movementController.InitializeMovement(transform, forwardDirection, cell, toCell, BlockMovementController.MovementType.BasicHop);
         OnPositionUpdated(this, toCell);

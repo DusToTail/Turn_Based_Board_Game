@@ -52,8 +52,14 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.W))
         {
             // Move forward
-            MovePlayerForward();
-            PreventInput();
+            Cell toCell = gameManager.gridController.GetCellFromCellWithDirection(playerBlock.cell, playerBlock.forwardDirection);
+
+            if(CellIsValidToMove(toCell))
+            {
+                MovePlayerForward();
+                PreventInput();
+            }
+            
         }
         else if(Input.GetKeyDown(KeyCode.S))
         {
@@ -93,6 +99,23 @@ public class PlayerController : MonoBehaviour
     private void MovePlayerForward()
     {
         playerBlock.MoveFoward();
+    }
+
+    private bool CellIsValidToMove(Cell cell)
+    {
+        // Anticipate obstacles, enemies, end goal
+        // May refactor to have the validation check be calculated before hand for obstacles. Keep for enemies to trigger hit and goal to clear level
+        if (gameManager.levelPlane.CheckIfCellIsOccupied(cell))
+        {
+            Debug.Log($"{cell.gridPosition} is terrain, cant move");
+            return false;
+        }
+        if (gameManager.characterPlane.CheckIfCellIsOccupied(cell))
+        {
+            Debug.Log($"{cell.gridPosition} is character, cant move");
+            return false;
+        }
+        return true;
     }
 
     private void ResetStats()
