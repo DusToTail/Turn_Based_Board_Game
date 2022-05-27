@@ -6,7 +6,8 @@ The goal is to reach the goal point on the point (represented as an object with 
 The project will feature:
 + Turn-based gameplay alternating between player controlling a character and enemies trying to attack the player
 + A battle system where each character is limited with action points (or moves)
-+ Limited 3d lighting surrounding the player, acting as (3d?) fog of war
-+ A variety of enemies, traps, gimmicks, abilities.
-+ Elevation in map design
-+ Save system
++ Level design tool using JSON file format (.txt) to save design and load design into scene
++ Limited 3d lighting surrounding the player, acting as (3d?) fog of war (NOT YET)
++ A variety of enemies, traps, gimmicks, abilities  (NOT YET)
++ Elevation in map design  (NOT YET)
++ Save system  (NOT YET)
