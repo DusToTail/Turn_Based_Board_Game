@@ -13,37 +13,31 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
+        GameManager.OnLevelStarted += AllowInput;
+        GameManager.OnPlayerTurnStarted += AllowInput;
+        GameManager.OnCharacterRanOutOfMoves += CallPlayerIsFinished;
+        GameManager.OnNextMoveRequired += ContinueToMoveIfAllowed;
+
         CharacterPlane.OnCharacterPlaneInitialized += InitializePlayerBlock;
     }
 
     private void OnDisable()
     {
+        GameManager.OnLevelStarted -= AllowInput;
+        GameManager.OnPlayerTurnStarted -= AllowInput;
+        GameManager.OnCharacterRanOutOfMoves -= CallPlayerIsFinished;
+        GameManager.OnNextMoveRequired -= ContinueToMoveIfAllowed;
+
         CharacterPlane.OnCharacterPlaneInitialized -= InitializePlayerBlock;
     }
+
 
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
 
-        gameManager.OnLevelStarted += ResetStats;
-        gameManager.OnLevelStarted += AllowInput;
-        gameManager.OnPlayerTurnStarted += AllowInput;
-        gameManager.OnCharacterRanOutOfMoves += CallPlayerIsFinished;
-        gameManager.OnNextMoveRequired += ContinueToMoveIfAllowed;
+        
     }
-
-    private void OnDestroy()
-    {
-
-        gameManager.OnLevelStarted -= ResetStats;
-        gameManager.OnLevelStarted -= AllowInput;
-        gameManager.OnPlayerTurnStarted -= AllowInput;
-        gameManager.OnCharacterRanOutOfMoves -= CallPlayerIsFinished;
-        gameManager.OnNextMoveRequired -= ContinueToMoveIfAllowed;
-
-    }
-
-
 
     private void Update()
     {
@@ -124,21 +118,9 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
-    private void ResetStats()
-    {
-        playerBlock.ResetHealth();
-        playerBlock.ResetCurrentMoves();
-    }
+    
 
-    private void AllowInput()
-    {
-        _canControl = true;
-    }
-
-    private void PreventInput()
-    {
-        _canControl = false;
-    }
+    
 
     private void ContinueToMoveIfAllowed(CharacterBlock compareBlock)
     {
@@ -158,7 +140,24 @@ public class PlayerController : MonoBehaviour
     private void InitializePlayerBlock(CharacterPlane plane)
     {
         playerBlock = plane.GetPlayerBlock();
+        ResetStats();
         AllowInput();
+    }
+
+    private void ResetStats()
+    {
+        playerBlock.ResetHealth();
+        playerBlock.ResetCurrentMoves();
+    }
+
+    private void AllowInput()
+    {
+        _canControl = true;
+    }
+
+    private void PreventInput()
+    {
+        _canControl = false;
     }
 
 }

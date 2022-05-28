@@ -17,35 +17,35 @@ public class GameManager : MonoBehaviour
     public string fileName;
     public LevelDesign currentLevel;
     public delegate void LevelLoadingStarted(LevelDesign levelDesign);
-    public event LevelLoadingStarted OnLevelLoadingStarted;
+    public static event LevelLoadingStarted OnLevelLoadingStarted;
 
     public delegate void LevelStarted();
-    public event LevelStarted OnLevelStarted;
+    public static event LevelStarted OnLevelStarted;
     public delegate void LevelFinished();
-    public event LevelFinished OnLevelFinished;
+    public static event LevelFinished OnLevelFinished;
 
     public delegate void BlockStartedBehaviour(Block behavingBlock);
-    public event BlockStartedBehaviour OnBlockStartedBehaviour;
+    public static event BlockStartedBehaviour OnBlockStartedBehaviour;
     public delegate void BlockEndedBehaviour(Block behavingBlock);
-    public event BlockEndedBehaviour OnBlockEndedBehaviour;
+    public static event BlockEndedBehaviour OnBlockEndedBehaviour;
 
     public delegate void PlayerTurnStarted();
-    public event PlayerTurnStarted OnPlayerTurnStarted;
+    public static event PlayerTurnStarted OnPlayerTurnStarted;
     public delegate void PlayerTurnEnded();
-    public event PlayerTurnEnded OnPlayerTurnEnded;
+    public static event PlayerTurnEnded OnPlayerTurnEnded;
 
     public delegate void AITurnStarted();
-    public event AITurnStarted OnAITurnStarted;
+    public static event AITurnStarted OnAITurnStarted;
     public delegate void AITurnEnded();
-    public event AITurnEnded OnAITurnEnded;
+    public static event AITurnEnded OnAITurnEnded;
 
     public delegate void CharacterRanOutOfMoves(CharacterBlock noMovesBlock);
-    public event CharacterRanOutOfMoves OnCharacterRanOutOfMoves;
+    public static event CharacterRanOutOfMoves OnCharacterRanOutOfMoves;
     public delegate void NextMoveRequired(CharacterBlock needMovesBlock);
-    public event NextMoveRequired OnNextMoveRequired;
+    public static event NextMoveRequired OnNextMoveRequired;
 
     public delegate void CharacterChangedPosition(CharacterBlock movedBlock, Cell toCell);
-    public event CharacterChangedPosition OnCharacterChangedPosition;
+    public static event CharacterChangedPosition OnCharacterChangedPosition;
 
     private void Start()
     {

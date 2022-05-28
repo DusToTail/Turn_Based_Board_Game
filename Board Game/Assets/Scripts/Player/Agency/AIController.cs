@@ -24,18 +24,14 @@ public class AIController : MonoBehaviour
         _gameManager = FindObjectOfType<GameManager>();
         controlBlock = GetComponent<CharacterBlock>();
 
-        _gameManager.OnCharacterRanOutOfMoves += CallAIIsFinished;
-        _gameManager.OnNextMoveRequired += ContinueToMoveIfAllowed;
-    }
-
-    private void OnDestroy()
-    {
-        _gameManager.OnCharacterRanOutOfMoves -= CallAIIsFinished;
-        _gameManager.OnNextMoveRequired -= ContinueToMoveIfAllowed;
+        
     }
 
     private void OnEnable()
     {
+        GameManager.OnCharacterRanOutOfMoves += CallAIIsFinished;
+        GameManager.OnNextMoveRequired += ContinueToMoveIfAllowed;
+
         AIs.Add(this);
         AIs.Sort(CompareActionSortingID);
         AIs.TrimExcess();
@@ -45,6 +41,9 @@ public class AIController : MonoBehaviour
 
     private void OnDisable()
     {
+        GameManager.OnCharacterRanOutOfMoves -= CallAIIsFinished;
+        GameManager.OnNextMoveRequired -= ContinueToMoveIfAllowed;
+
         AIs.Remove(this);
         AIs.Sort(CompareActionSortingID);
         AIs.TrimExcess();
