@@ -16,7 +16,7 @@ MonoBehaviour:
   weaponDescription: A basic weapon that can do basic attack move.
   attackDamage: 1
   attackRange: 1
-  attackCooldown: 1
-  attackGrid: 00000000
+  usageCost: 1
+  attackGrid: 01000000
   attackGridWidth: 1
   attackGridLength: 1

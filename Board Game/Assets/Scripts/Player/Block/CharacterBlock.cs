@@ -21,7 +21,7 @@ public class CharacterBlock : Block
 
     public int movesPerTurn;
     public int maxHealth;
-    public int attackDamage;
+    public WeaponHandler weaponHandler;
 
     public int curHealth { get { return _curHealth; }}
     public int curMovesLeft { get { return _curMovesLeft; } }
@@ -45,6 +45,7 @@ public class CharacterBlock : Block
 
         // May need to reimplement (use when importing level design)
         forwardDirection = GridDirection.Forward;
+
 
     }
 
@@ -157,15 +158,13 @@ public class CharacterBlock : Block
         MinusMoves(moveCost);
     }
 
-    public void AttackForward(int damageAmount)
+    public void Attack()
     {
-        // Get an array of cells basing on the weapons
-        Cell attackCell = gameManager.gridController.GetCellFromCellWithDirection(cell, forwardDirection);
-        // Use those cells from the gridController to query the characterPlane to check for those that is occupied
+        weaponHandler.UseWeapon(this);
+        // Finish movement
+        gameManager.CallBlockEndedBehaviour(this);
 
-        // Animation and Sound effect
-
-        // Trigger the occupants' TriggerHit method.
+        MinusMoves(weaponHandler.weapon.usageCost);
     }
 
     public void TakeDamage(int damageAmount)

@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour
         else if(Input.GetKeyDown(KeyCode.Space))
         {
             // Attack forward
+            AttackForward();
             PreventInput();
         }
         else if(Input.GetKeyDown(KeyCode.Escape))
@@ -99,6 +100,11 @@ public class PlayerController : MonoBehaviour
     private void MovePlayerForward()
     {
         playerBlock.MoveFoward();
+    }
+
+    private void AttackForward()
+    {
+        playerBlock.Attack();
     }
 
     private bool CellIsValidToMove(Cell cell)

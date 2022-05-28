@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class BasicWeapon : Weapon
 {
+    public void Start()
+    {
+        InitializeWeapon();
+    }
+
     public override void Attack(CharacterBlock userBlock)
     {
-        if (!_canAttack) { return; }
-        Cell userCell = userBlock.cell;
-        GridDirection userDirection = userBlock.forwardDirection;
         Cell[] attackCells = userBlock.gameManager.gridController.GetCellsFromCellWithDirectionAnd2DGrid(userBlock.cell, userBlock.forwardDirection, _attackGrid);
         for(int i = 0; i < attackCells.Length; i++)
         {
@@ -20,11 +22,10 @@ public class BasicWeapon : Weapon
 
             // Trigger the occupants' TriggerHit method.
             toAttackBlock.GetComponent<CharacterBlock>().TakeDamage(attackDamage);
-            _curAttackCooldown--;
             Debug.Log($"Attacked cell {attackCell.gridPosition}");
         }
-
     }
+
 
     
 

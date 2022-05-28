@@ -12,7 +12,7 @@ public class WeaponScriptableObject : ScriptableObject
 
     public int attackDamage;
     public int attackRange;
-    public int attackCooldown;
+    public int usageCost;
 
     public int[] attackGrid;
     public int attackGridWidth;
