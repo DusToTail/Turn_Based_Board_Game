@@ -21,6 +21,7 @@ public class BasicWeapon : Weapon
             // Trigger the occupants' TriggerHit method.
             toAttackBlock.GetComponent<CharacterBlock>().TakeDamage(attackDamage);
             _curAttackCooldown--;
+            Debug.Log($"Attacked cell {attackCell.gridPosition}");
         }
 
     }
