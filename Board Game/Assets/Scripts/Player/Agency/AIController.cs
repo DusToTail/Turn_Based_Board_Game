@@ -71,14 +71,12 @@ public class AIController : MonoBehaviour
 
     public void ContinueToMoveIfAllowed(CharacterBlock compareBlock)
     {
-        Debug.Log(compareBlock + " vs " + controlBlock);
         if (compareBlock != controlBlock) { return; }
         PerformAction();
     }
 
     public void CallAIIsFinished(CharacterBlock compareBlock)
     {
-        Debug.Log(compareBlock + " vs " + controlBlock);
         if(compareBlock != controlBlock) { return; }
         Debug.Log($"AI of {controlBlock.name} is finished with his/her moves");
         if (OnAIIsFinished != null)
@@ -87,12 +85,8 @@ public class AIController : MonoBehaviour
 
     public void IncrementCompletedAICount(AIController ai)
     {
-        Debug.Log($"{this.name} tried to increment");
         if(ai != this) { return; }
-        Debug.Log($"{this.name} is incrementing");
-
         completedAICount++;
-        Debug.Log(completedAICount);
         if (completedAICount >= AIs.Count)
         {
             if (OnAIsAreFinished != null)
