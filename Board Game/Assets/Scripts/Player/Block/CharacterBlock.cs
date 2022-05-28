@@ -26,21 +26,22 @@ public class CharacterBlock : Block
     public int curHealth { get { return _curHealth; }}
     public int curMovesLeft { get { return _curMovesLeft; } }
 
+    public GameManager gameManager;
+    public BlockMovementController movementController;
 
     [SerializeField] private bool displayGizmos;
 
     private int _curHealth;
     private int _curMovesLeft;
-    private GameManager _gameManager;
-    private BlockMovementController _movementController;
+    
 
     private void Start()
     {
-        _gameManager = FindObjectOfType<GameManager>();
-        _movementController = FindObjectOfType<BlockMovementController>();
-        OnPositionUpdated += _gameManager.CallCharacterChangedPosition;
-        OnCharacterRanOutOfMoves += _gameManager.CallCharacterRanOutOfMoves;
-        OnNextMoveRequired += _gameManager.CallNextMoveRequired;
+        gameManager = FindObjectOfType<GameManager>();
+        movementController = FindObjectOfType<BlockMovementController>();
+        OnPositionUpdated += gameManager.CallCharacterChangedPosition;
+        OnCharacterRanOutOfMoves += gameManager.CallCharacterRanOutOfMoves;
+        OnNextMoveRequired += gameManager.CallNextMoveRequired;
 
         // May need to reimplement (use when importing level design)
         forwardDirection = GridDirection.Forward;
@@ -49,9 +50,9 @@ public class CharacterBlock : Block
 
     private void OnDestroy()
     {
-        OnPositionUpdated -= _gameManager.CallCharacterChangedPosition;
-        OnCharacterRanOutOfMoves -= _gameManager.CallCharacterRanOutOfMoves;
-        OnNextMoveRequired -= _gameManager.CallNextMoveRequired;
+        OnPositionUpdated -= gameManager.CallCharacterChangedPosition;
+        OnCharacterRanOutOfMoves -= gameManager.CallCharacterRanOutOfMoves;
+        OnNextMoveRequired -= gameManager.CallNextMoveRequired;
 
 
     }
@@ -89,7 +90,7 @@ public class CharacterBlock : Block
         }
 
         // Set up movement controller
-        _movementController.InitializeMovement(transform, forwardDirection, cell, cell, BlockMovementController.MovementType.BasicHop);
+        movementController.InitializeMovement(transform, forwardDirection, cell, cell, BlockMovementController.MovementType.BasicHop);
         // Movement no cost
         StartCoroutine(MovementCoroutine(1));
 
@@ -98,10 +99,10 @@ public class CharacterBlock : Block
     public void MoveFoward()
     {
         // Get one forward cell
-        Cell toCell = _gameManager.gridController.GetCellFromCellWithDirection(cell, forwardDirection);
+        Cell toCell = gameManager.gridController.GetCellFromCellWithDirection(cell, forwardDirection);
 
         // Set up movement controller
-        _movementController.InitializeMovement(transform, forwardDirection, cell, toCell, BlockMovementController.MovementType.BasicHop);
+        movementController.InitializeMovement(transform, forwardDirection, cell, toCell, BlockMovementController.MovementType.BasicHop);
         OnPositionUpdated(this, toCell);
         cell = toCell;
         // Movement 1 cost
@@ -111,11 +112,11 @@ public class CharacterBlock : Block
     private IEnumerator MovementCoroutine(int moveCost)
     {
         float t = 0;
-        if(_movementController.movementType == BlockMovementController.MovementType.BasicHop)
+        if(movementController.movementType == BlockMovementController.MovementType.BasicHop)
         {
-            Transform one = _movementController.transform.GetChild(0);
-            Transform second = _movementController.transform.GetChild(1);
-            Transform third = _movementController.transform.GetChild(2);
+            Transform one = movementController.transform.GetChild(0);
+            Transform second = movementController.transform.GetChild(1);
+            Transform third = movementController.transform.GetChild(2);
 
             while (true)
             {
@@ -126,14 +127,14 @@ public class CharacterBlock : Block
                     MovementUtilities.QuadraticBezierLerp(transform, one, third, second, t, true);
                     break;
                 }
-                t += Time.deltaTime * _movementController.speed * (1 + t);
+                t += Time.deltaTime * movementController.speed * (1 + t);
                 MovementUtilities.QuadraticBezierLerp(transform, one, third, second, t, true);
             }
         }
-        else if(_movementController.movementType == BlockMovementController.MovementType.Slide)
+        else if(movementController.movementType == BlockMovementController.MovementType.Slide)
         {
-            Transform one = _movementController.transform.GetChild(0);
-            Transform second = _movementController.transform.GetChild(1);
+            Transform one = movementController.transform.GetChild(0);
+            Transform second = movementController.transform.GetChild(1);
             while (true)
             {
                 yield return null;
@@ -143,7 +144,7 @@ public class CharacterBlock : Block
                     MovementUtilities.LinearLerp(transform, one, second, t, true);
                     break;
                 }
-                t += Time.deltaTime * _movementController.speed * (1 + t);
+                t += Time.deltaTime * movementController.speed * (1 + t);
                 MovementUtilities.LinearLerp(transform, one, second, t, true);
             }
         }
@@ -151,7 +152,7 @@ public class CharacterBlock : Block
         // Sound Effect
 
         // Finish movement
-        _gameManager.CallBlockEndedBehaviour(this);
+        gameManager.CallBlockEndedBehaviour(this);
 
         MinusMoves(moveCost);
     }
@@ -159,7 +160,7 @@ public class CharacterBlock : Block
     public void AttackForward(int damageAmount)
     {
         // Get an array of cells basing on the weapons
-        Cell attackCell = _gameManager.gridController.GetCellFromCellWithDirection(cell, forwardDirection);
+        Cell attackCell = gameManager.gridController.GetCellFromCellWithDirection(cell, forwardDirection);
         // Use those cells from the gridController to query the characterPlane to check for those that is occupied
 
         // Animation and Sound effect
@@ -169,6 +170,7 @@ public class CharacterBlock : Block
 
     public void TakeDamage(int damageAmount)
     {
+        Debug.Log($"{gameObject} may take {damageAmount} damages. Is calculating");
         MinusHealth(damageAmount);
     }
 

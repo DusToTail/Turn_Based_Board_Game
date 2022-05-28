@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// English: Controller of the main grid used in the scene
@@ -35,6 +36,89 @@ public class GridController : MonoBehaviour
             return grid[newGridPosition.y, newGridPosition.z, newGridPosition.x];
 
         return cell;
+    }
+
+    /// <summary>
+    /// English: Only use 2 dimensional grid with odd number of columns. 0 means ignore the cell, 1 means return the cell
+    /// Only use for cells on the same height level
+    /// </summary>
+    /// <param name="fromCell"></param>
+    /// <param name="direction"></param>
+    /// <param name="checkGrid"></param>
+    /// <returns></returns>
+    public Cell[] GetCellsFromCellWithDirectionAnd2DGrid(Cell fromCell, GridDirection direction, int[,] checkGrid)
+    {
+        List<Cell> cells = new List<Cell>();
+        if (fromCell == null) { return cells.ToArray(); }
+        if (direction == null) { return cells.ToArray(); }
+        if (checkGrid == null) { return cells.ToArray(); }
+        Vector2Int directionV2Int = new Vector2Int(direction.direction.x, direction.direction.z);
+        if (checkGrid.GetLength(1) % 2 == 0)
+        {
+            // Width or number of rows is even
+            // Not implemented as of now
+            Debug.Log("Grid Width is even");
+        }
+        else if (checkGrid.GetLength(1) % 2 == 1)
+        {
+            // Width or number of rows is odd
+            Debug.Log("Grid Width is odd");
+
+            int midColumnIndex = checkGrid.GetLength(1) / 2;
+            int bottomRowIndex = 0;
+            for (int l = 0; l < checkGrid.GetLength(0); l++)
+            {
+                for (int w = 0; w < checkGrid.GetLength(1); w++)
+                {
+                    if (l == bottomRowIndex && w == midColumnIndex) { continue; }
+                    if(checkGrid[l,w] != 1) { continue; }
+                    Vector3Int relativeGridPosition = new Vector3Int(w - midColumnIndex, 0, l - bottomRowIndex);
+
+                    if (direction == GridDirection.Backward)
+                    {
+                        relativeGridPosition = new Vector3Int(-relativeGridPosition.x, 0, -relativeGridPosition.z);
+                        Vector3Int realGridPosition = fromCell.gridPosition + relativeGridPosition;
+                        if (IsWithinGrid(realGridPosition))
+                        {
+                            cells.Add(grid[realGridPosition.y, realGridPosition.z, realGridPosition.x]);
+                        }
+                    }
+                    else if(direction == GridDirection.Forward)
+                    {
+                        relativeGridPosition = new Vector3Int(relativeGridPosition.x, 0, relativeGridPosition.z);
+                        Vector3Int realGridPosition = fromCell.gridPosition + relativeGridPosition;
+                        if (IsWithinGrid(realGridPosition))
+                        {
+                            cells.Add(grid[realGridPosition.y, realGridPosition.z, realGridPosition.x]);
+                        }
+                    }
+                    else if(direction == GridDirection.Left)
+                    {
+                        relativeGridPosition = new Vector3Int(-relativeGridPosition.z, 0,relativeGridPosition.x);
+                        Vector3Int realGridPosition = fromCell.gridPosition + relativeGridPosition;
+                        if (IsWithinGrid(realGridPosition))
+                        {
+                            cells.Add(grid[realGridPosition.y, realGridPosition.z, realGridPosition.x]);
+                        }
+                    }
+                    else if(direction == GridDirection.Right)
+                    {
+                        relativeGridPosition = new Vector3Int(relativeGridPosition.z, 0, -relativeGridPosition.x);
+                        Vector3Int realGridPosition = fromCell.gridPosition + relativeGridPosition;
+                        if (IsWithinGrid(realGridPosition))
+                        {
+                            cells.Add(grid[realGridPosition.y, realGridPosition.z, realGridPosition.x]);
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("Direction is not on a horizontal 2D plane");
+                    }
+                }
+            }
+        }
+
+        return cells.ToArray();
     }
 
     public bool IsWithinGrid(Vector3Int gridPosition)
