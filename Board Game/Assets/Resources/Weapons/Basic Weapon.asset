@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7eadf9e9550c674ca1f485d7fb7ed33, type: 3}
+  m_Name: Basic Weapon
+  m_EditorClassIdentifier: 
+  weaponName: Basic Weapon
+  weaponDescription: A basic weapon that can do basic attack move.
+  attackDamage: 1
+  attackRange: 1
+  attackCooldown: 1
+  attackGrid: 00000000
+  attackGridWidth: 1
+  attackGridLength: 1
