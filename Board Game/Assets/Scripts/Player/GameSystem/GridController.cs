@@ -57,13 +57,10 @@ public class GridController : MonoBehaviour
         {
             // Width or number of rows is even
             // Not implemented as of now
-            Debug.Log("Grid Width is even");
         }
         else if (checkGrid.GetLength(1) % 2 == 1)
         {
             // Width or number of rows is odd
-            Debug.Log("Grid Width is odd");
-
             int midColumnIndex = checkGrid.GetLength(1) / 2;
             int bottomRowIndex = 0;
             for (int l = 0; l < checkGrid.GetLength(0); l++)

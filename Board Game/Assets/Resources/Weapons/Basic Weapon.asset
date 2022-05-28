@@ -17,6 +17,6 @@ MonoBehaviour:
   attackDamage: 1
   attackRange: 1
   usageCost: 1
-  attackGrid: 01000000
+  attackGrid: 0000000001000000
   attackGridWidth: 1
-  attackGridLength: 1
+  attackGridLength: 2

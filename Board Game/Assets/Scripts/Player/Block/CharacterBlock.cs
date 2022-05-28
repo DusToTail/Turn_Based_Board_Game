@@ -160,10 +160,20 @@ public class CharacterBlock : Block
 
     public void Attack()
     {
+        StartCoroutine(AttackCoroutine());
+
+    }
+
+    private IEnumerator AttackCoroutine()
+    {
         weaponHandler.UseWeapon(this);
+
+        // Need reimplementation to take into account of events after the attack of each caught up character
+        yield return new WaitForSeconds(1);
+
+
         // Finish movement
         gameManager.CallBlockEndedBehaviour(this);
-
         MinusMoves(weaponHandler.weapon.usageCost);
     }
 
