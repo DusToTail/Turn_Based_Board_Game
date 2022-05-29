@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class LightingManager : MonoBehaviour
 {
-    private void Start()
+    public Light playerLight;
+    public Transform player;
+
+    [SerializeField] private Vector3 offset;
+
+    private void Update()
     {
+        if(playerLight == null) { return; }
+        if(player == null) { return; }
+        playerLight.transform.position = player.position + offset;
     }
 }

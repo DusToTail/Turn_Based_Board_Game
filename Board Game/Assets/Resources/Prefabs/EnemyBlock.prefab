@@ -95,7 +95,7 @@ MonoBehaviour:
   weaponDescription: 
   attackDamage: 0
   attackRange: 0
-  attackCooldown: 0
+  usageCost: 0
 --- !u!1 &5677545340336260885
 GameObject:
   m_ObjectHideFlags: 0
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 5677545340336261102}
   - component: {fileID: 5677545340336261103}
   - component: {fileID: -6608869597593452130}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EnemyBlock
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -222,6 +222,8 @@ MonoBehaviour:
   movesPerTurn: 2
   maxHealth: 3
   weaponHandler: {fileID: 248611875}
+  attackedCharacterCount: 0
+  curAttackedCharacterCount: 0
   gameManager: {fileID: 0}
   movementController: {fileID: 0}
   displayGizmos: 1
