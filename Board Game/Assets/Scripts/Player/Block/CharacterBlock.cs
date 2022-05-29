@@ -172,7 +172,6 @@ public class CharacterBlock : Block
     {
         weaponHandler.UseWeapon(this);
 
-        // Need reimplementation to take into account of events after the attack of each caught up character
         yield return new WaitUntil(() => curAttackedCharacterCount >= attackedCharacterCount);
 
 
@@ -190,7 +189,7 @@ public class CharacterBlock : Block
     {
         yield return null;
         MinusHealth(damageAmount);
-        Debug.Log($"{gameObject} took {damageAmount} damages. Is calculating");
+        Debug.Log($"{gameObject} took {damageAmount} damages.");
 
         fromCharacter.curAttackedCharacterCount++;
     }
@@ -234,6 +233,13 @@ public class CharacterBlock : Block
         if (amount < 0) { return; }
         _curHealth -= amount;
         if (_curHealth < 0) { _curHealth = 0; }
+
+        if(HealthIsZero())
+        {
+            // Trigger Death Animation
+
+            Destroy(gameObject);
+        }
     }
 
     private void PlusHealth(int amount)
