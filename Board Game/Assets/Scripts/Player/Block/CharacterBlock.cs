@@ -26,6 +26,10 @@ public class CharacterBlock : Block
     public int curHealth { get { return _curHealth; }}
     public int curMovesLeft { get { return _curMovesLeft; } }
 
+    [HideInInspector] public int attackedCharacterCount;
+    [HideInInspector] public int curAttackedCharacterCount;
+
+
     public GameManager gameManager;
     public BlockMovementController movementController;
 
@@ -33,6 +37,7 @@ public class CharacterBlock : Block
 
     private int _curHealth;
     private int _curMovesLeft;
+    
     
 
     private void Start()
@@ -161,7 +166,6 @@ public class CharacterBlock : Block
     public void Attack()
     {
         StartCoroutine(AttackCoroutine());
-
     }
 
     private IEnumerator AttackCoroutine()
@@ -169,7 +173,7 @@ public class CharacterBlock : Block
         weaponHandler.UseWeapon(this);
 
         // Need reimplementation to take into account of events after the attack of each caught up character
-        yield return new WaitForSeconds(1);
+        yield return new WaitUntil(() => curAttackedCharacterCount >= attackedCharacterCount);
 
 
         // Finish movement
@@ -177,10 +181,18 @@ public class CharacterBlock : Block
         MinusMoves(weaponHandler.weapon.usageCost);
     }
 
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(CharacterBlock fromCharacter, int damageAmount)
     {
-        Debug.Log($"{gameObject} may take {damageAmount} damages. Is calculating");
+        StartCoroutine(TakeDamageCoroutine(fromCharacter, damageAmount));
+    }
+
+    private IEnumerator TakeDamageCoroutine(CharacterBlock fromCharacter, int damageAmount)
+    {
+        yield return null;
         MinusHealth(damageAmount);
+        Debug.Log($"{gameObject} took {damageAmount} damages. Is calculating");
+
+        fromCharacter.curAttackedCharacterCount++;
     }
 
     public void HealHealth(int healAmount)
