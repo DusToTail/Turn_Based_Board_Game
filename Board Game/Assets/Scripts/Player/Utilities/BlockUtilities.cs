@@ -26,6 +26,14 @@ public class BlockUtilities
         plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block = block;
     }
 
+    public static void PlaceObjectBlockAtCell(GameObject block, ObjectPlane plane, Cell cell)
+    {
+        if (plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block != null) { return; }
+
+        block.GetComponent<Block>().SnapToCell(cell);
+        plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block = block;
+    }
+
     public static void MoveTerrainBlockAtCellToPool(LevelPlane plane, Cell cell, Transform pool)
     {
         GameObject block = plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x];

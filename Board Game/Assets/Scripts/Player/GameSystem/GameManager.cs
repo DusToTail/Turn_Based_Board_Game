@@ -7,11 +7,12 @@ public class GameManager : MonoBehaviour
     public GridController gridController;
     public LevelPlane levelPlane;
     public CharacterPlane characterPlane;
+    public ObjectPlane objectPlane;
     public PlayerController playerController;
     // Need to prepare grid controller
     // Need to prepare level plane
     // Need to prepare character plane
-    public int prepCount = 3;
+    public int prepCount = 4;
     public int currentPrepCount;
 
     public string fileName;
@@ -57,6 +58,7 @@ public class GameManager : MonoBehaviour
         GridController.OnGridInitialized += InitializeGridController;
         LevelPlane.OnLevelPlaneInitialized += InitializeLevelPlane;
         CharacterPlane.OnCharacterPlaneInitialized += InitializeCharacterPlane;
+        ObjectPlane.OnObjectPlaneInitialized += InitializeObjectPlane;
 
         AIController.OnAIsAreFinished += CallAITurnEnded;
         OnAITurnEnded += CallPlayerTurnStarted;
@@ -73,6 +75,7 @@ public class GameManager : MonoBehaviour
         GridController.OnGridInitialized -= InitializeGridController;
         LevelPlane.OnLevelPlaneInitialized -= InitializeLevelPlane;
         CharacterPlane.OnCharacterPlaneInitialized -= InitializeCharacterPlane;
+        ObjectPlane.OnObjectPlaneInitialized -= InitializeObjectPlane;
 
         AIController.OnAIsAreFinished -= CallAITurnEnded;
         OnAITurnEnded -= CallPlayerTurnStarted;
@@ -220,6 +223,13 @@ public class GameManager : MonoBehaviour
     private void InitializeCharacterPlane(CharacterPlane plane)
     {
         characterPlane = plane;
+        IncrementPrepCount();
+
+    }
+
+    private void InitializeObjectPlane(ObjectPlane plane)
+    {
+        objectPlane = plane;
         IncrementPrepCount();
 
     }

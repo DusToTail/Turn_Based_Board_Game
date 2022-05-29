@@ -161,6 +161,8 @@ public class CharacterBlock : Block
         gameManager.CallBlockEndedBehaviour(this);
 
         MinusMoves(moveCost);
+        // Activate any object block at the current cell
+
     }
 
     public void Attack()
@@ -211,7 +213,7 @@ public class CharacterBlock : Block
 
     public void CheckForLeftOverMoves()
     {
-        if(_curMovesLeft <= 0)
+        if(NoMoreMoves())
         {
             if(OnCharacterRanOutOfMoves != null)
             {
@@ -226,6 +228,12 @@ public class CharacterBlock : Block
             }
         }
 
+    }
+
+    public void CallOnPositionUpdated(Cell toCell)
+    {
+        OnPositionUpdated(this, toCell);
+        cell = toCell;
     }
 
     private void MinusHealth(int amount)
@@ -272,6 +280,8 @@ public class CharacterBlock : Block
     }
 
     private bool NoMoreMoves() { return _curMovesLeft == 0; }
+
+
 
     private void OnDrawGizmos()
     {
