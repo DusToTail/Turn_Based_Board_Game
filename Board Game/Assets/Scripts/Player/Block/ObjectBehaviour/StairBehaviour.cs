@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class StairBehaviour : MonoBehaviour, IActivationOnStep
 {
-    public Vector3Int startCellGridPosition;
-    public Vector3Int endCellGridPosition;
+    public Block startBlock;
+    public Block endBlock;
 
     public GameManager gameManager;
 
@@ -16,7 +16,7 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
 
     public void OnStepped(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
-        Vector3Int directionV3Int = endCellGridPosition - startCellGridPosition;
+        Vector3Int directionV3Int = (endBlock.cell.gridPosition - startBlock.cell.gridPosition);
         Debug.Log($"End to Start V3Int {directionV3Int}");
         if(directionV3Int.magnitude == 0) 
         {
@@ -24,8 +24,9 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
             objectBlock.isFinished = true;
             return;
         }
-        Vector3Int normalizedDirection = directionV3Int / (int)directionV3Int.magnitude;
-        Debug.Log($"End to Start NormalizedV3Int {directionV3Int}");
+        Vector3Int normalizedDirection = new Vector3Int(directionV3Int.x, 0, directionV3Int.z);
+        normalizedDirection = normalizedDirection / (int)normalizedDirection.magnitude;
+        Debug.Log($"End to Start NormalizedV3Int {normalizedDirection}");
 
         GridDirection direction = GridDirection.GetDirectionFromVector3Int(new Vector3Int(normalizedDirection.x, 0, normalizedDirection.z));
         Debug.Log($"Direction: {direction.direction}");
@@ -43,14 +44,15 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
 
     private IEnumerator MoveOnStairCoroutine(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
-        Vector3Int directionV3Int = (endCellGridPosition - startCellGridPosition);
+        Vector3Int directionV3Int = (endBlock.cell.gridPosition - startBlock.cell.gridPosition);
         Debug.Log($"End to Start V3Int {directionV3Int}");
 
         for (int i = 0; i < Mathf.Abs(directionV3Int.y); i++)
         {
             Debug.Log($"{userBlock.name} before position: {userBlock.cell.gridPosition}");
             float t = 0;
-            Vector3Int normalizedDirection = directionV3Int / (int)directionV3Int.magnitude;
+            Vector3Int normalizedDirection = new Vector3Int(directionV3Int.x, 0, directionV3Int.z);
+            normalizedDirection = normalizedDirection / (int)normalizedDirection.magnitude;
             GridDirection direction = GridDirection.GetDirectionFromVector3Int(new Vector3Int(normalizedDirection.x, 0, normalizedDirection.z));
             Debug.Log($"End to Start {direction.direction}");
             Cell toCell = gameManager.gridController.GetCellFromCellWithDirection(userBlock.cell,direction);

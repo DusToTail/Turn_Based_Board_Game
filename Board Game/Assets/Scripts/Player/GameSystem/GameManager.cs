@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public CharacterPlane characterPlane;
     public ObjectPlane objectPlane;
     public PlayerController playerController;
+    public StairsManager stairsManager;
     // Need to prepare grid controller
     // Need to prepare level plane
     // Need to prepare character plane
@@ -124,6 +125,13 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        if(stairsManager != null)
+        {
+            currentLevel.stairsData = new int[saved.stairsData.Length];
+            saved.stairsData.CopyTo(currentLevel.stairsData,0);
+            stairsManager.InitializeStairsData(currentLevel.stairsData);
+        }
+
         Vector3Int gridSize = new Vector3Int(currentLevel.gridWidth, currentLevel.gridHeight, currentLevel.gridLength);
         gridController.InitializeGrid(gridSize);
     }
@@ -234,7 +242,6 @@ public class GameManager : MonoBehaviour
     {
         objectPlane = plane;
         IncrementPrepCount();
-
     }
 
     private void IncrementPrepCount()

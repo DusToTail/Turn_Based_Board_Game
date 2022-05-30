@@ -20,6 +20,6 @@ public class LevelDesign
     public int[] characterGrid;
     public int[] objectGrid;
 
-
+    public int[] stairsData;
 
 }

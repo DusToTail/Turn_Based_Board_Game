@@ -16,6 +16,7 @@ public class LevelEditorToolsManager : MonoBehaviour
     public LevelPlane levelPlane;
     public CharacterPlane characterPlane;
     public ObjectPlane objectPlane;
+    public StairsManager stairsManager;
 
     public LevelDesign editingDesign;
 
@@ -97,7 +98,22 @@ public class LevelEditorToolsManager : MonoBehaviour
                 }
             }
         }
-        
+
+        if(stairsManager != null)
+        {
+            editingDesign.stairsData = new int[stairsManager.stairs.Count * 6];
+            for(int i = 0; i < stairsManager.stairs.Count; i++)
+            {
+                editingDesign.stairsData[6 * i] = stairsManager.stairs[i].startBlock.cell.gridPosition.x;
+                editingDesign.stairsData[6 * i + 1] = stairsManager.stairs[i].startBlock.cell.gridPosition.y;
+                editingDesign.stairsData[6 * i + 2] = stairsManager.stairs[i].startBlock.cell.gridPosition.z;
+                editingDesign.stairsData[6 * i + 3] = stairsManager.stairs[i].endBlock.cell.gridPosition.x;
+                editingDesign.stairsData[6 * i + 4] = stairsManager.stairs[i].endBlock.cell.gridPosition.y;
+                editingDesign.stairsData[6 * i + 5] = stairsManager.stairs[i].endBlock.cell.gridPosition.z;
+
+            }
+        }
+
         SaveSystem.SaveLevelDesign(saveFileName, editingDesign);
 
     }
@@ -135,6 +151,11 @@ public class LevelEditorToolsManager : MonoBehaviour
                     count++;
                 }
             }
+        }
+
+        if (stairsManager != null)
+        {
+            stairsManager.InitializeStairsData(editingDesign.stairsData);
         }
 
         Vector3Int gridSize = new Vector3Int(editingDesign.gridWidth, editingDesign.gridHeight, editingDesign.gridLength);
