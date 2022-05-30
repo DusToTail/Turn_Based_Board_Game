@@ -103,9 +103,11 @@ public class GameManager : MonoBehaviour
         currentLevel.gridWidth = saved.gridWidth;
         currentLevel.terrainGrid = saved.terrainGrid;
         currentLevel.characterGrid = saved.characterGrid;
+        currentLevel.objectGrid = saved.objectGrid;
 
         levelPlane.idGrid = new int[currentLevel.gridHeight, currentLevel.gridLength, currentLevel.gridWidth];
         characterPlane.idGrid = new int[currentLevel.gridHeight, currentLevel.gridLength, currentLevel.gridWidth];
+        objectPlane.idGrid = new int[currentLevel.gridHeight, currentLevel.gridLength, currentLevel.gridWidth];
 
         int count = 0;
         for (int h = 0; h < currentLevel.gridHeight; h++)
@@ -116,6 +118,7 @@ public class GameManager : MonoBehaviour
                 {
                     levelPlane.idGrid[h, l, w] = currentLevel.terrainGrid[count];
                     characterPlane.idGrid[h, l, w] = currentLevel.characterGrid[count];
+                    objectPlane.idGrid[h, l, w] = currentLevel.objectGrid[count];
                     count++;
                 }
             }

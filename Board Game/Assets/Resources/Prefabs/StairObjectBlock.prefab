@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 12878815774820469}
   - component: {fileID: 12878815774820470}
   - component: {fileID: 12878815774820471}
-  - component: {fileID: 7832375718037219892}
+  - component: {fileID: 8926846821000137809}
   m_Layer: 7
   m_Name: StairObjectBlock
   m_TagString: Terrain
@@ -37,6 +37,7 @@ Transform:
   - {fileID: 3729133777056960922}
   - {fileID: 3729133777059480296}
   - {fileID: 3729133776992994620}
+  - {fileID: 6378587654974708818}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -90,7 +91,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7832375718037219892
+--- !u!114 &8926846821000137809
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,11 +100,59 @@ MonoBehaviour:
   m_GameObject: {fileID: 12878815774820464}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a3deaddee2656c418ace9af0b5c10b6, type: 3}
+  m_Script: {fileID: 11500000, guid: e16a7d3f1e8925e40b5212942978b828, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 200
+  id: 201
   cellBasedSize: {x: 1, y: 1, z: 1}
+  activationBehaviour: {fileID: 2374555619433676130}
+--- !u!1 &2374555619433676130
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6378587654974708818}
+  - component: {fileID: 4557779471704821751}
+  m_Layer: 0
+  m_Name: Behaviour
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6378587654974708818
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2374555619433676130}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 12878815774820469}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4557779471704821751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2374555619433676130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43ade1ef9d490a74d9e7d71a25b61076, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startCellGridPosition: {x: 0, y: 0, z: 0}
+  endCellGridPosition: {x: 0, y: 0, z: 0}
+  gameManager: {fileID: 0}
 --- !u!1 &3729133776992994621
 GameObject:
   m_ObjectHideFlags: 0
