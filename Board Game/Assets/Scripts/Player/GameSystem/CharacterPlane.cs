@@ -81,6 +81,8 @@ public class CharacterPlane : MonoBehaviour
 
     private void InitializeGrid(GridController controller)
     {
+        Debug.Log($"Character grid initializing");
+
         // Clear past childs in the grid
         for (int i = transform.childCount - 1; i >= 0; i--)
         {
@@ -102,7 +104,11 @@ public class CharacterPlane : MonoBehaviour
                     CellAndBlock cellAndBlock = new CellAndBlock(cell, null);
                     grid[h, l, w] = cellAndBlock;
 
-                    if (idGrid[h, l, w] == 0) { continue; }
+                    if (idGrid[h, l, w] == 0) 
+                    {
+                        Debug.Log($"Character Plane: Null at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
+                        continue; 
+                    }
 
                     GameObject block = blockIDs.GetCopyFromID(idGrid[h, l, w]);
                     block.transform.parent = transform;
@@ -110,7 +116,7 @@ public class CharacterPlane : MonoBehaviour
                     block.GetComponent<Block>().Initialize(cell, GridDirection.Forward);
                     BlockUtilities.PlaceCharacterBlockAtCell(block, this, cell);
 
-                    Debug.Log($"Created {block.name} {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
+                    Debug.Log($"Character Plane: Created {block.name} {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
                 }
             }
         }

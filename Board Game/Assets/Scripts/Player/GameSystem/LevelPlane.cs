@@ -38,8 +38,10 @@ public class LevelPlane : MonoBehaviour
     /// <param name="controller"></param>
     private void InitializeGrid(GridController controller)
     {
+        Debug.Log($"Terrain grid initializing");
+
         // Clear past childs in the grid
-        for(int i = transform.childCount - 1; i >= 0; i--)
+        for (int i = transform.childCount - 1; i >= 0; i--)
         {
             Debug.Log($"Destroying {transform.GetChild(i).gameObject.name}");
             if (Application.isPlaying) { Destroy(transform.GetChild(i).gameObject); }
@@ -57,7 +59,7 @@ public class LevelPlane : MonoBehaviour
                 for (int w = 0; w < controller.gridSize.x; w++)
                 {
                     Cell cell = controller.grid[h, l, w];
-                    if(idGrid[h, l, w] == 0) { Debug.Log($"({w} {h} {l}) is 0 or null"); continue; }
+                    if(idGrid[h, l, w] == 0) { Debug.Log($"Level Plane: ({w} {h} {l}) is 0 or null"); continue; }
                     GameObject block = blockIDs.GetCopyFromID(idGrid[h, l, w]);
                     block.transform.parent = transform;
                     block.name = $"Block {cell.gridPosition}";
@@ -65,11 +67,11 @@ public class LevelPlane : MonoBehaviour
                     BlockUtilities.PlaceTerrainBlockAtCell(block, this, cell);
                     grid[h, l, w] = block;
                     count++;
-                    Debug.Log($"Created Block id {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
+                    Debug.Log($"Level Plane: Created Block id {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
                 }
             }
         }
-        Debug.Log($"In total, grid intialized with {count} blocks");
+        Debug.Log($"Terrain grid intialized with {count} blocks");
         if(OnLevelPlaneInitialized != null)
             OnLevelPlaneInitialized(this);
     }

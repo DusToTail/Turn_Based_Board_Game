@@ -10,6 +10,7 @@ public class LevelDesign
     // Base grid will be processed by a grid controller
     // Terrain grid will be processed by a level plane
     // Character grid will be processed by a character plane
+    // Object grid will be processed by an object plane
     // Each block will have an integer id
     #endregion
     public int gridHeight;
@@ -17,6 +18,7 @@ public class LevelDesign
     public int gridWidth;
     public int[] terrainGrid;
     public int[] characterGrid;
+    public int[] objectGrid;
 
 
 

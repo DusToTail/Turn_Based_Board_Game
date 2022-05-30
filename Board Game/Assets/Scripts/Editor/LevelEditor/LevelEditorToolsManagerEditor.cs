@@ -73,7 +73,11 @@ public class LevelEditorToolsManagerEditor : Editor
                     {
                         manager.paintTool.PaintBlockAtCursor(manager.objectList[manager.objectIndex], manager.gridController, manager.levelPlane, manager.editingLayers);
                     }
-                    
+                    else if (manager.editingPlane == LevelEditorToolsManager.Planes.Object)
+                    {
+                        manager.paintTool.PaintBlockAtCursor(manager.objectList[manager.objectIndex], manager.gridController, manager.levelPlane, manager.objectPlane, manager.editingLayers);
+                    }
+
                 }
 
             }
@@ -95,7 +99,11 @@ public class LevelEditorToolsManagerEditor : Editor
                     {
                         manager.eraseTool.EraseBlockAtCursor(manager.levelPlane, manager.pool, manager.editingLayers);
                     }
-                    
+                    else if (manager.editingPlane == LevelEditorToolsManager.Planes.Object)
+                    {
+                        manager.eraseTool.EraseBlockAtCursor(manager.objectPlane, manager.pool, manager.editingLayers);
+                    }
+
                 }
             }
         }

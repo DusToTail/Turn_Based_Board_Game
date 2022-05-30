@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// English: A plane made out of object blocks, used to keep track of all objects in the level. Object is not passable like terrain
+/// </summary>
+[ExecuteAlways]
 public class ObjectPlane : MonoBehaviour
 {
     public delegate void ObjectPlaneInitialized(ObjectPlane objectPlane);
@@ -26,6 +30,8 @@ public class ObjectPlane : MonoBehaviour
 
     private void InitializeGrid(GridController controller)
     {
+        Debug.Log($"Object grid initializing");
+
         // Clear past childs in the grid
         for (int i = transform.childCount - 1; i >= 0; i--)
         {
@@ -47,7 +53,11 @@ public class ObjectPlane : MonoBehaviour
                     CellAndBlock cellAndBlock = new CellAndBlock(cell, null);
                     grid[h, l, w] = cellAndBlock;
 
-                    if (idGrid[h, l, w] == 0) { continue; }
+                    if (idGrid[h, l, w] == 0) 
+                    {
+                        Debug.Log($"Object Plane: Null at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
+                        continue; 
+                    }
 
                     GameObject block = blockIDs.GetCopyFromID(idGrid[h, l, w]);
                     block.transform.parent = transform;
@@ -55,11 +65,11 @@ public class ObjectPlane : MonoBehaviour
                     block.GetComponent<Block>().Initialize(cell, GridDirection.Forward);
                     BlockUtilities.PlaceObjectBlockAtCell(block, this, cell);
 
-                    Debug.Log($"Created {block.name} {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
+                    Debug.Log($"Object Plane: Created {block.name} {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
                 }
             }
         }
-        Debug.Log($"Character grid initialized");
+        Debug.Log($"Object grid initialized");
         if (OnObjectPlaneInitialized != null)
             OnObjectPlaneInitialized(this);
     }

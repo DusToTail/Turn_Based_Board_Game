@@ -58,6 +58,18 @@ public class BlockUtilities
         plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block = null;
     }
 
+    public static void MoveObjectBlockAtCellToPool(ObjectPlane plane, Cell cell, Transform pool)
+    {
+        GameObject block = plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block;
+        if (block == null) { return; }
+
+        block.transform.parent = pool;
+        block.transform.localPosition = Vector3.zero;
+        block.SetActive(false);
+        blockPool.Add(block);
+        plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block = null;
+    }
+
     public static void DrawWireframeAtCell(Cell cell)
     {
         if(cell == null) { return; }

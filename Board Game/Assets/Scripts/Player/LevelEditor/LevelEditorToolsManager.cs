@@ -15,6 +15,7 @@ public class LevelEditorToolsManager : MonoBehaviour
     public GridController gridController;
     public LevelPlane levelPlane;
     public CharacterPlane characterPlane;
+    public ObjectPlane objectPlane;
 
     public LevelDesign editingDesign;
 
@@ -41,7 +42,7 @@ public class LevelEditorToolsManager : MonoBehaviour
 
     public void SaveDesign()
     {
-        if(gridController == null || levelPlane == null || characterPlane == null)
+        if(gridController == null || levelPlane == null || characterPlane == null || objectPlane == null)
         {
             Debug.Log("Grid is not initialized in the editor");
             return;
@@ -54,6 +55,7 @@ public class LevelEditorToolsManager : MonoBehaviour
         editingDesign.gridWidth = gridController.gridSize.x;
         editingDesign.terrainGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
         editingDesign.characterGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
+        editingDesign.objectGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
 
         int count = 0;
         for (int h = 0; h < gridController.gridSize.y; h++)
@@ -81,6 +83,16 @@ public class LevelEditorToolsManager : MonoBehaviour
                     {
                         editingDesign.characterGrid[count] = characterPlane.grid[h, l, w].block.GetComponent<Block>().id;
                     }
+
+                    // Save object grid (Object Plane)
+                    if (objectPlane.grid[h, l, w].block == null)
+                    {
+                        editingDesign.objectGrid[count] = 0;
+                    }
+                    else
+                    {
+                        editingDesign.objectGrid[count] = objectPlane.grid[h, l, w].block.GetComponent<Block>().id;
+                    }
                     count++;
                 }
             }
@@ -92,7 +104,7 @@ public class LevelEditorToolsManager : MonoBehaviour
 
     public void LoadDesign()
     {
-        if (gridController == null || levelPlane == null || characterPlane == null)
+        if (gridController == null || levelPlane == null || characterPlane == null || objectPlane == null)
         {
             Debug.Log("Grid is not initialized in the editor");
             return;
@@ -104,9 +116,11 @@ public class LevelEditorToolsManager : MonoBehaviour
         editingDesign.gridWidth = saved.gridWidth;
         editingDesign.terrainGrid = saved.terrainGrid;
         editingDesign.characterGrid = saved.characterGrid;
+        editingDesign.objectGrid = saved.objectGrid;
 
         levelPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
         characterPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
+        objectPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
 
         int count = 0;
         for (int h = 0; h < editingDesign.gridHeight; h++)
@@ -117,6 +131,7 @@ public class LevelEditorToolsManager : MonoBehaviour
                 {
                     levelPlane.idGrid[h, l, w] =  editingDesign.terrainGrid[count];
                     characterPlane.idGrid[h, l, w] = editingDesign.characterGrid[count];
+                    objectPlane.idGrid[h, l, w] = editingDesign.objectGrid[count];
                     count++;
                 }
             }
@@ -128,7 +143,7 @@ public class LevelEditorToolsManager : MonoBehaviour
 
     public void LoadDefaultDesign()
     {
-        if (gridController == null || levelPlane == null || characterPlane == null)
+        if (gridController == null || levelPlane == null || characterPlane == null || objectPlane == null)
         {
             Debug.Log("Grid is not initialized in the editor");
             return;
@@ -139,6 +154,7 @@ public class LevelEditorToolsManager : MonoBehaviour
         editingDesign.gridWidth = 10;
         editingDesign.terrainGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
         editingDesign.characterGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
+        editingDesign.objectGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
 
         int count = 0;
         for (int h = 0; h < 1; h++)
@@ -156,6 +172,7 @@ public class LevelEditorToolsManager : MonoBehaviour
 
         levelPlane.idGrid = new int[editingDesign.gridHeight,  editingDesign.gridLength, editingDesign.gridWidth];
         characterPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
+        objectPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
 
         count = 0;
         for (int h = 0; h < editingDesign.gridHeight; h++)
@@ -166,6 +183,7 @@ public class LevelEditorToolsManager : MonoBehaviour
                 {
                     levelPlane.idGrid[h, l, w] = editingDesign.terrainGrid[count];
                     characterPlane.idGrid[h, l, w] = editingDesign.characterGrid[count];
+                    objectPlane.idGrid[h, l, w] = editingDesign.objectGrid[count];
                     count++;
                 }
             }
@@ -180,6 +198,7 @@ public class LevelEditorToolsManager : MonoBehaviour
         GridController.OnGridInitialized += InitializeGridController;
         LevelPlane.OnLevelPlaneInitialized += InitializeLevelPlane;
         CharacterPlane.OnCharacterPlaneInitialized += InitializeCharacterPlane;
+        ObjectPlane.OnObjectPlaneInitialized += InitializeObjectPlane;
     }
 
     private void OnDisable()
@@ -187,6 +206,7 @@ public class LevelEditorToolsManager : MonoBehaviour
         GridController.OnGridInitialized -= InitializeGridController;
         LevelPlane.OnLevelPlaneInitialized -= InitializeLevelPlane;
         CharacterPlane.OnCharacterPlaneInitialized -= InitializeCharacterPlane;
+        ObjectPlane.OnObjectPlaneInitialized -= InitializeObjectPlane;
     }
 
     private void InitializeGridController(GridController gridController)
@@ -202,5 +222,10 @@ public class LevelEditorToolsManager : MonoBehaviour
     private void InitializeCharacterPlane(CharacterPlane characterPlane)
     {
         this.characterPlane = characterPlane;
+    }
+
+    private void InitializeObjectPlane(ObjectPlane objectPlane)
+    {
+        this.objectPlane = objectPlane;
     }
 }

@@ -143,7 +143,7 @@ public class GridController : MonoBehaviour
                     Vector3 worldPosition = transform.position + new Vector3(w * cellSize.x, h * cellSize.y, l * cellSize.z) + 0.5f * cellSize;
                     Cell cell = new Cell(worldPosition, gridPosition);
                     grid[h,l,w] = cell;
-                    Debug.Log($"Created Cell {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
+                    Debug.Log($"Grid Controller: Created Cell {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
                 }
             }
         }
@@ -171,7 +171,7 @@ public class GridController : MonoBehaviour
                     Vector3 worldPosition = transform.position + new Vector3(w * cellSize.x, h * cellSize.y, l * cellSize.z) + 0.5f * cellSize;
                     Cell cell = new Cell(worldPosition, gridPosition);
                     grid[h, l, w] = cell;
-                    Debug.Log($"Created Cell {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
+                    Debug.Log($"Grid Controller: Created Cell {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
                 }
             }
         }
