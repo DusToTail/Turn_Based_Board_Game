@@ -17,10 +17,23 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
     public void OnStepped(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
         Vector3Int directionV3Int = endCellGridPosition - startCellGridPosition;
-        GridDirection direction = GridDirection.GetDirectionFromVector3Int(new Vector3Int(directionV3Int.x, 0, directionV3Int.z));
-        if (direction.Equals(userBlock.forwardDirection)) 
+        Debug.Log($"End to Start V3Int {directionV3Int}");
+        if(directionV3Int.magnitude == 0) 
         {
             gameManager.CallBlockEndedBehaviour(objectBlock);
+            objectBlock.isFinished = true;
+            return;
+        }
+        Vector3Int normalizedDirection = directionV3Int / (int)directionV3Int.magnitude;
+        Debug.Log($"End to Start NormalizedV3Int {directionV3Int}");
+
+        GridDirection direction = GridDirection.GetDirectionFromVector3Int(new Vector3Int(normalizedDirection.x, 0, normalizedDirection.z));
+        Debug.Log($"Direction: {direction.direction}");
+        Debug.Log($"User Forward Direction: {userBlock.forwardDirection.direction}");
+        if (!direction.Equals(userBlock.forwardDirection)) 
+        {
+            gameManager.CallBlockEndedBehaviour(objectBlock);
+            objectBlock.isFinished = true;
             return; 
         }
         objectBlock.isFinished = false;
