@@ -5,6 +5,7 @@ using UnityEngine;
 public class ObjectBlock : Block
 {
     public GameObject activationBehaviour;
+    public bool isFinished;
 
     private void OnEnable()
     {
@@ -23,7 +24,6 @@ public class ObjectBlock : Block
         if(currentBlock.cell.gridPosition != cell.gridPosition) { return; }
         if(currentBlock.GetType() != typeof(CharacterBlock)) { return; }
         Debug.Log($"{currentBlock.name} landed on {name} at cell {cell.gridPosition}");
-
         Activate((CharacterBlock)currentBlock);
     }
 
@@ -39,7 +39,6 @@ public class ObjectBlock : Block
     {
         if(activationBehaviour == null) { return; }
         if(activationBehaviour.GetComponent<IActivationOnStep>() == null) { return; }
-
         activationBehaviour.GetComponent<IActivationOnStep>().OnStepped(this, userBlock);
     }
 }

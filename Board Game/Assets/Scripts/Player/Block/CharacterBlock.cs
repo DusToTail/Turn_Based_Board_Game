@@ -118,6 +118,7 @@ public class CharacterBlock : Block
     private IEnumerator MovementCoroutine(int moveCost)
     {
         float t = 0;
+        Cell steppedOnCell = cell;
         if(movementController.movementType == BlockMovementController.MovementType.BasicHop)
         {
             Transform one = movementController.transform.GetChild(0);
@@ -157,11 +158,18 @@ public class CharacterBlock : Block
 
         // Sound Effect
 
+
         // Finish movement
         gameManager.CallBlockEndedBehaviour(this);
 
+        // Wait for any object block at the current cell
+        GameObject objectBlock = gameManager.objectPlane.grid[steppedOnCell.gridPosition.y, steppedOnCell.gridPosition.z, steppedOnCell.gridPosition.x].block;
+        if(objectBlock != null)
+        {
+            yield return new WaitUntil(() => objectBlock.GetComponent<ObjectBlock>().isFinished == true);
+        }
+
         MinusMoves(moveCost);
-        // Activate any object block at the current cell
 
     }
 

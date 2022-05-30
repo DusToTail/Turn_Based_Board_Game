@@ -18,29 +18,38 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
     {
         Vector3Int directionV3Int = endCellGridPosition - startCellGridPosition;
         GridDirection direction = GridDirection.GetDirectionFromVector3Int(new Vector3Int(directionV3Int.x, 0, directionV3Int.z));
-        if (direction != userBlock.forwardDirection) 
+        if (direction.Equals(userBlock.forwardDirection)) 
         {
             gameManager.CallBlockEndedBehaviour(objectBlock);
             return; 
         }
+        objectBlock.isFinished = false;
+
         StartCoroutine(MoveOnStairCoroutine(objectBlock, userBlock));
     }
 
     private IEnumerator MoveOnStairCoroutine(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
-        Vector3Int directionV3Int = endCellGridPosition - startCellGridPosition;
-        for(int i = 0; i < Mathf.Abs(directionV3Int.y); i++)
+        Vector3Int directionV3Int = (endCellGridPosition - startCellGridPosition);
+        Debug.Log($"End to Start V3Int {directionV3Int}");
+
+        for (int i = 0; i < Mathf.Abs(directionV3Int.y); i++)
         {
+            Debug.Log($"{userBlock.name} before position: {userBlock.cell.gridPosition}");
             float t = 0;
-            GridDirection direction = GridDirection.GetDirectionFromVector3Int(new Vector3Int(directionV3Int.x, 0, directionV3Int.z));
+            Vector3Int normalizedDirection = directionV3Int / (int)directionV3Int.magnitude;
+            GridDirection direction = GridDirection.GetDirectionFromVector3Int(new Vector3Int(normalizedDirection.x, 0, normalizedDirection.z));
+            Debug.Log($"End to Start {direction.direction}");
             Cell toCell = gameManager.gridController.GetCellFromCellWithDirection(userBlock.cell,direction);
             if(directionV3Int.y > 0)
                 toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, GridDirection.Up);
             else if(directionV3Int.y < 0)
                 toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, GridDirection.Down);
+            Debug.Log($"ToCell of {userBlock.name} is: {toCell.gridPosition}");
 
             userBlock.movementController.InitializeMovement(userBlock.transform, direction, userBlock.cell, toCell, BlockMovementController.MovementType.BasicHop);
             userBlock.CallOnPositionUpdated(toCell);
+            Debug.Log($"{userBlock.name} after position: {userBlock.cell.gridPosition}");
 
             if (userBlock.movementController.movementType == BlockMovementController.MovementType.BasicHop)
             {
@@ -84,6 +93,7 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
         }
 
         gameManager.CallBlockEndedBehaviour(objectBlock);
+        objectBlock.isFinished = true;
     }
 
 }
