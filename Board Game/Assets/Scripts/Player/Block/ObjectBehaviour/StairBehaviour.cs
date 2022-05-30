@@ -16,6 +16,13 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
 
     public void OnStepped(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
+        Vector3Int directionV3Int = endCellGridPosition - startCellGridPosition;
+        GridDirection direction = GridDirection.GetDirectionFromVector3Int(new Vector3Int(directionV3Int.x, 0, directionV3Int.z));
+        if (direction != userBlock.forwardDirection) 
+        {
+            gameManager.CallBlockEndedBehaviour(objectBlock);
+            return; 
+        }
         StartCoroutine(MoveOnStairCoroutine(objectBlock, userBlock));
     }
 
