@@ -110,6 +110,16 @@ public class PlayerController : MonoBehaviour
             Debug.Log($"{cell.gridPosition} is terrain, cant move");
             return false;
         }
+        else
+        {
+            Cell cellBelow = gameManager.gridController.GetCellFromCellWithDirection(cell, GridDirection.Down);
+            if(!gameManager.levelPlane.CheckIfCellIsOccupied(cellBelow))
+            {
+                Debug.Log($"{cell.gridPosition} is cliff, cant move");
+                return false;
+            }
+        }
+
         if (gameManager.characterPlane.CheckIfCellIsOccupied(cell))
         {
             Debug.Log($"{cell.gridPosition} is character, cant move");
