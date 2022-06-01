@@ -7,7 +7,7 @@ using UnityEditor.UIElements;
 public class BehaviourTreeEditor : EditorWindow
 {
     private BehaviourTreeView _treeView;
-    private InspectorElement _inspectorView;
+    private InspectorView _inspectorView;
 
     [MenuItem("BehaviourTreeEditor/Editor ...")]
     public static void ShowWindow()
@@ -32,15 +32,23 @@ public class BehaviourTreeEditor : EditorWindow
         root.styleSheets.Add(styleSheet);
 
         _treeView = root.Q<BehaviourTreeView>();
-        _inspectorView = root.Q<InspectorElement>();
+        _inspectorView = root.Q<InspectorView>();
+        _treeView.OnNodeSelected = OnNodeSelectionChanged;
+        OnSelectionChange();
     }
 
     private void OnSelectionChange()
     {
         BehaviourTree tree = Selection.activeObject as BehaviourTree;
-        if(tree)
+        if(tree && AssetDatabase.CanOpenAssetInEditor(tree.GetInstanceID()))
         {
+            Debug.Log("Behaviour Tree selected");
             _treeView.PopulateView(tree);
         }
+    }
+
+    private void OnNodeSelectionChanged(NodeView node)
+    {
+        _inspectorView.UpdateSelection(node);
     }
 }
