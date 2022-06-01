@@ -75,6 +75,7 @@ public class CharacterBlock : Block
             OnCharacterRemoved();
     }
 
+
     /// <summary>
     /// English: Rotate the block horizontally with hop animation
     /// </summary>
@@ -172,6 +173,28 @@ public class CharacterBlock : Block
         MinusMoves(moveCost);
 
     }
+
+    public void SkipAction()
+    {
+        StartCoroutine(SkipActionCoroutine());
+    }
+
+    private IEnumerator SkipActionCoroutine()
+    {
+        Cell steppedOnCell = cell;
+
+        gameManager.CallBlockEndedBehaviour(this);
+
+        // Wait for any object block at the current cell
+        GameObject objectBlock = gameManager.objectPlane.grid[steppedOnCell.gridPosition.y, steppedOnCell.gridPosition.z, steppedOnCell.gridPosition.x].block;
+        if (objectBlock != null)
+        {
+            yield return new WaitUntil(() => objectBlock.GetComponent<ObjectBlock>().isFinished == true);
+        }
+
+        MinusMoves(1);
+    }
+
 
     public void Attack()
     {

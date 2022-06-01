@@ -57,7 +57,8 @@ public class PlayerController : MonoBehaviour
         }
         else if(Input.GetKeyDown(KeyCode.S))
         {
-            // Guard or Use items?
+            // Skip Action
+            SkipAction();
             PreventInput();
         }
         else if(Input.GetKeyDown(KeyCode.D))
@@ -84,6 +85,11 @@ public class PlayerController : MonoBehaviour
             PreventInput();
         }
 
+    }
+
+    private void SkipAction()
+    {
+        playerBlock.SkipAction();
     }
 
     private void RotatePlayer(Block.Rotations rotation)
