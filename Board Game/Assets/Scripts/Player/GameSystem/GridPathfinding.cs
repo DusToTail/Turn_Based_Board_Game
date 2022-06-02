@@ -55,7 +55,7 @@ public static class GridPathfinding
                 {
                     Debug.Log($"Pathfinding cell {i} is at {backtrackList[i].cell.gridPosition}");
                 }
-                
+                Debug.Log($"Iteration count: {count}");
                 return backtrackList;
             }
 
