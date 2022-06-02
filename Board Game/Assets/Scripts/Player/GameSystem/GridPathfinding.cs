@@ -3,8 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+/// <summary>
+/// English: Static class for A* pathfinding in 3D grid with obstacles
+/// </summary>
 public static class GridPathfinding
 {
+    /// <summary>
+    ///  English: Get the direction to the next cell in order to reach the destination with A*
+    /// </summary>
+    /// <param name="fromCell"></param>
+    /// <param name="toCell"></param>
+    /// <param name="gridController"></param>
+    /// <param name="levelPlane"></param>
+    /// <param name="characterPlane"></param>
+    /// <param name="objectPlane"></param>
+    /// <returns></returns>
     public static GridDirection GetImmediateDirection(Cell fromCell, Cell toCell, GridController gridController, LevelPlane levelPlane, CharacterPlane characterPlane, ObjectPlane objectPlane)
     {
         List<PathfindingCell> backtrackList = GetBacktrackPath(fromCell, toCell, gridController, levelPlane, characterPlane, objectPlane);
@@ -15,8 +28,19 @@ public static class GridPathfinding
         return resultDirection;
     }
 
+    /// <summary>
+    /// English: Get a list of cells that construct the path towards the destination (backward)
+    /// </summary>
+    /// <param name="fromCell"></param>
+    /// <param name="toCell"></param>
+    /// <param name="gridController"></param>
+    /// <param name="levelPlane"></param>
+    /// <param name="characterPlane"></param>
+    /// <param name="objectPlane"></param>
+    /// <returns></returns>
     public static List<PathfindingCell> GetBacktrackPath(Cell fromCell, Cell toCell, GridController gridController, LevelPlane levelPlane, CharacterPlane characterPlane, ObjectPlane objectPlane)
     {
+        // Create closed list
         PathfindingCell[,,] pathfindingGrid = new PathfindingCell[gridController.gridSize.y, gridController.gridSize.z, gridController.gridSize.x];
         for (int h = 0; h < gridController.gridSize.y; h++)
         {
@@ -29,6 +53,8 @@ public static class GridPathfinding
                 }
             }
         }
+
+        // Create open list (priority queue) and add the starting point
         PriorityQueue<PathfindingCell> queue = new PriorityQueue<PathfindingCell>(true);
         PathfindingCell root = pathfindingGrid[fromCell.gridPosition.y, fromCell.gridPosition.z, fromCell.gridPosition.x];
         root.CalculateCosts(toCell, 0, true);
@@ -36,12 +62,15 @@ public static class GridPathfinding
         queue.Enqueue(root.fCost, root);
         Debug.Log($"Pathfinding enqueued {root.cell.gridPosition} with {root.fCost} fCost, {root.gCost} gCost, {root.hCost} hCost");
 
+        // Create backtrack list to return
         List<PathfindingCell> backtrackList = new List<PathfindingCell>();
         int count = 0;
         while (queue.Count > 0)
         {
             PathfindingCell current = queue.Dequeue();
             Debug.Log($"Pathfinding processing Cell {current.cell.gridPosition}");
+
+            // If destination is reached, construct backtrack path and return
             if (current.cell == toCell)
             {
                 Debug.Log($"Pathfinding reached destination at {current.cell.gridPosition}");
@@ -59,12 +88,15 @@ public static class GridPathfinding
                 return backtrackList;
             }
 
+            // Enqueue neighboring cell for each direction excluding up, down, none
             foreach (GridDirection direction in GridDirection.AllDirections)
             {
                 Debug.Log($"Pathfinding processing Direction {direction.direction}");
-
+                // Direction validation
                 if (direction == GridDirection.Up || direction == GridDirection.Down || direction == GridDirection.None) { continue; }
                 Cell neighborCell = gridController.GetCellFromCellWithDirection(current.cell, direction);
+
+                // Terrain, gimmick validation
                 if (objectPlane.grid[neighborCell.gridPosition.y, neighborCell.gridPosition.z, neighborCell.gridPosition.x].block != null)
                 {
                     GameObject objectBlock = objectPlane.grid[neighborCell.gridPosition.y, neighborCell.gridPosition.z, neighborCell.gridPosition.x].block;
@@ -95,6 +127,8 @@ public static class GridPathfinding
 
                 PathfindingCell neighborPathfindingCell = pathfindingGrid[neighborCell.gridPosition.y, neighborCell.gridPosition.z, neighborCell.gridPosition.x];
                 Debug.Log($"Pathfinding processing Neighbor Cell {neighborPathfindingCell.cell.gridPosition}");
+
+                // gCost validation
                 if((current.gCost + neighborPathfindingCell.selfCost) >= neighborPathfindingCell.gCost) { continue; }
 
                 neighborPathfindingCell.CalculateCosts(toCell, current.gCost);
@@ -109,6 +143,9 @@ public static class GridPathfinding
         return backtrackList;
     }
 
+    /// <summary>
+    /// English: implementation of an A* node
+    /// </summary>
     public class PathfindingCell
     {
         public PathfindingCell parent;

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// English: Simple tester (debugger) for grid pathfinding
+/// </summary>
 public class GridPathfindingDebugger : MonoBehaviour
 {
     public GridController gridController;
