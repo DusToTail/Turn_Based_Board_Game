@@ -74,7 +74,7 @@ public static class GridPathfinding
                     {
                         Cell endStairCell = objectBlock.GetComponentInChildren<StairBehaviour>().endBlock.cell;
                         PathfindingCell endStairPathfindingCell = pathfindingGrid[endStairCell.gridPosition.y, endStairCell.gridPosition.z, endStairCell.gridPosition.x];
-                        if (endStairPathfindingCell.traversed) { continue; }
+                        if((current.gCost + endStairPathfindingCell.selfCost) >= endStairPathfindingCell.gCost) { continue; }
 
                         endStairPathfindingCell.CalculateCosts(toCell, current.gCost);
                         endStairPathfindingCell.parent = current;
@@ -95,8 +95,8 @@ public static class GridPathfinding
 
                 PathfindingCell neighborPathfindingCell = pathfindingGrid[neighborCell.gridPosition.y, neighborCell.gridPosition.z, neighborCell.gridPosition.x];
                 Debug.Log($"Pathfinding processing Neighbor Cell {neighborPathfindingCell.cell.gridPosition}");
+                if((current.gCost + neighborPathfindingCell.selfCost) >= neighborPathfindingCell.gCost) { continue; }
 
-                if (neighborPathfindingCell.traversed) { continue; }
                 neighborPathfindingCell.CalculateCosts(toCell, current.gCost);
                 neighborPathfindingCell.parent = current;
                 queue.Enqueue(neighborPathfindingCell.fCost, neighborPathfindingCell);
@@ -117,7 +117,6 @@ public static class GridPathfinding
         public int hCost;
         public int gCost;
         public int fCost;
-        public bool traversed;
 
         public PathfindingCell(Cell cell)
         {
@@ -125,9 +124,8 @@ public static class GridPathfinding
             this.cell = cell;
             selfCost = 1;
             hCost = 0;
-            gCost = 0;
+            gCost = int.MaxValue;
             fCost = 0;
-            traversed = false;
         }
 
         public void CalculateCosts(Cell toCell, int gCost, bool isRoot = false)
@@ -140,7 +138,6 @@ public static class GridPathfinding
                 this.gCost = gCost + selfCost;
             fCost = gCost + hCost;
 
-            traversed = true;
         }
 
     }

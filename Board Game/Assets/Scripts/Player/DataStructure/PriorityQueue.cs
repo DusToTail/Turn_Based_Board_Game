@@ -48,8 +48,7 @@ public class PriorityQueue<T>
 
     public void UpdatePriority(T obj, int priority)
     {
-        int i = 0;
-        for (; i <= _heapSize; i++)
+        for (int i = 0; i <= _heapSize; i++)
         {
             Node node = _queue[i];
             if (object.ReferenceEquals(node.item, obj))
@@ -132,7 +131,9 @@ public class PriorityQueue<T>
 
     private void Swap(int i, int j)
     {
-
+        var temp = _queue[i];
+        _queue[i] = _queue[j];
+        _queue[j] = temp;
     }
 
     private int ChildIndexLeft(int i)
