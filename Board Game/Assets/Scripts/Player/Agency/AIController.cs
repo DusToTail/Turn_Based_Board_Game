@@ -16,6 +16,7 @@ public class AIController : MonoBehaviour
 
     public int actionSortingID;
     public CharacterBlock controlBlock;
+    public BehaviourTreeRunner behaviourTreeRunner;
 
     private GameManager _gameManager;
 

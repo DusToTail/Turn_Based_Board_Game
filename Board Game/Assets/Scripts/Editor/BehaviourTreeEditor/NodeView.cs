@@ -63,7 +63,7 @@ public class NodeView : UnityEditor.Experimental.GraphView.Node
         }
         else if (node is RootNode)
         {
-            input = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
+            output = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
         }
 
         if (output != null)

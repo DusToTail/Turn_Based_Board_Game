@@ -36,6 +36,7 @@ public class BehaviourTree: ScriptableObject
     {
         nodes.Remove(node);
         AssetDatabase.RemoveObjectFromAsset(node);
+        //DestroyImmediate(node, true);
         AssetDatabase.SaveAssets();
     }
 

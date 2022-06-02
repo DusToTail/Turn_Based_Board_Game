@@ -9,6 +9,7 @@ using System.Linq;
 public class BehaviourTreeView : GraphView
 {
     public Action<NodeView> OnNodeSelected;
+    public Action<NodeView> OnNodeDeleted;
 
     public new class UxmlFactory : UxmlFactory<BehaviourTreeView, GraphView.UxmlTraits> { }
     private BehaviourTree _tree;
@@ -83,6 +84,7 @@ public class BehaviourTreeView : GraphView
                 if(nodeView != null)
                 {
                     _tree.DeleteNode(nodeView.node);
+                    OnNodeDeleted(nodeView);
                 }
 
                 Edge edge = e as Edge;

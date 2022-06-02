@@ -1,0 +1,174 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-5216324578951962251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f0a658be527dab4aba584e2080372cc, type: 3}
+  m_Name: IfPlayerIsAvailableNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 3a569347fcd45e24d8ad8c2af15c4b32
+  position: {x: -417.4571, y: -321.25555}
+  children:
+  - {fileID: -2017415609948150378}
+  - {fileID: 5291796629176088139}
+  controller: {fileID: 0}
+--- !u!114 &-4287879230714908784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e906a7fd055962944825f9a6fbb79b7a, type: 3}
+  m_Name: MoveToCellNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 78cfe8758e63a4948b99867516451d90
+  position: {x: 269.66656, y: -120}
+  self: {fileID: 0}
+--- !u!114 &-3281902107457451483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27691d34bd353dd439d5b7d3fc12c6fd, type: 3}
+  m_Name: IfBlockInRangeNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: b76a62233c7e9f040b5f754a1c4c6937
+  position: {x: 54.000042, y: -119.99998}
+  children:
+  - {fileID: -4287879230714908784}
+  - {fileID: -703567097301479448}
+  self: {fileID: 0}
+  target: {fileID: 0}
+  range: 0
+--- !u!114 &-2017415609948150378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16b7eff6e3762fc4b8f620b20c415851, type: 3}
+  m_Name: SkipActionNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: fe1f574ca49c42244ab9c0987d3f01f2
+  position: {x: -171.45718, y: -321.25555}
+  self: {fileID: 0}
+--- !u!114 &-703567097301479448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3983484d09b5dca458914fefff7bd47a, type: 3}
+  m_Name: AttackNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 13e161be4d8084e4c892bf436b279b8b
+  position: {x: 269.99997, y: -13.279172}
+  self: {fileID: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aabfe0febc280646a70266753e8288a, type: 3}
+  m_Name: IdleMoveAttackTree
+  m_EditorClassIdentifier: 
+  rootNode: {fileID: 6231067474330791034}
+  treeState: 0
+  nodes:
+  - {fileID: 6231067474330791034}
+  - {fileID: -5216324578951962251}
+  - {fileID: -2017415609948150378}
+  - {fileID: 5291796629176088139}
+  - {fileID: 4260253104492325335}
+  - {fileID: -4287879230714908784}
+  - {fileID: -3281902107457451483}
+  - {fileID: -703567097301479448}
+--- !u!114 &4260253104492325335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16b7eff6e3762fc4b8f620b20c415851, type: 3}
+  m_Name: SkipActionNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 7787efb3310d9d74796cee3add9af304
+  position: {x: 54.05002, y: -221.33333}
+  self: {fileID: 0}
+--- !u!114 &5291796629176088139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27691d34bd353dd439d5b7d3fc12c6fd, type: 3}
+  m_Name: IfBlockInRangeNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 0327ea534557ced468d7b31847ca5315
+  position: {x: -171.45718, y: -221.25558}
+  children:
+  - {fileID: 4260253104492325335}
+  - {fileID: -3281902107457451483}
+  self: {fileID: 0}
+  target: {fileID: 0}
+  range: 0
+--- !u!114 &6231067474330791034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4269d3b219030624a8cb5ac74e1bc7ed, type: 3}
+  m_Name: RootNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: fcd8ac7bb4fd13f4fbf459696f701965
+  position: {x: -556.1239, y: -321.25555}
+  child: {fileID: -5216324578951962251}

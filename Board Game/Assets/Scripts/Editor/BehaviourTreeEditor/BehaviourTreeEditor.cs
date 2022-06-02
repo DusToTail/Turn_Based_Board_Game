@@ -1,7 +1,6 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements;
 
 
 public class BehaviourTreeEditor : EditorWindow
@@ -34,6 +33,7 @@ public class BehaviourTreeEditor : EditorWindow
         _treeView = root.Q<BehaviourTreeView>();
         _inspectorView = root.Q<InspectorView>();
         _treeView.OnNodeSelected = OnNodeSelectionChanged;
+        _treeView.OnNodeDeleted = OnNodeSelectionChanged;
         OnSelectionChange();
     }
 
