@@ -22,7 +22,7 @@ public static class GridPathfinding
     {
         List<PathfindingCell> backtrackList = GetBacktrackPath(fromCell, toCell, gridController, levelPlane, characterPlane, objectPlane);
         if(backtrackList.Count < 2) { return GridDirection.None; }
-        Vector3Int resultVector3Int = backtrackList[backtrackList.Count - 1].cell.gridPosition - backtrackList[backtrackList.Count - 2].cell.gridPosition;
+        Vector3Int resultVector3Int = backtrackList[backtrackList.Count - 2].cell.gridPosition - backtrackList[backtrackList.Count - 1].cell.gridPosition ;
         resultVector3Int -= new Vector3Int(0, resultVector3Int.y, 0);
         GridDirection resultDirection = GridDirection.GetDirectionFromVector3Int(resultVector3Int);
         return resultDirection;
