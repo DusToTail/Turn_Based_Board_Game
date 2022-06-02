@@ -105,7 +105,7 @@ public static class GridPathfinding
             }
             count++;
         }
-
+        Debug.Log($"Iteration count: {count}");
         return backtrackList;
     }
 
