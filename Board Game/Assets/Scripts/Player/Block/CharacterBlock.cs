@@ -21,6 +21,7 @@ public class CharacterBlock : Block
 
     public int movesPerTurn;
     public int maxHealth;
+    public int visionRange;
     public WeaponHandler weaponHandler;
 
     public int curHealth { get { return _curHealth; }}

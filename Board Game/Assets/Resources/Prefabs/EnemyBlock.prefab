@@ -221,6 +221,7 @@ MonoBehaviour:
   cellBasedSize: {x: 1, y: 1, z: 1}
   movesPerTurn: 2
   maxHealth: 3
+  visionRange: 3
   weaponHandler: {fileID: 248611875}
   attackedCharacterCount: 0
   curAttackedCharacterCount: 0
@@ -241,6 +242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionSortingID: 1
   controlBlock: {fileID: 5677545340336261103}
+  behaviourTreeRunner: {fileID: 0}
 --- !u!1 &9018452999187204696
 GameObject:
   m_ObjectHideFlags: 0

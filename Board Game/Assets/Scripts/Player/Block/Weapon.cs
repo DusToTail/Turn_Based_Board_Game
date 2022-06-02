@@ -45,4 +45,6 @@ public abstract class Weapon : MonoBehaviour
             }
         }
     }
+
+    public int[,] GetAttackGrid() { return _attackGrid; }
 }
