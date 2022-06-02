@@ -20,6 +20,7 @@ public class BehaviourTree: ScriptableObject
         return treeState;
     }
 
+    #if UNITY_EDITOR
     public Node CreateNode(System.Type type)
     {
         Node node = ScriptableObject.CreateInstance(type) as Node;
@@ -82,6 +83,7 @@ public class BehaviourTree: ScriptableObject
             composite.children.Remove(child);
         }
     }
+    #endif
 
     public List<Node> GetChildren(Node parent)
     {
