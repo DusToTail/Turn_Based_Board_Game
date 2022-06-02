@@ -40,13 +40,13 @@ public class MoveToCellNode : ActionNode
             Debug.Log("Node: Rotate left");
             self.RotateHorizontally(Block.Rotations.Left);
         }
-        else if(Vector3.SignedAngle(self.forwardDirection, direction, Vector3.up) > 0)
+        else if(Vector3.SignedAngle(self.forwardDirection, direction, Vector3.up) < 0)
         {
             // turn left
             Debug.Log("Node: Rotate left");
             self.RotateHorizontally(Block.Rotations.Left);
         }
-        else if(Vector3.SignedAngle(self.forwardDirection, direction, Vector3.up) < 0)
+        else if(Vector3.SignedAngle(self.forwardDirection, direction, Vector3.up) > 0)
         {
             // turn right
             Debug.Log("Node: Rotate right");
