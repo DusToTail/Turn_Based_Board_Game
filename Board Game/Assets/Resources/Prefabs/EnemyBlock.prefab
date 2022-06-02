@@ -220,9 +220,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   cellBasedSize: {x: 1, y: 1, z: 1}
-  movesPerTurn: 1
+  movesPerTurn: 2
   maxHealth: 3
-  visionRange: 3
+  visionRange: 4
   weaponHandler: {fileID: 248611875}
   attackedCharacterCount: 0
   curAttackedCharacterCount: 0

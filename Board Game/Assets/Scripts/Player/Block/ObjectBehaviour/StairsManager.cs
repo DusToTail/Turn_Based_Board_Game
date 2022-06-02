@@ -49,7 +49,7 @@ public class StairsManager : MonoBehaviour
                         if(plane.grid[h,l,w].block.GetComponentInChildren<StairBehaviour>() != null)
                         {
                             stairs.Add(plane.grid[h, l, w].block.GetComponentInChildren<StairBehaviour>());
-                            Debug.Log($"Stairs Manager added: {plane.grid[h, l, w].block.name}");
+                            //Debug.Log($"Stairs Manager added: {plane.grid[h, l, w].block.name}");
                         }
                     }
                 }
@@ -64,15 +64,11 @@ public class StairsManager : MonoBehaviour
                 {
                     Vector3Int startGridPosition = new Vector3Int(stairsData[6 * i], stairsData[6 * i + 1], stairsData[6 * i + 2]);
                     Vector3Int endGridPosition = new Vector3Int(stairsData[6 * i + 3], stairsData[6 * i + 4], stairsData[6 * i + 5]);
-                    Debug.Log($"{stairs[i].name} Stair's Start Position: {startGridPosition}");
-                    Debug.Log($"{stairs[i].name} Stair's End Position: {endGridPosition}");
-                    Debug.Log($"{objectPlane.grid[startGridPosition.y, startGridPosition.z, startGridPosition.x].block.GetComponent<Block>()}");
                     stairs[i].startBlock = objectPlane.grid[startGridPosition.y, startGridPosition.z, startGridPosition.x].block.GetComponent<Block>();
                     stairs[i].endBlock = objectPlane.grid[endGridPosition.y, endGridPosition.z, endGridPosition.x].block.GetComponent<Block>();
                 }
             }
         }
-        
 
         Debug.Log($"Stairs Manager initialized with {stairs.Count} stairs");
     }

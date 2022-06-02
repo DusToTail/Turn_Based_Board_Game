@@ -35,7 +35,7 @@ public class ObjectPlane : MonoBehaviour
         // Clear past childs in the grid
         for (int i = transform.childCount - 1; i >= 0; i--)
         {
-            Debug.Log($"Destroying {transform.GetChild(i).gameObject.name}");
+            //Debug.Log($"Destroying {transform.GetChild(i).gameObject.name}");
             if (Application.isPlaying) { Destroy(transform.GetChild(i).gameObject); }
             else { DestroyImmediate(transform.GetChild(i).gameObject); }
         }
@@ -55,7 +55,7 @@ public class ObjectPlane : MonoBehaviour
 
                     if (idGrid[h, l, w] == 0) 
                     {
-                        Debug.Log($"Object Plane: Null at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
+                        //Debug.Log($"Object Plane: Null at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
                         continue; 
                     }
 
@@ -65,7 +65,7 @@ public class ObjectPlane : MonoBehaviour
                     block.GetComponent<Block>().Initialize(cell, GridDirection.Forward);
                     BlockUtilities.PlaceObjectBlockAtCell(block, this, cell);
 
-                    Debug.Log($"Object Plane: Created {block.name} {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
+                    //Debug.Log($"Object Plane: Created {block.name} {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
                 }
             }
         }

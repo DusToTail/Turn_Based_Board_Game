@@ -21,10 +21,15 @@ public static class GridPathfinding
     public static GridDirection GetImmediateDirection(Cell fromCell, Cell toCell, GridController gridController, LevelPlane levelPlane, CharacterPlane characterPlane, ObjectPlane objectPlane)
     {
         List<PathfindingCell> backtrackList = GetBacktrackPath(fromCell, toCell, gridController, levelPlane, characterPlane, objectPlane);
-        if(backtrackList.Count < 2) { return GridDirection.None; }
+        if(backtrackList.Count < 2) 
+        {
+            Debug.Log("Pathfinding: There is not solution");
+            return GridDirection.None; 
+        }
         Vector3Int resultVector3Int = backtrackList[backtrackList.Count - 2].cell.gridPosition - backtrackList[backtrackList.Count - 1].cell.gridPosition ;
         resultVector3Int -= new Vector3Int(0, resultVector3Int.y, 0);
         GridDirection resultDirection = GridDirection.GetDirectionFromVector3Int(resultVector3Int);
+        Debug.Log("Pathfinding: There is not solution");
         return resultDirection;
     }
 
@@ -49,7 +54,7 @@ public static class GridPathfinding
                 for (int w = 0; w < gridController.gridSize.x; w++)
                 {
                     pathfindingGrid[h, l, w] = new PathfindingCell(gridController.grid[h, l, w]);
-                    Debug.Log($"Created Pathfinding Cell at {pathfindingGrid[h, l, w].cell.gridPosition}");
+                    //Debug.Log($"Created Pathfinding Cell at {pathfindingGrid[h, l, w].cell.gridPosition}");
                 }
             }
         }
@@ -60,7 +65,7 @@ public static class GridPathfinding
         root.CalculateCosts(toCell, 0, true);
         root.parent = null;
         queue.Enqueue(root.fCost, root);
-        Debug.Log($"Pathfinding enqueued {root.cell.gridPosition} with {root.fCost} fCost, {root.gCost} gCost, {root.hCost} hCost");
+        //Debug.Log($"Pathfinding enqueued {root.cell.gridPosition} with {root.fCost} fCost, {root.gCost} gCost, {root.hCost} hCost");
 
         // Create backtrack list to return
         List<PathfindingCell> backtrackList = new List<PathfindingCell>();
@@ -68,30 +73,30 @@ public static class GridPathfinding
         while (queue.Count > 0)
         {
             PathfindingCell current = queue.Dequeue();
-            Debug.Log($"Pathfinding processing Cell {current.cell.gridPosition}");
+            //Debug.Log($"Pathfinding processing Cell {current.cell.gridPosition}");
 
             // If destination is reached, construct backtrack path and return
             if (current.cell == toCell)
             {
-                Debug.Log($"Pathfinding reached destination at {current.cell.gridPosition}");
+                //Debug.Log($"Pathfinding reached destination at {current.cell.gridPosition}");
                 backtrackList.Add(current);
                 while (backtrackList[backtrackList.Count - 1].cell != fromCell)
                 {
                     backtrackList.Add(backtrackList[backtrackList.Count - 1].parent);
                 }
 
-                for (int i = backtrackList.Count - 1; i >= 0; i--)
-                {
-                    Debug.Log($"Pathfinding cell {i} is at {backtrackList[i].cell.gridPosition}");
-                }
-                Debug.Log($"Iteration count: {count}");
+                //for (int i = backtrackList.Count - 1; i >= 0; i--)
+                //{
+                //    Debug.Log($"Pathfinding cell {i} is at {backtrackList[i].cell.gridPosition}");
+                //}
+                //Debug.Log($"Iteration count: {count}");
                 return backtrackList;
             }
 
             // Enqueue neighboring cell for each direction excluding up, down, none
             foreach (GridDirection direction in GridDirection.AllDirections)
             {
-                Debug.Log($"Pathfinding processing Direction {direction.direction}");
+                //Debug.Log($"Pathfinding processing Direction {direction.direction}");
                 // Direction validation
                 if (direction == GridDirection.Up || direction == GridDirection.Down || direction == GridDirection.None) { continue; }
                 Cell neighborCell = gridController.GetCellFromCellWithDirection(current.cell, direction);
@@ -104,14 +109,22 @@ public static class GridPathfinding
                     // Handle elevation
                     if (objectBlock.GetComponentInChildren<StairBehaviour>() != null)
                     {
+                        Cell startStairCell = objectBlock.GetComponentInChildren<StairBehaviour>().startBlock.cell;
+                        PathfindingCell startStairPathfindingCell = pathfindingGrid[startStairCell.gridPosition.y, startStairCell.gridPosition.z, startStairCell.gridPosition.x];
                         Cell endStairCell = objectBlock.GetComponentInChildren<StairBehaviour>().endBlock.cell;
                         PathfindingCell endStairPathfindingCell = pathfindingGrid[endStairCell.gridPosition.y, endStairCell.gridPosition.z, endStairCell.gridPosition.x];
-                        if((current.gCost + endStairPathfindingCell.selfCost) >= endStairPathfindingCell.gCost) { continue; }
+                        if((current.gCost + endStairPathfindingCell.selfCost) < endStairPathfindingCell.gCost)
+                        {
+                            startStairPathfindingCell.CalculateCosts(toCell, current.gCost);
+                            startStairPathfindingCell.parent = current;
+                            queue.Enqueue(startStairPathfindingCell.fCost, startStairPathfindingCell);
+                            //Debug.Log($"Pathfinding enqueued {startStairPathfindingCell.cell.gridPosition} with {startStairPathfindingCell.fCost} fCost, {startStairPathfindingCell.gCost} gCost, {startStairPathfindingCell.hCost} hCost, {startStairPathfindingCell.parent.cell.gridPosition} as parent");
 
-                        endStairPathfindingCell.CalculateCosts(toCell, current.gCost);
-                        endStairPathfindingCell.parent = current;
-                        queue.Enqueue(endStairPathfindingCell.fCost, endStairPathfindingCell);
-                        Debug.Log($"Pathfinding enqueued {endStairPathfindingCell.cell.gridPosition} with {endStairPathfindingCell.fCost} fCost, {endStairPathfindingCell.gCost} gCost, {endStairPathfindingCell.hCost} hCost, {endStairPathfindingCell.parent.cell.gridPosition} as parent");
+                            endStairPathfindingCell.CalculateCosts(toCell, current.gCost);
+                            endStairPathfindingCell.parent = startStairPathfindingCell;
+                            queue.Enqueue(endStairPathfindingCell.fCost, endStairPathfindingCell);
+                            //Debug.Log($"Pathfinding enqueued {endStairPathfindingCell.cell.gridPosition} with {endStairPathfindingCell.fCost} fCost, {endStairPathfindingCell.gCost} gCost, {endStairPathfindingCell.hCost} hCost, {endStairPathfindingCell.parent.cell.gridPosition} as parent");
+                        }
                     }
                 }
                 else if (levelPlane.grid[neighborCell.gridPosition.y, neighborCell.gridPosition.z, neighborCell.gridPosition.x] != null)
@@ -126,7 +139,7 @@ public static class GridPathfinding
                 }
 
                 PathfindingCell neighborPathfindingCell = pathfindingGrid[neighborCell.gridPosition.y, neighborCell.gridPosition.z, neighborCell.gridPosition.x];
-                Debug.Log($"Pathfinding processing Neighbor Cell {neighborPathfindingCell.cell.gridPosition}");
+                //Debug.Log($"Pathfinding processing Neighbor Cell {neighborPathfindingCell.cell.gridPosition}");
 
                 // gCost validation
                 if((current.gCost + neighborPathfindingCell.selfCost) >= neighborPathfindingCell.gCost) { continue; }
@@ -134,12 +147,14 @@ public static class GridPathfinding
                 neighborPathfindingCell.CalculateCosts(toCell, current.gCost);
                 neighborPathfindingCell.parent = current;
                 queue.Enqueue(neighborPathfindingCell.fCost, neighborPathfindingCell);
-                Debug.Log($"Pathfinding enqueued {neighborPathfindingCell.cell.gridPosition} with {neighborPathfindingCell.fCost} fCost, {neighborPathfindingCell.gCost} gCost, {neighborPathfindingCell.hCost} hCost, {neighborPathfindingCell.parent.cell.gridPosition} as parent");
+                //Debug.Log($"Pathfinding enqueued {neighborPathfindingCell.cell.gridPosition} with {neighborPathfindingCell.fCost} fCost, {neighborPathfindingCell.gCost} gCost, {neighborPathfindingCell.hCost} hCost, {neighborPathfindingCell.parent.cell.gridPosition} as parent");
                 
             }
             count++;
         }
-        Debug.Log($"Iteration count: {count}");
+        //Debug.Log($"Iteration count: {count}");
+        Debug.Log("Pathfinding: There is not solution");
+
         return backtrackList;
     }
 

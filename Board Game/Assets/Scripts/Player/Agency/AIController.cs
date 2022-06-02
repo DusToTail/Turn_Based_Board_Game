@@ -62,7 +62,8 @@ public class AIController : MonoBehaviour
     public void PerformAction()
     {
         Debug.Log($"AI {name} performs something");
-        _behaviourTreeRunner.RunTree();
+        //RotateSelf(Block.Rotations.Left);
+        StartCoroutine(_behaviourTreeRunner.RunTree());
     }
 
     public void RotateSelf(Block.Rotations rotation)

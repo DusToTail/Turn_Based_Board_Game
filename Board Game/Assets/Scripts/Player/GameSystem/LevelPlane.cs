@@ -43,7 +43,7 @@ public class LevelPlane : MonoBehaviour
         // Clear past childs in the grid
         for (int i = transform.childCount - 1; i >= 0; i--)
         {
-            Debug.Log($"Destroying {transform.GetChild(i).gameObject.name}");
+            //Debug.Log($"Destroying {transform.GetChild(i).gameObject.name}");
             if (Application.isPlaying) { Destroy(transform.GetChild(i).gameObject); }
             else { DestroyImmediate(transform.GetChild(i).gameObject); }
         }
@@ -59,7 +59,11 @@ public class LevelPlane : MonoBehaviour
                 for (int w = 0; w < controller.gridSize.x; w++)
                 {
                     Cell cell = controller.grid[h, l, w];
-                    if(idGrid[h, l, w] == 0) { Debug.Log($"Level Plane: ({w} {h} {l}) is 0 or null"); continue; }
+                    if(idGrid[h, l, w] == 0) 
+                    { 
+                        //Debug.Log($"Level Plane: ({w} {h} {l}) is 0 or null"); 
+                        continue; 
+                    }
                     GameObject block = blockIDs.GetCopyFromID(idGrid[h, l, w]);
                     block.transform.parent = transform;
                     block.name = $"Block {cell.gridPosition}";
@@ -67,7 +71,7 @@ public class LevelPlane : MonoBehaviour
                     BlockUtilities.PlaceTerrainBlockAtCell(block, this, cell);
                     grid[h, l, w] = block;
                     count++;
-                    Debug.Log($"Level Plane: Created Block id {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
+                    //Debug.Log($"Level Plane: Created Block id {idGrid[h, l, w]} at gridPosition {cell.gridPosition} at worldPosition [{cell.worldPosition}]");
                 }
             }
         }
