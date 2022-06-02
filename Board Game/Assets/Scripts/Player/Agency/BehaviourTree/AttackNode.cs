@@ -8,6 +8,7 @@ public class AttackNode : ActionNode
 
     protected override void OnStart()
     {
+        self = tree.AI.controlBlock;
     }
 
     protected override void OnStop()
@@ -16,6 +17,7 @@ public class AttackNode : ActionNode
 
     protected override State OnUpdate()
     {
+        Debug.Log("Node: Attack forward");
         self.Attack();
         return State.Success;
     }

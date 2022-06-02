@@ -110,6 +110,7 @@ GameObject:
   - component: {fileID: 5677545340336261102}
   - component: {fileID: 5677545340336261103}
   - component: {fileID: -6608869597593452130}
+  - component: {fileID: 3463857440976087800}
   m_Layer: 8
   m_Name: EnemyBlock
   m_TagString: Enemy
@@ -219,7 +220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   cellBasedSize: {x: 1, y: 1, z: 1}
-  movesPerTurn: 2
+  movesPerTurn: 1
   maxHealth: 3
   visionRange: 3
   weaponHandler: {fileID: 248611875}
@@ -242,7 +243,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionSortingID: 1
   controlBlock: {fileID: 5677545340336261103}
-  behaviourTreeRunner: {fileID: 0}
+  target: {fileID: 0}
+--- !u!114 &3463857440976087800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5677545340336260885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ec82d3e2fbd87c48982b80e926c3c69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tree: {fileID: 11400000, guid: 48eb7011807cacb42b6c5f0a795ef2a7, type: 2}
+  _clone: {fileID: 0}
 --- !u!1 &9018452999187204696
 GameObject:
   m_ObjectHideFlags: 0

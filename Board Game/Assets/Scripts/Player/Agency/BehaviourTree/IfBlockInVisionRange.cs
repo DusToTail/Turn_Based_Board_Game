@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class IfBlockInVisionRange : CompositeNode
 {
-    public Block self;
+    public CharacterBlock self;
     public Block target;
     public int visionRange;
 
     protected override void OnStart()
     {
+        self = tree.AI.controlBlock;
+        visionRange = self.visionRange;
+        target = tree.AI.target;
     }
 
     protected override void OnStop()
@@ -22,11 +25,13 @@ public class IfBlockInVisionRange : CompositeNode
         if (Mathf.Abs(vector.x) + Mathf.Abs(vector.y) + Mathf.Abs(vector.z) > visionRange)
         {
             // Block is outside range
+            Debug.Log("Node: Target is outside vision range");
             return children[0].Update();
         }
         else
         {
             // Block is inside range
+            Debug.Log("Node: Target is inside vision range");
             return children[1].Update();
         }
     }

@@ -5,11 +5,11 @@ using UnityEngine;
 public class BehaviourTreeRunner : MonoBehaviour
 {
     public BehaviourTree tree;
-    private BehaviourTree _clone;
+    public BehaviourTree _clone;
 
     private void Start()
     {
-        _clone = tree.Clone();
+        
     }
 
     private void Update()
@@ -18,11 +18,22 @@ public class BehaviourTreeRunner : MonoBehaviour
 
     public void RunTree()
     {
+        Debug.Log($"Start run tree");
+        InitializeClone();
         _clone.Update();
+        DestroyClone();
     }
 
-    private void OnDestroy()
+    private void InitializeClone()
     {
+        _clone = tree.Clone();
+        _clone.SetAI(GetComponent<AIController>());
+    }
+
+    private void DestroyClone()
+    {
+        Destroy(_clone.rootNode);
         Destroy(_clone);
     }
+
 }

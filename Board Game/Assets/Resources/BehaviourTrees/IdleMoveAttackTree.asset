@@ -15,7 +15,8 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 3463f63a1ecb1904a93cf091b6fa7e59
-  position: {x: 0, y: 0}
+  position: {x: 274, y: -3}
+  tree: {fileID: 11400000}
   self: {fileID: 0}
 --- !u!114 &-5216324578951962251
 MonoBehaviour:
@@ -33,6 +34,7 @@ MonoBehaviour:
   started: 0
   guid: 3a569347fcd45e24d8ad8c2af15c4b32
   position: {x: -417.4571, y: -321.25555}
+  tree: {fileID: 11400000}
   children:
   - {fileID: -2017415609948150378}
   - {fileID: 4856586863284199373}
@@ -53,8 +55,10 @@ MonoBehaviour:
   started: 0
   guid: 2076ea9a56e88864cb4dea113999eecf
   position: {x: 54.000034, y: -112.544754}
+  tree: {fileID: 11400000}
   children:
   - {fileID: 6073063590632071167}
+  - {fileID: -7698838799838146604}
   self: {fileID: 0}
   target: {fileID: 0}
 --- !u!114 &-2017415609948150378
@@ -73,6 +77,7 @@ MonoBehaviour:
   started: 0
   guid: fe1f574ca49c42244ab9c0987d3f01f2
   position: {x: -171.45718, y: -321.25555}
+  tree: {fileID: 11400000}
   self: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -92,11 +97,12 @@ MonoBehaviour:
   - {fileID: 6231067474330791034}
   - {fileID: -5216324578951962251}
   - {fileID: -2017415609948150378}
-  - {fileID: 4260253104492325335}
   - {fileID: 4856586863284199373}
+  - {fileID: 4260253104492325335}
   - {fileID: -4072573459527802698}
   - {fileID: 6073063590632071167}
   - {fileID: -7698838799838146604}
+  AI: {fileID: 0}
 --- !u!114 &4260253104492325335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,6 +119,7 @@ MonoBehaviour:
   started: 0
   guid: 7787efb3310d9d74796cee3add9af304
   position: {x: 54.05002, y: -221.33333}
+  tree: {fileID: 11400000}
   self: {fileID: 0}
 --- !u!114 &4856586863284199373
 MonoBehaviour:
@@ -130,6 +137,7 @@ MonoBehaviour:
   started: 0
   guid: 97790b804b08f9f4ab42cc5e247db004
   position: {x: -171.33331, y: -221.33333}
+  tree: {fileID: 11400000}
   children:
   - {fileID: 4260253104492325335}
   - {fileID: -4072573459527802698}
@@ -152,6 +160,7 @@ MonoBehaviour:
   started: 0
   guid: 268aeb8bc601f5342978f66636da4734
   position: {x: 273.7575, y: -112.66669}
+  tree: {fileID: 11400000}
   self: {fileID: 0}
 --- !u!114 &6231067474330791034
 MonoBehaviour:
@@ -169,4 +178,5 @@ MonoBehaviour:
   started: 0
   guid: fcd8ac7bb4fd13f4fbf459696f701965
   position: {x: -556.1239, y: -321.25555}
+  tree: {fileID: 11400000}
   child: {fileID: -5216324578951962251}

@@ -16,13 +16,20 @@ public class AIController : MonoBehaviour
 
     public int actionSortingID;
     public CharacterBlock controlBlock;
-    public BehaviourTreeRunner behaviourTreeRunner;
+
+    public CharacterBlock target;
 
     private GameManager _gameManager;
+    private PlayerController _playerController;
+    private BehaviourTreeRunner _behaviourTreeRunner;
 
     private void Start()
     {
         _gameManager = FindObjectOfType<GameManager>();
+        _playerController = FindObjectOfType<PlayerController>();
+        _behaviourTreeRunner = GetComponent<BehaviourTreeRunner>();
+
+        target = _playerController.playerBlock;
         controlBlock = GetComponent<CharacterBlock>();
 
         
@@ -54,9 +61,8 @@ public class AIController : MonoBehaviour
 
     public void PerformAction()
     {
-        //Debug.Log($"AI perform something");
-        // Need to program an AI and strategies
-        RotateSelf(Block.Rotations.Left);
+        Debug.Log($"AI {name} performs something");
+        _behaviourTreeRunner.RunTree();
     }
 
     public void RotateSelf(Block.Rotations rotation)

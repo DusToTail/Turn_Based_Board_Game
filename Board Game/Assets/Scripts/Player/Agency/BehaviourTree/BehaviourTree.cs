@@ -9,10 +9,11 @@ public class BehaviourTree: ScriptableObject
     public Node rootNode;
     public Node.State treeState = Node.State.Running;
     public List<Node> nodes = new List<Node>();
+    public AIController AI;
 
     public Node.State Update()
     {
-        if(rootNode.state == Node.State.Running)
+        if (rootNode.state == Node.State.Running)
         {
             return rootNode.Update();
         }
@@ -108,7 +109,13 @@ public class BehaviourTree: ScriptableObject
     public BehaviourTree Clone()
     {
         BehaviourTree tree = Instantiate(this);
-        tree.rootNode = tree.rootNode.Clone();
+        tree.rootNode = rootNode.Clone(tree);
+
         return tree;
+    }
+
+    public void SetAI(AIController AI)
+    {
+        this.AI = AI;
     }
 }

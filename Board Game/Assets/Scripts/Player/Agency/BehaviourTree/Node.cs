@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,7 @@ public abstract class Node : ScriptableObject
     [HideInInspector] public bool started = false;
     [HideInInspector] public string guid;
     [HideInInspector] public Vector2 position;
+    public BehaviourTree tree;
 
     public State Update()
     {
@@ -23,7 +25,6 @@ public abstract class Node : ScriptableObject
             OnStart();
             started = true;
         }
-
         state = OnUpdate();
 
         if(state == State.Failure || state == State.Success)
@@ -35,9 +36,21 @@ public abstract class Node : ScriptableObject
         return state;
     }
 
-    public virtual Node Clone()
+    public virtual void Destroy()
     {
-        return Instantiate(this);
+        Destroy(this);
+    }
+
+    public virtual Node Clone(BehaviourTree tree)
+    {
+        Node node = Instantiate(this);
+        node.tree = tree;
+        return node;
+    }
+    public virtual bool SetTree(BehaviourTree tree)
+    {
+        this.tree = tree;
+        return true;
     }
 
     protected abstract void OnStart();

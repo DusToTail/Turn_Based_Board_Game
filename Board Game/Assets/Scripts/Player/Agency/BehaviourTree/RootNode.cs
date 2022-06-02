@@ -19,10 +19,17 @@ public class RootNode : Node
         return child.Update();
     }
 
-    public override Node Clone()
+    public override Node Clone(BehaviourTree tree)
     {
         RootNode node = Instantiate(this);
-        node.child = child.Clone();
+        node.tree = tree;
+        node.child = child.Clone(tree);
         return node;
+    }
+
+    public override void Destroy()
+    {
+        child.Destroy();
+        Destroy(this);
     }
 }
