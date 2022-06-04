@@ -133,6 +133,7 @@ public class LevelEditorToolsManager : MonoBehaviour
         editingDesign.terrainGrid = saved.terrainGrid;
         editingDesign.characterGrid = saved.characterGrid;
         editingDesign.objectGrid = saved.objectGrid;
+        editingDesign.stairsData = saved.stairsData;
 
         levelPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
         characterPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];

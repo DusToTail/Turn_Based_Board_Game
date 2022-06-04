@@ -25,6 +25,7 @@ public class StairsManager : MonoBehaviour
     public void InitializeStairsData(int[] data)
     {
         if(data == null) { Debug.Log("No Stair Data"); return; }
+        Debug.Log("Initialize stair data");
         stairsData = new int[data.Length];
         for (int i = 0; i < data.Length; i++)
         {

@@ -21,8 +21,8 @@ public class GoalBehaviour : MonoBehaviour, IActivationOnStep
     {
         // trigger some ending scene before level finished
         yield return new WaitForSeconds(1);
-        gameManager.CallLevelFinished();
         gameManager.CallBlockEndedBehaviour(objectBlock);
         objectBlock.isFinished = true;
+        gameManager.CallLevelFinished();
     }
 }
