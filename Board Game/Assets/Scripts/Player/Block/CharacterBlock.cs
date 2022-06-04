@@ -68,12 +68,16 @@ public class CharacterBlock : Block
     {
         if(OnCharacterAdded != null)
             OnCharacterAdded();
+
+        GameManager.OnLevelFinished += StopBehaviour;
     }
 
     private void OnDisable()
     {
         if(OnCharacterRemoved != null)
             OnCharacterRemoved();
+        GameManager.OnLevelFinished -= StopBehaviour;
+
     }
 
 
@@ -313,7 +317,10 @@ public class CharacterBlock : Block
 
     private bool NoMoreMoves() { return _curMovesLeft == 0; }
 
-
+    private void StopBehaviour()
+    {
+        StopAllCoroutines();
+    }
 
     private void OnDrawGizmos()
     {

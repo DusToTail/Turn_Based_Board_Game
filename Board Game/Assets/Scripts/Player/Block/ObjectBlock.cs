@@ -11,12 +11,17 @@ public class ObjectBlock : Block
     {
         GameManager.OnBlockStartedBehaviour += ActivateBefore;
         GameManager.OnBlockEndedBehaviour += ActivateAfter;
+
+        GameManager.OnLevelFinished += StopBehaviour;
     }
 
     private void OnDisable()
     {
         GameManager.OnBlockStartedBehaviour -= ActivateBefore;
         GameManager.OnBlockEndedBehaviour -= ActivateAfter;
+
+        GameManager.OnLevelFinished -= StopBehaviour;
+
     }
 
     public void ActivateAfter(Block currentBlock)
@@ -40,5 +45,10 @@ public class ObjectBlock : Block
         if(activationBehaviour == null) { return; }
         if(activationBehaviour.GetComponent<IActivationOnStep>() == null) { return; }
         activationBehaviour.GetComponent<IActivationOnStep>().OnStepped(this, userBlock);
+    }
+
+    private void StopBehaviour()
+    {
+        StopAllCoroutines();
     }
 }
