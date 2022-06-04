@@ -16,8 +16,8 @@ public class BehaviourTreeRunner : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.OnCharacterRanOutOfMoves += SetBehaviourIsFinished;
-        GameManager.OnNextMoveRequired += SetBehaviourIsFinished;
+        GameManager.OnCharacterRanOutOfMoves -= SetBehaviourIsFinished;
+        GameManager.OnNextMoveRequired -= SetBehaviourIsFinished;
     }
 
     private void Start()
