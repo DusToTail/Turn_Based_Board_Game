@@ -9,12 +9,16 @@ public class PlayerController : MonoBehaviour
     public delegate void PlayerIsFinished();
     public static event PlayerIsFinished OnPlayerIsFinished;
 
+    public bool CanControl { get { return _canControl; } }
     private bool _canControl = false;
 
     private void OnEnable()
     {
+        GameManager.OnLevelLoadingStarted += PreventInput;
         GameManager.OnLevelStarted += AllowInput;
         GameManager.OnPlayerTurnStarted += AllowInput;
+        GameManager.OnLevelFinished += PreventInput;
+        GameManager.OnLevelFailed += PreventInput;
         GameManager.OnCharacterRanOutOfMoves += CallPlayerIsFinished;
         GameManager.OnNextMoveRequired += ContinueToMoveIfAllowed;
 
@@ -23,8 +27,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnDisable()
     {
+        GameManager.OnLevelLoadingStarted -= PreventInput;
         GameManager.OnLevelStarted -= AllowInput;
         GameManager.OnPlayerTurnStarted -= AllowInput;
+        GameManager.OnLevelFinished -= PreventInput;
+        GameManager.OnLevelFailed -= PreventInput;
         GameManager.OnCharacterRanOutOfMoves -= CallPlayerIsFinished;
         GameManager.OnNextMoveRequired -= ContinueToMoveIfAllowed;
 
@@ -35,14 +42,13 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-        FindObjectOfType<LightingManager>().player = playerBlock.transform;
-        _canControl = false;
 
     }
 
     private void Update()
     {
         if (!_canControl) { return; }
+        if(playerBlock == null) { return; }
 
         if(Input.GetKeyDown(KeyCode.W))
         {
@@ -50,34 +56,34 @@ public class PlayerController : MonoBehaviour
             Cell toCell = gameManager.gridController.GetCellFromCellWithDirection(playerBlock.cell, playerBlock.forwardDirection);
             if(CellIsValidToMove(toCell))
             {
-                MovePlayerForward();
                 PreventInput();
+                MovePlayerForward();
             }
             
         }
         else if(Input.GetKeyDown(KeyCode.S))
         {
             // Skip Action
-            SkipAction();
             PreventInput();
+            SkipAction();
         }
         else if(Input.GetKeyDown(KeyCode.D))
         {
             // Rotate right
-            RotatePlayer(Block.Rotations.Right);
             PreventInput();
+            RotatePlayer(Block.Rotations.Right);
         }
         else if(Input.GetKeyDown(KeyCode.A))
         {
             // Rotate left
-            RotatePlayer(Block.Rotations.Left);
             PreventInput();
+            RotatePlayer(Block.Rotations.Left);
         }
         else if(Input.GetKeyDown(KeyCode.Space))
         {
             // Attack forward
-            AttackForward();
             PreventInput();
+            AttackForward();
         }
         else if(Input.GetKeyDown(KeyCode.E))
         {
@@ -85,17 +91,10 @@ public class PlayerController : MonoBehaviour
             Cell forwardCell = gameManager.gridController.GetCellFromCellWithDirection(playerBlock.cell,playerBlock.forwardDirection);
             if(ObjectAtCellIsValidToActivate(forwardCell))
             {
-                ActivateForward();
                 PreventInput();
+                ActivateForward();
             }
-
         }
-        else if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            // Menu or Cancel something
-            PreventInput();
-        }
-
     }
 
     private void SkipAction()
@@ -201,7 +200,7 @@ public class PlayerController : MonoBehaviour
     {
         playerBlock = plane.GetPlayerBlock();
         ResetStats();
-        AllowInput();
+        FindObjectOfType<LightingManager>().player = playerBlock.transform;
     }
 
     private void ResetStats()
@@ -213,11 +212,21 @@ public class PlayerController : MonoBehaviour
     private void AllowInput()
     {
         _canControl = true;
+        Debug.Log("Allow player controller movement");
     }
 
     private void PreventInput()
     {
         _canControl = false;
+        Debug.Log("Prevent player controller movement");
+
+    }
+
+    private void PreventInput(LevelDesign design)
+    {
+        _canControl = false;
+        Debug.Log("Prevent player controller movement");
+
     }
 
 }

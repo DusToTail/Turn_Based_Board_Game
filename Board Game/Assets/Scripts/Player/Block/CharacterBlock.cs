@@ -170,9 +170,14 @@ public class CharacterBlock : Block
 
         // Wait for any object block at the current cell
         GameObject objectBlock = gameManager.objectPlane.grid[steppedOnCell.gridPosition.y, steppedOnCell.gridPosition.z, steppedOnCell.gridPosition.x].block;
-        if(objectBlock != null)
+        if(objectBlock != null && objectBlock.GetComponent<IActivationOnStep>() != null)
         {
+            Debug.Log($"{gameObject.name} waiting for {objectBlock.name} to finish");
             yield return new WaitUntil(() => objectBlock.GetComponent<ObjectBlock>().isFinished == true);
+        }
+        else
+        {
+            Debug.Log($"There is no object at {steppedOnCell.gridPosition} to wait");
         }
 
         MinusMoves(moveCost);
@@ -212,9 +217,14 @@ public class CharacterBlock : Block
 
         // Wait for any object block at the current cell
         GameObject objectBlock = gameManager.objectPlane.grid[steppedOnCell.gridPosition.y, steppedOnCell.gridPosition.z, steppedOnCell.gridPosition.x].block;
-        if (objectBlock != null)
+        if (objectBlock != null && objectBlock.GetComponent<IActivationOnStep>() != null)
         {
+            Debug.Log($"{gameObject.name} waiting for {objectBlock.name} to finish");
             yield return new WaitUntil(() => objectBlock.GetComponent<ObjectBlock>().isFinished == true);
+        }
+        else
+        {
+            Debug.Log($"There is no object at {steppedOnCell.gridPosition} to wait");
         }
 
         MinusMoves(1);

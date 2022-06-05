@@ -421,4 +421,5 @@ MonoBehaviour:
   id: 530
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 6377975956786101628}
+  isPassable: 1
   isFinished: 0

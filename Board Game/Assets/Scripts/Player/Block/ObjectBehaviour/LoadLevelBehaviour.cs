@@ -20,13 +20,12 @@ public class LoadLevelBehaviour : MonoBehaviour, IActivationOnTrigger
     private IEnumerator StartNewGameCoroutine(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
         // Trigger sound effect and loading screen animation
-        gameManager.ui.PlayLevelTransitionScene();
         // Wait for the screen animation to fully cover the entire screen
         yield return new WaitForSeconds(1f);
 
         // Trigger game loading
         gameManager.CallLevelLoadingStarted(levelIndex);
-
+        Debug.Log($"{objectBlock} called level {levelIndex} loading started");
 
 
 

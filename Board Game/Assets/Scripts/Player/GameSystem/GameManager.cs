@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public int prepCount = 5;
     public int currentPrepCount;
 
+    public int currentLevelIndex;
     public string levelFileNameFormat;
     public LevelDesign currentLevel;
     public delegate void LevelLoadingStarted(LevelDesign levelDesign);
@@ -26,6 +27,8 @@ public class GameManager : MonoBehaviour
     public static event LevelStarted OnLevelStarted;
     public delegate void LevelFinished();
     public static event LevelFinished OnLevelFinished;
+    public delegate void LevelFailed();
+    public static event LevelFailed OnLevelFailed;
 
     public delegate void BlockStartedBehaviour(Block behavingBlock);
     public static event BlockStartedBehaviour OnBlockStartedBehaviour;
@@ -99,15 +102,13 @@ public class GameManager : MonoBehaviour
     public void CallLevelLoadingStarted(int levelIndex)
     {
         currentPrepCount = 0;
-
+        currentLevelIndex = levelIndex;
         if (gridController == null || levelPlane == null || characterPlane == null)
         {
             Debug.Log("Grid is not initialized in the editor");
             return;
         }
         ui.PlayLevelTransitionScene();
-        if(levelIndex == 0) { ui.gameTitle.SetActive(true); }
-        else { ui.gameTitle.SetActive(false); }
         currentLevel = new LevelDesign();
         LevelDesign saved = SaveSystem.LoadLevelDesign(levelFileNameFormat + $" {levelIndex}");
         currentLevel.gridHeight = saved.gridHeight;
@@ -143,6 +144,8 @@ public class GameManager : MonoBehaviour
             stairsManager.InitializeStairsData(currentLevel.stairsData);
         }
 
+        OnLevelLoadingStarted(currentLevel);
+
         Vector3Int gridSize = new Vector3Int(currentLevel.gridWidth, currentLevel.gridHeight, currentLevel.gridLength);
         gridController.InitializeGrid(gridSize);
     }
@@ -159,6 +162,14 @@ public class GameManager : MonoBehaviour
         Debug.Log("Level Finished");
         if (OnLevelFinished != null)
             OnLevelFinished();
+
+    }
+
+    public void CallLevelFailed()
+    {
+        Debug.Log("Level Failed");
+        if (OnLevelFailed != null)
+            OnLevelFailed();
 
     }
 
