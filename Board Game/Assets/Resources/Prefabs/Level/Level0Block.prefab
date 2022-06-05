@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4994480637719656190}
   - component: {fileID: 1282034604541646707}
   m_Layer: 7
-  m_Name: StartNewGameBlock
+  m_Name: Level0Block
   m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

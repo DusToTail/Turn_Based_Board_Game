@@ -3749,7 +3749,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &697099910
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9076,7 +9076,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22dd6fb7038a0c14ea66054919b66b79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newGameLevelIndex: 0
+  levelIndex: 0
   gameManager: {fileID: 0}
 --- !u!1 &1691587608
 GameObject:
@@ -10924,12 +10924,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 521468721837346743, guid: 34d81370d19ba5b458708fd78bc6ed44, type: 3}
       propertyPath: blocks.Array.size
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 521468721837346743, guid: 34d81370d19ba5b458708fd78bc6ed44, type: 3}
       propertyPath: blocks.Array.data[6]
       value: 
       objectReference: {fileID: 4994480637719656185, guid: 2ec34f92705effc4e9ceae535d18aa65, type: 3}
+    - target: {fileID: 521468721837346743, guid: 34d81370d19ba5b458708fd78bc6ed44, type: 3}
+      propertyPath: blocks.Array.data[7]
+      value: 
+      objectReference: {fileID: 4439744336541984834, guid: c30c8e1ef122d8542ab781c615e36fa2, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34d81370d19ba5b458708fd78bc6ed44, type: 3}
 --- !u!1001 &3342998142478582574
@@ -11549,12 +11553,16 @@ PrefabInstance:
       objectReference: {fileID: 497481623}
     - target: {fileID: 7343578177040881624, guid: 20cf77bad2bca564380c3eb76286c32d, type: 3}
       propertyPath: objectList.Array.size
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7343578177040881624, guid: 20cf77bad2bca564380c3eb76286c32d, type: 3}
       propertyPath: objectList.Array.data[6]
       value: 
       objectReference: {fileID: 4994480637719656185, guid: 2ec34f92705effc4e9ceae535d18aa65, type: 3}
+    - target: {fileID: 7343578177040881624, guid: 20cf77bad2bca564380c3eb76286c32d, type: 3}
+      propertyPath: objectList.Array.data[7]
+      value: 
+      objectReference: {fileID: 4439744336541984834, guid: c30c8e1ef122d8542ab781c615e36fa2, type: 3}
     - target: {fileID: 7343578177040881625, guid: 20cf77bad2bca564380c3eb76286c32d, type: 3}
       propertyPath: m_RootOrder
       value: 12
