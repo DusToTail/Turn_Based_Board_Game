@@ -311,7 +311,8 @@ public class CharacterBlock : Block
         if(HealthIsZero())
         {
             // Trigger Death Animation
-
+            if(this == gameManager.playerController.playerBlock)
+                gameManager.CallLevelFailed();
             Destroy(gameObject);
         }
     }
