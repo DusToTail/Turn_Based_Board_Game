@@ -200,7 +200,8 @@ public class PlayerController : MonoBehaviour
     {
         playerBlock = plane.GetPlayerBlock();
         ResetStats();
-        FindObjectOfType<LightingManager>().player = playerBlock.transform;
+        FindObjectOfType<LightingManager>().playerBlockTransform = playerBlock.transform;
+        FindObjectOfType<CameraController>().playerBlockTransform = playerBlock.transform;
     }
 
     private void ResetStats()
