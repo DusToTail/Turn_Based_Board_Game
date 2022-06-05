@@ -130,6 +130,12 @@ public class AIController : MonoBehaviour
 
     public static void StartNextAIPerform()
     {
+        if(AIs.Count == 0) 
+        {
+            if (OnAIsAreFinished != null)
+                OnAIsAreFinished();
+            return; 
+        }
         AIs[completedAICount].PerformAction();
     }
 

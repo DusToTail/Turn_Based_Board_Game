@@ -179,6 +179,26 @@ public class CharacterBlock : Block
 
     }
 
+    public void ActivateForward()
+    {
+        StartCoroutine(ActivateForwardCoroutine());
+    }
+
+    private IEnumerator ActivateForwardCoroutine()
+    {
+        Cell forwardCell = gameManager.gridController.GetCellFromCellWithDirection(cell, forwardDirection);
+
+        // Wait for any object block at the current cell
+        GameObject objectBlock = gameManager.objectPlane.grid[forwardCell.gridPosition.y, forwardCell.gridPosition.z, forwardCell.gridPosition.x].block;
+        objectBlock.GetComponent<ObjectBlock>().ActivateOnTriggered(this);
+        if (objectBlock != null)
+        {
+            yield return new WaitUntil(() => objectBlock.GetComponent<ObjectBlock>().isFinished == true);
+        }
+
+        MinusMoves(1);
+    }
+
     public void SkipAction()
     {
         StartCoroutine(SkipActionCoroutine());

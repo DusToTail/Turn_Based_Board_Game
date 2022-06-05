@@ -4,16 +4,18 @@ using UnityEditor;
 [CustomEditor(typeof(GameManager))]
 public class GameManagerEditor : Editor
 {
+    public int levelIndex;
     public override void OnInspectorGUI()
     {
         GameManager manager = (GameManager)target;
         DrawDefaultInspector();
 
+        levelIndex = EditorGUILayout.IntField(levelIndex);
 
 
         if(GUILayout.Button("LoadLevel"))
         {
-            manager.CallLevelLoadingStarted();
+            manager.CallLevelLoadingStarted(levelIndex);
             manager.CallLevelStarted();
         }
 

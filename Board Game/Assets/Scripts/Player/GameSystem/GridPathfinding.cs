@@ -106,6 +106,9 @@ public static class GridPathfinding
                 {
                     GameObject objectBlock = objectPlane.grid[neighborCell.gridPosition.y, neighborCell.gridPosition.z, neighborCell.gridPosition.x].block;
 
+                    // Handle impassable object
+                    if (!objectBlock.GetComponent<ObjectBlock>().isPassable)
+                        continue;
                     // Handle elevation
                     if (objectBlock.GetComponentInChildren<StairBehaviour>() != null)
                     {

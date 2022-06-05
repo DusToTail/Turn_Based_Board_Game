@@ -106,6 +106,8 @@ MonoBehaviour:
   id: 201
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 2374555619433676130}
+  isPassable: 1
+  isFinished: 0
 --- !u!1 &2374555619433676130
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,8 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ade1ef9d490a74d9e7d71a25b61076, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startCellGridPosition: {x: 0, y: 0, z: 0}
-  endCellGridPosition: {x: 0, y: 0, z: 0}
+  startBlock: {fileID: 0}
+  endBlock: {fileID: 0}
   gameManager: {fileID: 0}
 --- !u!1 &3729133776992994621
 GameObject:

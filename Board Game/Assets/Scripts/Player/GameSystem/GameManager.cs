@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public UIController ui;
     public GridController gridController;
     public LevelPlane levelPlane;
     public CharacterPlane characterPlane;
@@ -13,10 +14,10 @@ public class GameManager : MonoBehaviour
     // Need to prepare grid controller
     // Need to prepare level plane
     // Need to prepare character plane
-    public int prepCount = 4;
+    public int prepCount = 5;
     public int currentPrepCount;
 
-    public string fileName;
+    public string levelFileNameFormat;
     public LevelDesign currentLevel;
     public delegate void LevelLoadingStarted(LevelDesign levelDesign);
     public static event LevelLoadingStarted OnLevelLoadingStarted;
@@ -51,7 +52,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        CallLevelLoadingStarted();
+        // Trigger sound effect and animation before entering the main menu
+        ui.PlayGameOpeningScene();
+        // Main menu at level index 0
+        // Actual levels at index 1, 2, 3 , 4, etc
+        CallLevelLoadingStarted(0);
     }
 
     private void OnEnable()
@@ -60,6 +65,7 @@ public class GameManager : MonoBehaviour
         LevelPlane.OnLevelPlaneInitialized += InitializeLevelPlane;
         CharacterPlane.OnCharacterPlaneInitialized += InitializeCharacterPlane;
         ObjectPlane.OnObjectPlaneInitialized += InitializeObjectPlane;
+        UIController.OnUIControllerInitialized += InitializeUIController;
 
         AIController.OnAIsAreFinished += CallAITurnEnded;
         OnAITurnEnded += CallPlayerTurnStarted;
@@ -77,6 +83,7 @@ public class GameManager : MonoBehaviour
         LevelPlane.OnLevelPlaneInitialized -= InitializeLevelPlane;
         CharacterPlane.OnCharacterPlaneInitialized -= InitializeCharacterPlane;
         ObjectPlane.OnObjectPlaneInitialized -= InitializeObjectPlane;
+        UIController.OnUIControllerInitialized -= InitializeUIController;
 
         AIController.OnAIsAreFinished -= CallAITurnEnded;
         OnAITurnEnded -= CallPlayerTurnStarted;
@@ -89,16 +96,20 @@ public class GameManager : MonoBehaviour
 
     
 
-    public void CallLevelLoadingStarted()
+    public void CallLevelLoadingStarted(int levelIndex)
     {
+        currentPrepCount = 0;
+
         if (gridController == null || levelPlane == null || characterPlane == null)
         {
             Debug.Log("Grid is not initialized in the editor");
             return;
         }
-
+        ui.PlayLevelTransitionScene();
+        if(levelIndex == 0) { ui.gameTitle.SetActive(true); }
+        else { ui.gameTitle.SetActive(false); }
         currentLevel = new LevelDesign();
-        LevelDesign saved = SaveSystem.LoadLevelDesign(fileName);
+        LevelDesign saved = SaveSystem.LoadLevelDesign(levelFileNameFormat + $" {levelIndex}");
         currentLevel.gridHeight = saved.gridHeight;
         currentLevel.gridLength = saved.gridLength;
         currentLevel.gridWidth = saved.gridWidth;
@@ -244,11 +255,22 @@ public class GameManager : MonoBehaviour
         IncrementPrepCount();
     }
 
+    private void InitializeUIController(UIController ui)
+    {
+        this.ui = ui;
+        IncrementPrepCount();
+    }
+
     private void IncrementPrepCount()
     {
         currentPrepCount++;
         if (currentPrepCount == prepCount)
         {
+            // Grid controller
+            // Level Plane
+            // Character Plane
+            // Object Plane
+            // Transition
             CallLevelStarted();
         }
     }

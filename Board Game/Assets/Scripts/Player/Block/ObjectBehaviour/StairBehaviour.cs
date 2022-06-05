@@ -9,6 +9,7 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
 
     public GameManager gameManager;
 
+
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
@@ -17,7 +18,7 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
     public void OnStepped(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
         Vector3Int directionV3Int = (endBlock.cell.gridPosition - startBlock.cell.gridPosition);
-        Debug.Log($"End to Start V3Int {directionV3Int}");
+        //Debug.Log($"End to Start V3Int {directionV3Int}");
         if(directionV3Int.magnitude == 0) 
         {
             gameManager.CallBlockEndedBehaviour(objectBlock);
@@ -26,11 +27,11 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
         }
         Vector3Int normalizedDirection = new Vector3Int(directionV3Int.x, 0, directionV3Int.z);
         normalizedDirection = normalizedDirection / (int)normalizedDirection.magnitude;
-        Debug.Log($"End to Start NormalizedV3Int {normalizedDirection}");
+        //Debug.Log($"End to Start NormalizedV3Int {normalizedDirection}");
 
         GridDirection direction = GridDirection.GetDirectionFromVector3Int(new Vector3Int(normalizedDirection.x, 0, normalizedDirection.z));
-        Debug.Log($"Direction: {direction.direction}");
-        Debug.Log($"User Forward Direction: {userBlock.forwardDirection.direction}");
+        //Debug.Log($"Direction: {direction.direction}");
+        //Debug.Log($"User Forward Direction: {userBlock.forwardDirection.direction}");
         if (!direction.Equals(userBlock.forwardDirection)) 
         {
             gameManager.CallBlockEndedBehaviour(objectBlock);
@@ -45,26 +46,26 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
     private IEnumerator MoveOnStairCoroutine(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
         Vector3Int directionV3Int = (endBlock.cell.gridPosition - startBlock.cell.gridPosition);
-        Debug.Log($"End to Start V3Int {directionV3Int}");
+        //Debug.Log($"End to Start V3Int {directionV3Int}");
 
         for (int i = 0; i < Mathf.Abs(directionV3Int.y); i++)
         {
-            Debug.Log($"{userBlock.name} before position: {userBlock.cell.gridPosition}");
+            //Debug.Log($"{userBlock.name} before position: {userBlock.cell.gridPosition}");
             float t = 0;
             Vector3Int normalizedDirection = new Vector3Int(directionV3Int.x, 0, directionV3Int.z);
             normalizedDirection = normalizedDirection / (int)normalizedDirection.magnitude;
             GridDirection direction = GridDirection.GetDirectionFromVector3Int(new Vector3Int(normalizedDirection.x, 0, normalizedDirection.z));
-            Debug.Log($"End to Start {direction.direction}");
+            //Debug.Log($"End to Start {direction.direction}");
             Cell toCell = gameManager.gridController.GetCellFromCellWithDirection(userBlock.cell,direction);
             if(directionV3Int.y > 0)
                 toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, GridDirection.Up);
             else if(directionV3Int.y < 0)
                 toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, GridDirection.Down);
-            Debug.Log($"ToCell of {userBlock.name} is: {toCell.gridPosition}");
+            //Debug.Log($"ToCell of {userBlock.name} is: {toCell.gridPosition}");
 
             userBlock.movementController.InitializeMovement(userBlock.transform, direction, userBlock.cell, toCell, BlockMovementController.MovementType.BasicHop);
             userBlock.CallOnPositionUpdated(toCell);
-            Debug.Log($"{userBlock.name} after position: {userBlock.cell.gridPosition}");
+            //Debug.Log($"{userBlock.name} after position: {userBlock.cell.gridPosition}");
 
             if (userBlock.movementController.movementType == BlockMovementController.MovementType.BasicHop)
             {

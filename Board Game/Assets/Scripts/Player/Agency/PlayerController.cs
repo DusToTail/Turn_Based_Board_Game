@@ -36,7 +36,8 @@ public class PlayerController : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
         FindObjectOfType<LightingManager>().player = playerBlock.transform;
-        
+        _canControl = false;
+
     }
 
     private void Update()
@@ -47,7 +48,6 @@ public class PlayerController : MonoBehaviour
         {
             // Move forward
             Cell toCell = gameManager.gridController.GetCellFromCellWithDirection(playerBlock.cell, playerBlock.forwardDirection);
-
             if(CellIsValidToMove(toCell))
             {
                 MovePlayerForward();
@@ -79,6 +79,17 @@ public class PlayerController : MonoBehaviour
             AttackForward();
             PreventInput();
         }
+        else if(Input.GetKeyDown(KeyCode.E))
+        {
+            // Activate forward
+            Cell forwardCell = gameManager.gridController.GetCellFromCellWithDirection(playerBlock.cell,playerBlock.forwardDirection);
+            if(ObjectAtCellIsValidToActivate(forwardCell))
+            {
+                ActivateForward();
+                PreventInput();
+            }
+
+        }
         else if(Input.GetKeyDown(KeyCode.Escape))
         {
             // Menu or Cancel something
@@ -107,6 +118,11 @@ public class PlayerController : MonoBehaviour
         playerBlock.Attack();
     }
 
+    private void ActivateForward()
+    {
+        playerBlock.ActivateForward();
+    }
+
     private bool CellIsValidToMove(Cell cell)
     {
         // Anticipate obstacles, enemies, end goal
@@ -131,7 +147,35 @@ public class PlayerController : MonoBehaviour
             Debug.Log($"{cell.gridPosition} is character, cant move");
             return false;
         }
+
+        if (gameManager.objectPlane.CheckIfCellIsOccupied(cell))
+        {
+            ObjectBlock block = gameManager.objectPlane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block.GetComponent<ObjectBlock>();
+            if(block.isPassable)
+            {
+                return true;
+            }
+            else
+            {
+                Debug.Log($"{cell.gridPosition} is impassible object, cant move");
+                return false;
+            }
+            
+        }
+
         return true;
+    }
+
+    private bool ObjectAtCellIsValidToActivate(Cell cell)
+    {
+        if(gameManager.objectPlane.CheckIfCellIsOccupied(cell))
+        {
+            Debug.Log($"There is object at {cell.gridPosition}");
+            ObjectBlock block = gameManager.objectPlane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block.GetComponent<ObjectBlock>();
+            if (block.activationBehaviour != null && block.activationBehaviour.GetComponent<IActivationOnTrigger>() != null)
+                return true;
+        }
+        return false;
     }
 
     

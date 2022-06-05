@@ -5,34 +5,35 @@ using UnityEngine;
 public class ObjectBlock : Block
 {
     public GameObject activationBehaviour;
+    public bool isPassable;
     public bool isFinished;
 
     private void OnEnable()
     {
-        GameManager.OnBlockStartedBehaviour += ActivateBefore;
-        GameManager.OnBlockEndedBehaviour += ActivateAfter;
+        GameManager.OnBlockStartedBehaviour += ActivateBeforeBehaviourAtCurrentCell;
+        GameManager.OnBlockEndedBehaviour += ActivateAfterBehaviourAtCurrentCell;
 
         GameManager.OnLevelFinished += StopBehaviour;
     }
 
     private void OnDisable()
     {
-        GameManager.OnBlockStartedBehaviour -= ActivateBefore;
-        GameManager.OnBlockEndedBehaviour -= ActivateAfter;
+        GameManager.OnBlockStartedBehaviour -= ActivateBeforeBehaviourAtCurrentCell;
+        GameManager.OnBlockEndedBehaviour -= ActivateAfterBehaviourAtCurrentCell;
 
         GameManager.OnLevelFinished -= StopBehaviour;
 
     }
 
-    public void ActivateAfter(Block currentBlock)
+    public void ActivateAfterBehaviourAtCurrentCell(Block currentBlock)
     {
         if(currentBlock.cell.gridPosition != cell.gridPosition) { return; }
         if(currentBlock.GetType() != typeof(CharacterBlock)) { return; }
         Debug.Log($"{currentBlock.name} landed on {name} at cell {cell.gridPosition}");
-        Activate((CharacterBlock)currentBlock);
+        ActivateOnStepped((CharacterBlock)currentBlock);
     }
 
-    public void ActivateBefore(Block currentBlock)
+    public void ActivateBeforeBehaviourAtCurrentCell(Block currentBlock)
     {
         if (currentBlock.cell.gridPosition != cell.gridPosition) { return; }
         if (currentBlock.GetType() != typeof(CharacterBlock)) { return; }
@@ -40,11 +41,20 @@ public class ObjectBlock : Block
 
     }
 
-    public void Activate(CharacterBlock userBlock)
+    public void ActivateOnStepped(CharacterBlock userBlock)
     {
         if(activationBehaviour == null) { return; }
-        if(activationBehaviour.GetComponent<IActivationOnStep>() == null) { return; }
-        activationBehaviour.GetComponent<IActivationOnStep>().OnStepped(this, userBlock);
+        if(activationBehaviour.GetComponent<IActivationOnStep>() != null)
+            activationBehaviour.GetComponent<IActivationOnStep>().OnStepped(this, userBlock);
+        
+    }
+
+    public void ActivateOnTriggered(CharacterBlock userBlock)
+    {
+        if (activationBehaviour == null) { return; }
+        if (activationBehaviour.GetComponent<IActivationOnTrigger>() != null)
+            activationBehaviour.GetComponent<IActivationOnTrigger>().OnTriggered(this, userBlock);
+
     }
 
     private void StopBehaviour()

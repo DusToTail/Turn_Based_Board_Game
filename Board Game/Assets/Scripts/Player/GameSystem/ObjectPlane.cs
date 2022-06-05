@@ -17,6 +17,12 @@ public class ObjectPlane : MonoBehaviour
     [SerializeField]
     private BlockIDContainer blockIDs;
 
+    public bool CheckIfCellIsOccupied(Cell cell)
+    {
+        if (grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block != null) { return true; }
+        return false;
+    }
+
     private void OnEnable()
     {
         GridController.OnGridInitialized += InitializeGrid;

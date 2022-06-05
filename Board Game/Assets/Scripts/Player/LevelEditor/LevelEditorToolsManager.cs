@@ -171,9 +171,9 @@ public class LevelEditorToolsManager : MonoBehaviour
             return;
         }
         editingDesign = new LevelDesign();
-        editingDesign.gridHeight = 5;
-        editingDesign.gridLength = 10;
-        editingDesign.gridWidth = 10;
+        editingDesign.gridHeight = gridController.gridSize.y;
+        editingDesign.gridLength = gridController.gridSize.z;
+        editingDesign.gridWidth = gridController.gridSize.x;
         editingDesign.terrainGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
         editingDesign.characterGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
         editingDesign.objectGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
