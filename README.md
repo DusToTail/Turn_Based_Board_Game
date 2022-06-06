@@ -17,8 +17,8 @@ The project will feature:
 Current Blocks:
 + White statue (id: 1): Player
 + Purple block (id: 2) (in gameplay): Basic enemy
-+ White block (id: 200): basic terrain
-+ Yellow block (id: 201): Stairs (auto, no action points required)
++ White block (id: 100): basic terrain
++ Yellow block (id: 201): Stairs start/end point (auto, no action points required)
 + Cyan block (id: 500): Load level 0 (menu stage)
 + Purple block (id: 501) (in menu, when application starts running): Load level 1
 + Red block (id: 530): goal
