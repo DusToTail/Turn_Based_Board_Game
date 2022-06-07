@@ -1,5 +1,51 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &187408040200726787
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6848861144501403545}
+  - component: {fileID: 7322724346937915169}
+  m_Layer: 8
+  m_Name: AudioHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6848861144501403545
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187408040200726787}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3812534035949748817}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7322724346937915169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187408040200726787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8098187f9b092ac439239a072283cb21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  datas: []
+  sources: []
 --- !u!1 &505984112938646805
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,6 +405,7 @@ Transform:
   - {fileID: 505984113853286604}
   - {fileID: 505984113919512344}
   - {fileID: 2581078888506591756}
+  - {fileID: 6848861144501403545}
   - {fileID: 3306713002705628986}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -448,6 +495,7 @@ MonoBehaviour:
   maxHealth: 3
   visionRange: 3
   weaponHandler: {fileID: 1489315947665005370}
+  audioHandler: {fileID: 7322724346937915169}
   attackedCharacterCount: 0
   curAttackedCharacterCount: 0
   gameManager: {fileID: 0}
@@ -508,7 +556,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 3fe6b0859fe175243a0668912272a5c3, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3fe6b0859fe175243a0668912272a5c3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -552,7 +600,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 3fe6b0859fe175243a0668912272a5c3, type: 3}
       propertyPath: m_Name
-      value: Ui
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 3fe6b0859fe175243a0668912272a5c3, type: 3}
       propertyPath: m_IsActive

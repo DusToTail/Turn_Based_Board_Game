@@ -23,6 +23,7 @@ public class CharacterBlock : Block
     [HideInInspector] public int maxHealth;
     [HideInInspector] public int visionRange;
     public WeaponHandler weaponHandler;
+    public AudioHandler audioHandler;
 
     public int curHealth { get { return _curHealth; }}
     public int curMovesLeft { get { return _curMovesLeft; } }
@@ -56,6 +57,7 @@ public class CharacterBlock : Block
         visionRange = characterData.visionRange;
         weaponHandler.weapon.data = characterData.defaultWeapon;
         weaponHandler.weapon.InitializeWeapon();
+        audioHandler.InitializeAudioSources(characterData.soundEffects);
 
     }
 
