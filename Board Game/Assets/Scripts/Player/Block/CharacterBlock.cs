@@ -165,12 +165,12 @@ public class CharacterBlock : Block
         // Sound Effect
 
 
-        // Finish movement
+
         gameManager.CallBlockEndedBehaviour(this);
 
         // Wait for any object block at the current cell
         GameObject objectBlock = gameManager.objectPlane.grid[steppedOnCell.gridPosition.y, steppedOnCell.gridPosition.z, steppedOnCell.gridPosition.x].block;
-        if(objectBlock != null && objectBlock.GetComponent<IActivationOnStep>() != null)
+        if(objectBlock != null && objectBlock.GetComponentInChildren<IActivationOnStep>() != null)
         {
             Debug.Log($"{gameObject.name} waiting for {objectBlock.name} to finish");
             yield return new WaitUntil(() => objectBlock.GetComponent<ObjectBlock>().isFinished == true);
@@ -179,7 +179,7 @@ public class CharacterBlock : Block
         {
             Debug.Log($"There is no object at {steppedOnCell.gridPosition} to wait");
         }
-
+        // Finish movement
         MinusMoves(moveCost);
 
     }
