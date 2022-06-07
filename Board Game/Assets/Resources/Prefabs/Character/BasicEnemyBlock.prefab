@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: -6608869597593452130}
   - component: {fileID: 3463857440976087800}
   m_Layer: 8
-  m_Name: EnemyBlock
+  m_Name: BasicEnemyBlock
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -220,6 +220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   cellBasedSize: {x: 1, y: 1, z: 1}
+  characterData: {fileID: 11400000, guid: 0dca1b73e2764444d9c7858eb1954f25, type: 2}
   movesPerTurn: 2
   maxHealth: 3
   visionRange: 100

@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class BasicWeapon : Weapon
 {
-    public void Start()
-    {
-        InitializeWeapon();
-    }
-
     public override void Attack(CharacterBlock userBlock)
     {
         Cell[] attackCells = userBlock.gameManager.gridController.GetCellsFromCellWithDirectionAnd2DGrid(userBlock.cell, userBlock.forwardDirection, _attackGrid);

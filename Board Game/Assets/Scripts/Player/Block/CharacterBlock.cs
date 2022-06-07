@@ -17,11 +17,11 @@ public class CharacterBlock : Block
 
     public delegate void PositionUpdated(CharacterBlock thisBlock, Cell targetCell);
     public event PositionUpdated OnPositionUpdated;
-    
 
-    public int movesPerTurn;
-    public int maxHealth;
-    public int visionRange;
+    public CharacterDataScriptableObject characterData;
+    [HideInInspector] public int movesPerTurn;
+    [HideInInspector] public int maxHealth;
+    [HideInInspector] public int visionRange;
     public WeaponHandler weaponHandler;
 
     public int curHealth { get { return _curHealth; }}
@@ -51,7 +51,11 @@ public class CharacterBlock : Block
 
         // May need to reimplement (use when importing level design)
         forwardDirection = GridDirection.Forward;
-
+        movesPerTurn = characterData.movesPerTurn;
+        maxHealth = characterData.maxHealth;
+        visionRange = characterData.visionRange;
+        weaponHandler.weapon.data = characterData.defaultWeapon;
+        weaponHandler.weapon.InitializeWeapon();
 
     }
 

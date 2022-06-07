@@ -443,6 +443,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   cellBasedSize: {x: 1, y: 1, z: 1}
+  characterData: {fileID: 11400000, guid: 335718f0956bf20499e6d4cfb528f567, type: 2}
   movesPerTurn: 3
   maxHealth: 3
   visionRange: 3
