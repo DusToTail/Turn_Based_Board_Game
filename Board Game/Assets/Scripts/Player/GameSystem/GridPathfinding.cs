@@ -28,6 +28,7 @@ public static class GridPathfinding
         }
         Vector3Int resultVector3Int = backtrackList[backtrackList.Count - 2].cell.gridPosition - backtrackList[backtrackList.Count - 1].cell.gridPosition ;
         resultVector3Int -= new Vector3Int(0, resultVector3Int.y, 0);
+        resultVector3Int /= (int)resultVector3Int.magnitude;
         GridDirection resultDirection = GridDirection.GetDirectionFromVector3Int(resultVector3Int);
         Debug.Log("Pathfinding: There is not solution");
         return resultDirection;
@@ -98,7 +99,7 @@ public static class GridPathfinding
             {
                 //Debug.Log($"Pathfinding processing Direction {direction.direction}");
                 // Direction validation
-                if (direction == GridDirection.Up || direction == GridDirection.Down || direction == GridDirection.None) { continue; }
+                if (direction == GridDirection.Up || direction == GridDirection.Down) { continue; }
                 Cell neighborCell = gridController.GetCellFromCellWithDirection(current.cell, direction);
 
                 // Terrain, gimmick validation
