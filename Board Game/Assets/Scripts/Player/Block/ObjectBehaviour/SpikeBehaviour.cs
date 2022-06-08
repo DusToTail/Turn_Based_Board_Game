@@ -17,10 +17,10 @@ public class SpikeBehaviour : MonoBehaviour, IActivationOnStep, IDamageOnActivat
 
     public void OnStepped(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
-        StartCoroutine(DamageCharacter(objectBlock, userBlock));
+        StartCoroutine(DamageCharacterCoroutine(objectBlock, userBlock));
     }
 
-    public IEnumerator DamageCharacter(ObjectBlock objectBlock, CharacterBlock userBlock)
+    public IEnumerator DamageCharacterCoroutine(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
         // Trigger animation
 

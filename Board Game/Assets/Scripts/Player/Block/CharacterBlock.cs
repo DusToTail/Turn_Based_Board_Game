@@ -28,8 +28,8 @@ public class CharacterBlock : Block
     public int curHealth { get { return _curHealth; }}
     public int curMovesLeft { get { return _curMovesLeft; } }
 
-    [HideInInspector] public int attackedCharacterCount;
-    [HideInInspector] public int curAttackedCharacterCount;
+    [HideInInspector] public int attackedEntityCount;
+    [HideInInspector] public int curAttackedEntityCount;
 
 
     public GameManager gameManager;
@@ -246,7 +246,7 @@ public class CharacterBlock : Block
     {
         weaponHandler.UseWeapon(this);
 
-        yield return new WaitUntil(() => curAttackedCharacterCount >= attackedCharacterCount);
+        yield return new WaitUntil(() => curAttackedEntityCount >= attackedEntityCount);
 
 
         // Finish movement
@@ -265,7 +265,7 @@ public class CharacterBlock : Block
         MinusHealth(damageAmount);
         Debug.Log($"{gameObject} took {damageAmount} damages from {fromCharacter.name}.");
 
-        fromCharacter.curAttackedCharacterCount++;
+        fromCharacter.curAttackedEntityCount++;
     }
 
     public void TakeDamage(ObjectBlock fromObject, int damageAmount)

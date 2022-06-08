@@ -7,5 +7,5 @@ public interface IDamageOnActivation
     public int attackedCharacterCount { get; set; }
     public int curAttackedCharacterCount {get; set;}
 
-    IEnumerator DamageCharacter(ObjectBlock objectBlock, CharacterBlock userBlock);
+    IEnumerator DamageCharacterCoroutine(ObjectBlock objectBlock, CharacterBlock userBlock);
 }

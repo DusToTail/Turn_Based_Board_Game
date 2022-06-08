@@ -12,23 +12,42 @@ public class BasicWeapon : Weapon
         {
             Debug.Log($"Planning to attack {attackCells[i].gridPosition}");
         }
-        userBlock.attackedCharacterCount = 0;
-        userBlock.curAttackedCharacterCount = 0;
+        userBlock.attackedEntityCount = 0;
+        userBlock.curAttackedEntityCount = 0;
         for (int i = 0; i < attackCells.Length; i++)
         {
             Cell attackCell = attackCells[i];
-            GameObject toAttackBlock = userBlock.gameManager.characterPlane.grid[attackCell.gridPosition.y, attackCell.gridPosition.z, attackCell.gridPosition.x].block;
-            if(toAttackBlock == null) { continue; }
-            toAttackBlocks.Add(toAttackBlock);
-            userBlock.attackedCharacterCount++;
+            GameObject toAttackCharacter = userBlock.gameManager.characterPlane.grid[attackCell.gridPosition.y, attackCell.gridPosition.z, attackCell.gridPosition.x].block;
+            if(toAttackCharacter != null)
+            {
+                toAttackBlocks.Add(toAttackCharacter);
+                userBlock.attackedEntityCount++;
+            }
+            GameObject toAttackObject = userBlock.gameManager.objectPlane.grid[attackCell.gridPosition.y, attackCell.gridPosition.z, attackCell.gridPosition.x].block;
+            if(toAttackObject != null && toAttackObject.GetComponent<ObjectBlock>().activationBehaviour.GetComponent<IDestroyableOnAttacked>() != null)
+            {
+                toAttackBlocks.Add(toAttackObject);
+                userBlock.attackedEntityCount++;
+            }
         }
         for (int i = 0; i < toAttackBlocks.Count; i++)
         {
             // Animation and Sound effect
 
-            // Trigger the occupants' TriggerHit method.
-            toAttackBlocks[i].GetComponent<CharacterBlock>().TakeDamage(userBlock, attackDamage);
-            Debug.Log($"Attacked {toAttackBlocks[i].name} at cell {toAttackBlocks[i].GetComponent<CharacterBlock>().cell.gridPosition}");
+            // Trigger the characters' TakeDamage method.
+            if(toAttackBlocks[i].GetComponent<CharacterBlock>() != null)
+            {
+                toAttackBlocks[i].GetComponent<CharacterBlock>().TakeDamage(userBlock, attackDamage);
+                Debug.Log($"Attacked {toAttackBlocks[i].name} at cell {toAttackBlocks[i].GetComponent<CharacterBlock>().cell.gridPosition}");
+            }
+            // Trigger the obstacles' OnAttacked method.
+            if (toAttackBlocks[i].GetComponent<ObjectBlock>() != null)
+            {
+                ObjectBlock target = toAttackBlocks[i].GetComponent<ObjectBlock>();
+                target.activationBehaviour.GetComponent<IDestroyableOnAttacked>().OnAttacked(target, userBlock);
+                Debug.Log($"Attacked {toAttackBlocks[i].name} at cell {target.cell.gridPosition}");
+            }
+            
         }
     }
 
