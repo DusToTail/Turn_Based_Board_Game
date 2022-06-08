@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     public CharacterBlock playerBlock;
     public Cell focusCell;
+    public RevealAreaSkill revealSkill;
     public GameManager gameManager;
     public delegate void PlayerIsFinished();
     public static event PlayerIsFinished OnPlayerIsFinished;
@@ -13,7 +14,7 @@ public class PlayerController : MonoBehaviour
     public enum ControlMode
     {
         Character,
-        Skill,
+        RevealSkill,
         Survey
     }
 
@@ -82,7 +83,11 @@ public class PlayerController : MonoBehaviour
                 FocusCellMoveInDirection(GridDirection.Forward);
 
             }
+            else if (_controlMode == ControlMode.RevealSkill)
+            {
+                FocusCellMoveInDirection(GridDirection.Forward);
 
+            }
         }
         else if(Input.GetKeyDown(KeyCode.S))
         {
@@ -97,7 +102,11 @@ public class PlayerController : MonoBehaviour
                 FocusCellMoveInDirection(GridDirection.Backward);
 
             }
+            else if (_controlMode == ControlMode.RevealSkill)
+            {
+                FocusCellMoveInDirection(GridDirection.Backward);
 
+            }
         }
         else if(Input.GetKeyDown(KeyCode.D))
         {
@@ -112,7 +121,11 @@ public class PlayerController : MonoBehaviour
                 FocusCellMoveInDirection(GridDirection.Right);
 
             }
+            else if (_controlMode == ControlMode.RevealSkill)
+            {
+                FocusCellMoveInDirection(GridDirection.Right);
 
+            }
         }
         else if(Input.GetKeyDown(KeyCode.A))
         {
@@ -127,7 +140,11 @@ public class PlayerController : MonoBehaviour
                 FocusCellMoveInDirection(GridDirection.Left);
 
             }
+            else if (_controlMode == ControlMode.RevealSkill)
+            {
+                FocusCellMoveInDirection(GridDirection.Left);
 
+            }
         }
         else if(Input.GetKeyDown(KeyCode.Space))
         {
@@ -141,7 +158,12 @@ public class PlayerController : MonoBehaviour
             {
 
             }
-            
+            else if (_controlMode == ControlMode.RevealSkill && revealSkill.IsOffCooldown)
+            {
+                PreventInput();
+                RevealArea(focusCell);
+            }
+
         }
         else if(Input.GetKeyDown(KeyCode.E))
         {
@@ -161,9 +183,9 @@ public class PlayerController : MonoBehaviour
         {
             if (_controlMode == ControlMode.Character)
             {
-                _controlMode = ControlMode.Skill;
+                _controlMode = ControlMode.RevealSkill;
             }
-            else if(_controlMode == ControlMode.Skill)
+            else if(_controlMode == ControlMode.RevealSkill)
             {
                 _controlMode = ControlMode.Survey;
             }
@@ -198,6 +220,18 @@ public class PlayerController : MonoBehaviour
     private void ActivateForward()
     {
         playerBlock.ActivateForward();
+    }
+
+    private void RevealArea(Cell atCell)
+    {
+        StartCoroutine(RevealAreaCoroutine(atCell));
+    }
+
+    private IEnumerator RevealAreaCoroutine(Cell atCell)
+    {
+        revealSkill.RevealArea(atCell);
+        yield return new WaitUntil(() => revealSkill.isFinished);
+        AllowInput();
     }
 
     private bool CellIsValidToMove(Cell cell)
