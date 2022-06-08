@@ -19,6 +19,7 @@ public abstract class Weapon : MonoBehaviour
 
 
     public abstract void Attack(CharacterBlock userBlock);
+    public abstract void Attack(ObjectBlock userBlock);
 
     public void InitializeWeapon()
     {

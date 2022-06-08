@@ -10,4 +10,9 @@ public class WeaponHandler : MonoBehaviour
     {
         weapon.Attack(userBlock);
     }
+
+    public void UseWeapon(ObjectBlock userBlock)
+    {
+        weapon.Attack(userBlock);
+    }
 }

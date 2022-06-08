@@ -5,6 +5,7 @@ using UnityEngine;
 public class ObjectBlock : Block
 {
     public GameObject activationBehaviour;
+    public GameManager gameManager;
     public bool isPassable;
     public bool isFinished;
 
@@ -23,6 +24,11 @@ public class ObjectBlock : Block
 
         GameManager.OnLevelFinished -= StopBehaviour;
 
+    }
+
+    private void Start()
+    {
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     public void ActivateAfterBehaviourAtCurrentCell(Block currentBlock)

@@ -263,9 +263,23 @@ public class CharacterBlock : Block
     {
         yield return null;
         MinusHealth(damageAmount);
-        Debug.Log($"{gameObject} took {damageAmount} damages.");
+        Debug.Log($"{gameObject} took {damageAmount} damages from {fromCharacter.name}.");
 
         fromCharacter.curAttackedCharacterCount++;
+    }
+
+    public void TakeDamage(ObjectBlock fromObject, int damageAmount)
+    {
+        StartCoroutine(TakeDamageCoroutine(fromObject, damageAmount));
+    }
+
+    private IEnumerator TakeDamageCoroutine(ObjectBlock fromObject, int damageAmount)
+    {
+        yield return null;
+        MinusHealth(damageAmount);
+        Debug.Log($"{gameObject} took {damageAmount} damages from {fromObject.name}.");
+
+        fromObject.activationBehaviour.GetComponent<IDamageOnActivation>().curAttackedCharacterCount++;
     }
 
     public void HealHealth(int healAmount)
