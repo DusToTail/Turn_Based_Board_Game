@@ -11,5 +11,6 @@ public class PlayerControllerEditor : Editor
         PlayerController playerController = (PlayerController)target;
         DrawDefaultInspector();
         GUILayout.Label("Can Control: " + playerController.CanControl.ToString());
+        GUILayout.Label("ControlMode: " + playerController.Mode.ToString());
     }
 }

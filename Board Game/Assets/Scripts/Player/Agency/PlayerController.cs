@@ -5,9 +5,23 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public CharacterBlock playerBlock;
+    public Cell focusCell;
     public GameManager gameManager;
     public delegate void PlayerIsFinished();
     public static event PlayerIsFinished OnPlayerIsFinished;
+
+    public enum ControlMode
+    {
+        Character,
+        Skill,
+        Survey
+    }
+
+    [SerializeField]
+    private bool displayGizmos;
+
+    public ControlMode Mode { get { return _controlMode; } }
+    private ControlMode _controlMode;
 
     public bool CanControl { get { return _canControl; } }
     private bool _canControl = false;
@@ -52,48 +66,112 @@ public class PlayerController : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.W))
         {
-            // Move forward
-            Cell toCell = gameManager.gridController.GetCellFromCellWithDirection(playerBlock.cell, playerBlock.forwardDirection);
-            if(CellIsValidToMove(toCell))
+            if(_controlMode == ControlMode.Character)
             {
-                PreventInput();
-                MovePlayerForward();
+                // Move forward
+                Cell toCell = gameManager.gridController.GetCellFromCellWithDirection(playerBlock.cell, playerBlock.forwardDirection);
+                if (CellIsValidToMove(toCell))
+                {
+                    PreventInput();
+                    MovePlayerForward();
+                    FocusCellMoveInDirection(playerBlock.forwardDirection);
+                }
             }
-            
+            else if(_controlMode == ControlMode.Survey)
+            {
+                FocusCellMoveInDirection(GridDirection.Forward);
+
+            }
+
         }
         else if(Input.GetKeyDown(KeyCode.S))
         {
-            // Skip Action
-            PreventInput();
-            SkipAction();
+            if(_controlMode == ControlMode.Character)
+            {
+                // Skip Action
+                PreventInput();
+                SkipAction();
+            }
+            else if(_controlMode == ControlMode.Survey)
+            {
+                FocusCellMoveInDirection(GridDirection.Backward);
+
+            }
+
         }
         else if(Input.GetKeyDown(KeyCode.D))
         {
-            // Rotate right
-            PreventInput();
-            RotatePlayer(Block.Rotations.Right);
+            if (_controlMode == ControlMode.Character)
+            {
+                // Rotate right
+                PreventInput();
+                RotatePlayer(Block.Rotations.Right);
+            }
+            else if (_controlMode == ControlMode.Survey)
+            {
+                FocusCellMoveInDirection(GridDirection.Right);
+
+            }
+
         }
         else if(Input.GetKeyDown(KeyCode.A))
         {
-            // Rotate left
-            PreventInput();
-            RotatePlayer(Block.Rotations.Left);
+            if (_controlMode == ControlMode.Character)
+            {
+                // Rotate left
+                PreventInput();
+                RotatePlayer(Block.Rotations.Left);
+            }
+            else if (_controlMode == ControlMode.Survey)
+            {
+                FocusCellMoveInDirection(GridDirection.Left);
+
+            }
+
         }
         else if(Input.GetKeyDown(KeyCode.Space))
         {
-            // Attack forward
-            PreventInput();
-            AttackForward();
+            if (_controlMode == ControlMode.Character)
+            {
+                // Attack forward
+                PreventInput();
+                AttackForward();
+            }
+            else if(_controlMode == ControlMode.Survey)
+            {
+
+            }
+            
         }
         else if(Input.GetKeyDown(KeyCode.E))
         {
-            // Activate forward
-            Cell forwardCell = gameManager.gridController.GetCellFromCellWithDirection(playerBlock.cell,playerBlock.forwardDirection);
-            if(ObjectAtCellIsValidToActivate(forwardCell))
+            if (_controlMode == ControlMode.Character)
             {
-                PreventInput();
-                ActivateForward();
+                // Activate forward
+                Cell forwardCell = gameManager.gridController.GetCellFromCellWithDirection(playerBlock.cell, playerBlock.forwardDirection);
+                if (ObjectAtCellIsValidToActivate(forwardCell))
+                {
+                    PreventInput();
+                    ActivateForward();
+                }
             }
+            
+        }
+        else if(Input.GetKeyDown(KeyCode.Q))
+        {
+            if (_controlMode == ControlMode.Character)
+            {
+                _controlMode = ControlMode.Skill;
+            }
+            else if(_controlMode == ControlMode.Skill)
+            {
+                _controlMode = ControlMode.Survey;
+            }
+            else if (_controlMode == ControlMode.Survey)
+            {
+                _controlMode = ControlMode.Character;
+            }
+            FocusCellBackToPlayer();
         }
     }
 
@@ -200,6 +278,8 @@ public class PlayerController : MonoBehaviour
     {
         playerBlock = plane.GetPlayerBlock();
         ResetStats();
+        focusCell = playerBlock.cell;
+        _controlMode = ControlMode.Character;
         FindObjectOfType<LightingManager>().playerBlockTransform = playerBlock.transform;
         FindObjectOfType<CameraController>().playerBlockTransform = playerBlock.transform;
     }
@@ -230,4 +310,90 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    private void FocusCellMoveInDirection(GridDirection direction)
+    {
+        Cell nextCell = gameManager.gridController.GetCellFromCellWithDirection(focusCell, direction);
+        if (gameManager.levelPlane.CheckIfCellIsOccupied(nextCell))
+        {
+            Debug.Log($"{nextCell.gridPosition} is terrain, move focus cell up");
+
+            Cell cellAbove = gameManager.gridController.GetCellFromCellWithDirection(nextCell, GridDirection.Up);
+            if(gameManager.levelPlane.CheckIfCellIsOccupied(cellAbove))
+            {
+                int curHeight = nextCell.gridPosition.y;
+                while (curHeight < gameManager.gridController.gridSize.y)
+                {
+                    Cell cellAboveAbove = gameManager.gridController.GetCellFromCellWithDirection(cellAbove, GridDirection.Up);
+                    if (!gameManager.levelPlane.CheckIfCellIsOccupied(cellAboveAbove))
+                    {
+                        Debug.Log($"{cellAboveAbove.gridPosition} is empty, stop focus cell at {cellAbove.gridPosition}");
+                        cellAbove = cellAboveAbove;
+                        break;
+                    }
+                    else
+                    {
+                        Debug.Log($"{cellAboveAbove.gridPosition} is not empty, move focus cell up");
+                        cellAbove = cellAboveAbove;
+                    }
+                    curHeight++;
+                }
+                nextCell = cellAbove;
+                focusCell = nextCell;
+            }
+            else
+            {
+                nextCell = cellAbove;
+                focusCell = nextCell;
+
+            }
+
+        }
+        else
+        {
+            Cell cellBelow = gameManager.gridController.GetCellFromCellWithDirection(nextCell, GridDirection.Down);
+            if (!gameManager.levelPlane.CheckIfCellIsOccupied(cellBelow))
+            {
+                Debug.Log($"{nextCell.gridPosition} is cliff, move focus cell down");
+                int curHeight = nextCell.gridPosition.y;
+                while(curHeight > 0)
+                {
+                    Cell cellBelowBelow = gameManager.gridController.GetCellFromCellWithDirection(cellBelow, GridDirection.Down);
+                    if(!gameManager.levelPlane.CheckIfCellIsOccupied(cellBelowBelow))
+                    {
+                        Debug.Log($"{cellBelowBelow.gridPosition} is empty, move focus cell down");
+                        cellBelow = cellBelowBelow;
+                    }
+                    else
+                    {
+                        Debug.Log($"{cellBelowBelow.gridPosition} is not empty, stop at {cellBelow.gridPosition}");
+                        break;
+                    }
+                    curHeight--;
+                }
+                nextCell = cellBelow;
+                focusCell = nextCell;
+            }
+            else
+            {
+                focusCell = nextCell;
+
+            }
+
+
+        }
+
+    }
+
+    private void FocusCellBackToPlayer()
+    {
+        focusCell = playerBlock.cell;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!displayGizmos) { return; }
+        if(focusCell == null) { return; }
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(focusCell.worldPosition, gameManager.gridController.cellSize);
+    }
 }
