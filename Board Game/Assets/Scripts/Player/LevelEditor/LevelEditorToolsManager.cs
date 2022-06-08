@@ -17,6 +17,8 @@ public class LevelEditorToolsManager : MonoBehaviour
     public CharacterPlane characterPlane;
     public ObjectPlane objectPlane;
     public StairsManager stairsManager;
+    public RemoteTriggerManager remoteTriggerManager;
+    public RemoteDoorManager remoteDoorManager;
 
     public LevelDesign editingDesign;
 
@@ -114,6 +116,26 @@ public class LevelEditorToolsManager : MonoBehaviour
             }
         }
 
+        if (remoteTriggerManager != null)
+        {
+            editingDesign.remoteTriggersData = new int[remoteTriggerManager.remoteTriggers.Count * 3];
+            for (int i = 0; i < remoteTriggerManager.remoteTriggers.Count; i++)
+            {
+                editingDesign.remoteTriggersData[3 * i] = remoteTriggerManager.remoteTriggers[i].toBeTriggeredBlock.cell.gridPosition.x;
+                editingDesign.remoteTriggersData[3 * i + 1] = remoteTriggerManager.remoteTriggers[i].toBeTriggeredBlock.cell.gridPosition.y;
+                editingDesign.remoteTriggersData[3 * i + 2] = remoteTriggerManager.remoteTriggers[i].toBeTriggeredBlock.cell.gridPosition.z;
+            }
+        }
+
+        if (remoteDoorManager != null)
+        {
+            editingDesign.remoteDoorsData = new int[remoteDoorManager.remoteDoors.Count];
+            for (int i = 0; i < remoteDoorManager.remoteDoors.Count; i++)
+            {
+                editingDesign.remoteDoorsData[i] = remoteDoorManager.remoteDoors[i].isOpen? 1 : 0;
+            }
+        }
+
         SaveSystem.SaveLevelDesign(saveFileName, editingDesign);
 
     }
@@ -134,6 +156,8 @@ public class LevelEditorToolsManager : MonoBehaviour
         editingDesign.characterGrid = saved.characterGrid;
         editingDesign.objectGrid = saved.objectGrid;
         editingDesign.stairsData = saved.stairsData;
+        editingDesign.remoteTriggersData = saved.remoteTriggersData;
+        editingDesign.remoteDoorsData = saved.remoteDoorsData;
 
         levelPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
         characterPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
@@ -157,6 +181,16 @@ public class LevelEditorToolsManager : MonoBehaviour
         if (stairsManager != null)
         {
             stairsManager.InitializeStairsData(editingDesign.stairsData);
+        }
+
+        if (remoteTriggerManager != null)
+        {
+            remoteTriggerManager.InitializeRemoteTriggersData(editingDesign.remoteTriggersData);
+        }
+
+        if (remoteDoorManager != null)
+        {
+            remoteDoorManager.InitializeRemoteDoorsData(editingDesign.remoteDoorsData);
         }
 
         Vector3Int gridSize = new Vector3Int(editingDesign.gridWidth, editingDesign.gridHeight, editingDesign.gridLength);

@@ -16,7 +16,8 @@ public class DestroyableBehaviour : MonoBehaviour, IDestroyableOnAttacked
 
     public void OnAttacked(ObjectBlock self, CharacterBlock attackingBlock)
     {
-        curHealth --;
+        self.isFinished = false;
+        curHealth--;
         if (curHealth <= 0) 
         { 
             curHealth = 0;

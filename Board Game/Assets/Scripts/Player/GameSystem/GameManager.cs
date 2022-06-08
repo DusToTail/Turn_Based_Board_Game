@@ -11,9 +11,14 @@ public class GameManager : MonoBehaviour
     public ObjectPlane objectPlane;
     public PlayerController playerController;
     public StairsManager stairsManager;
-    // Need to prepare grid controller
-    // Need to prepare level plane
-    // Need to prepare character plane
+    public RemoteTriggerManager remoteTriggerManager;
+    public RemoteDoorManager remoteDoorManager;
+
+    // Grid Controller
+    // Level Plane
+    // Character Plane
+    // Object Plane
+    // UI
     public int prepCount = 5;
     public int currentPrepCount;
 
@@ -142,6 +147,20 @@ public class GameManager : MonoBehaviour
             currentLevel.stairsData = new int[saved.stairsData.Length];
             saved.stairsData.CopyTo(currentLevel.stairsData,0);
             stairsManager.InitializeStairsData(currentLevel.stairsData);
+        }
+
+        if (remoteTriggerManager != null)
+        {
+            currentLevel.remoteTriggersData = new int[saved.remoteTriggersData.Length];
+            saved.remoteTriggersData.CopyTo(currentLevel.remoteTriggersData, 0);
+            remoteTriggerManager.InitializeRemoteTriggersData(currentLevel.remoteTriggersData);
+        }
+
+        if (remoteDoorManager != null)
+        {
+            currentLevel.remoteDoorsData = new int[saved.remoteDoorsData.Length];
+            saved.remoteDoorsData.CopyTo(currentLevel.remoteDoorsData, 0);
+            remoteDoorManager.InitializeRemoteDoorsData(currentLevel.remoteDoorsData);
         }
 
         OnLevelLoadingStarted(currentLevel);

@@ -21,5 +21,6 @@ public class LevelDesign
     public int[] objectGrid;
 
     public int[] stairsData;
-
+    public int[] remoteTriggersData;
+    public int[] remoteDoorsData;
 }

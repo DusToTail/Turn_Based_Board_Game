@@ -17,6 +17,7 @@ public class SpikeBehaviour : MonoBehaviour, IActivationOnStep, IDamageOnActivat
 
     public void OnStepped(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
+        objectBlock.isFinished = false;
         StartCoroutine(DamageCharacterCoroutine(objectBlock, userBlock));
     }
 
