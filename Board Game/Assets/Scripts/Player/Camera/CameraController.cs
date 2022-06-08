@@ -4,14 +4,26 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform playerBlockTransform;
+    public PlayerController playerController;
     public Vector3 offset;
 
 
     private void LateUpdate()
     {
-        if(playerBlockTransform == null) { return; }
-        transform.position = playerBlockTransform.position + offset;
+        if(playerController == null) { return; }
+
+        if(playerController.Mode == PlayerController.ControlMode.Character)
+        {
+            transform.position = playerController.playerBlock.transform.position + offset;
+        }
+        else
+        {
+            if (playerController.focusCell == null) { return; }
+            transform.position = playerController.focusCell.worldPosition + offset;
+        }
+
+
+        
     }
 
 

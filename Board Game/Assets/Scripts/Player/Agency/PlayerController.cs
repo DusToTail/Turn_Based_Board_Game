@@ -281,7 +281,7 @@ public class PlayerController : MonoBehaviour
         focusCell = playerBlock.cell;
         _controlMode = ControlMode.Character;
         FindObjectOfType<LightingManager>().playerBlockTransform = playerBlock.transform;
-        FindObjectOfType<CameraController>().playerBlockTransform = playerBlock.transform;
+        FindObjectOfType<CameraController>().playerController = this;
     }
 
     private void ResetStats()
