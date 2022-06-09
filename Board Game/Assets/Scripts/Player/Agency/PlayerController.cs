@@ -187,7 +187,7 @@ public class PlayerController : MonoBehaviour
             }
             else if(_controlMode == ControlMode.RevealSkill)
             {
-                _controlMode = ControlMode.Survey;
+                _controlMode = ControlMode.Survey; 
             }
             else if (_controlMode == ControlMode.Survey)
             {
