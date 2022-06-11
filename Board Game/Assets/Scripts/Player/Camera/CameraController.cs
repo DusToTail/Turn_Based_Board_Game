@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour
     private void LateUpdate()
     {
         if(playerController == null) { return; }
-
+        if(playerController.playerBlock == null) { return; }
         if(playerController.Mode == PlayerController.ControlMode.Character)
         {
             transform.position = playerController.playerBlock.transform.position + offset;
