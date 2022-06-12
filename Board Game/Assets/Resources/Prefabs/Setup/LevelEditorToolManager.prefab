@@ -93,11 +93,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b16b030aa38fe8349ac6137884ba022e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveFileName: Default
+  saveFileName: Level 1
   editingLayers:
     serializedVersion: 2
-    m_Bits: 448
-  editingPlane: 2
+    m_Bits: 64
+  editingPlane: 0
   paintTool: {fileID: 7343578178054369474}
   eraseTool: {fileID: 7343578177792254974}
   rotateTool: {fileID: 7343578177003870117}
@@ -107,15 +107,26 @@ MonoBehaviour:
   characterPlane: {fileID: 0}
   objectPlane: {fileID: 0}
   stairsManager: {fileID: 0}
+  remoteTriggerManager: {fileID: 0}
+  remoteDoorManager: {fileID: 0}
   toolType: 0
-  objectIndex: 5
+  objectIndex: 1
   objectList:
   - {fileID: 3741728637648728937, guid: dc07e7a055496e148a90573f5d61bb6e, type: 3}
+  - {fileID: 3741728637648728937, guid: c5a0ef20a5fd8c342971339b02864bd3, type: 3}
+  - {fileID: 3741728637648728937, guid: c208dbf9c065dfa44a04ac2de0353833, type: 3}
+  - {fileID: 3741728637648728937, guid: 9b6e43bd98c29da44ad7ab85b4ba27de, type: 3}
   - {fileID: 3812534035949748820, guid: ee580204375490448b8e9ef0fed615a6, type: 3}
   - {fileID: 5677545340336260885, guid: f7d361aca91c167429bdb3d6c653463c, type: 3}
+  - {fileID: 5677545340336260885, guid: 7e9f7d00cf386684189ae91bd90fea31, type: 3}
   - {fileID: 12878815774820464, guid: e8480e6b886387d44a8e7feb3601dc91, type: 3}
-  - {fileID: 6702489340845166785, guid: 98c85539f6358cf43b64588e6845f71a, type: 3}
+  - {fileID: 4439744336541984834, guid: ff00891c4fb603747a753d04e195f0ca, type: 3}
+  - {fileID: 4439744336541984834, guid: 28b05b726766a404f8da337ef8f1e538, type: 3}
+  - {fileID: 4439744336541984834, guid: bf0e805a0873c174ab53ce5dfb0eea75, type: 3}
+  - {fileID: 12878815774820464, guid: b4f0a3bf49cf42445850ca05fdd99bf7, type: 3}
   - {fileID: 7611116629634572581, guid: a05e62fc633df8a48b233bba7bf15e05, type: 3}
+  - {fileID: 4994480637719656185, guid: 2ec34f92705effc4e9ceae535d18aa65, type: 3}
+  - {fileID: 4439744336541984834, guid: c30c8e1ef122d8542ab781c615e36fa2, type: 3}
 --- !u!1 &7343578177792254975
 GameObject:
   m_ObjectHideFlags: 0
