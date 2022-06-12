@@ -67,7 +67,6 @@ public class GridController : MonoBehaviour
             {
                 for (int w = 0; w < checkGrid.GetLength(1); w++)
                 {
-                    if (l == bottomRowIndex && w == midColumnIndex) { continue; }
                     if(checkGrid[l,w] != 1) { continue; }
                     Vector3Int relativeGridPosition = new Vector3Int(w - midColumnIndex, 0, l - bottomRowIndex);
 

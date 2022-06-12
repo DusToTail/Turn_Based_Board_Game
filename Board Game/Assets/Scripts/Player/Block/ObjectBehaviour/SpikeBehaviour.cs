@@ -13,6 +13,7 @@ public class SpikeBehaviour : MonoBehaviour, IActivationOnStep, IDamageOnActivat
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        weaponHandler.weapon.InitializeWeapon();
     }
 
     public void OnStepped(ObjectBlock objectBlock, CharacterBlock userBlock)
