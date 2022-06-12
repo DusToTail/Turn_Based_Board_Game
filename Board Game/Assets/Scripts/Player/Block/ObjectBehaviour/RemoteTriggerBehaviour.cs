@@ -23,7 +23,7 @@ public class RemoteTriggerBehaviour : MonoBehaviour, IRemoteActivationOnTrigger
     private IEnumerator TriggerObjectCoroutine(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
         toBeTriggered.OnTriggered(toBeTriggeredBlock, objectBlock, userBlock);
-
+        Debug.Log($"{objectBlock.name} is triggered. Waiting for {toBeTriggeredBlock.name} to be triggered");
         yield return new WaitUntil(() => toBeTriggeredBlock.isFinished);
         objectBlock.isFinished = true;
     }

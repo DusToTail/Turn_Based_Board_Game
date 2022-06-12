@@ -18,11 +18,11 @@ public class RemoteDoorBehaviour : MonoBehaviour, IRemoteActivation
         self.isFinished = false;
         if(isOpen)
         {
-            StartCoroutine(OpenDoor(self, trigger, userBlock));
+            StartCoroutine(CloseDoor(self, trigger, userBlock));
         }
         else
         {
-            StartCoroutine(CloseDoor(self, trigger, userBlock));
+            StartCoroutine(OpenDoor(self, trigger, userBlock));
         }
     }
 
