@@ -15,22 +15,22 @@ The goal is to reach the goal point whilst avoiding traps and enemies
 + Save system  (NOT YET)
 
 ★Level 0(Menu) important block
-Cyan(id:500): Load level 0 
-Purple(id:501): Load level 1 
++ Cyan(id:500): Load level 0 
++ Purple(id:501): Load level 1 
 
 ★Level 1 important block
-School uniform girl statue(id:1): Player
-Skeleton statue(id:2): Basic enemy
-Transparent yellow(id:201):Start and end point of stairs (auto, no move cost needed)
-Brown(id:202): Destroyable block (by attacking)
-Light blue(id:203): Trigger for remote door
-Dark blue(id:204): Remote door
-Transparent black(id:300): Spike, deal 1 damage to those who step on
-Transparent red(id:530): Goal, clear level when player steps on
++ School uniform girl statue(id:1): Player
++ Skeleton statue(id:2): Basic enemy
++ Transparent yellow(id:201):Start and end point of stairs (auto, no move cost needed)
++ Brown(id:202): Destroyable block (by attacking)
++ Light blue(id:203): Trigger for remote door
++ Dark blue(id:204): Remote door
++ Transparent black(id:300): Spike, deal 1 damage to those who step on
++ Transparent red(id:530): Goal, clear level when player steps on
 
 ★Current stats
-School uniform girl statue(id:1): action points 3, HP 3, Vision 3, Attack range 1
-Skeleton statue(id:2): action points 2, HP 3, Vision 5, Attack range 2
++ School uniform girl statue(id:1): action points 3, HP 3, Vision 3, Attack range 1
++ Skeleton statue(id:2): action points 2, HP 3, Vision 5, Attack range 2
 
 Gameplay Control
 
