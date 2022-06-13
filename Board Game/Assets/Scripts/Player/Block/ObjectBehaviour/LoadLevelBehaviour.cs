@@ -14,10 +14,10 @@ public class LoadLevelBehaviour : MonoBehaviour, IActivationOnTrigger
 
     public void OnTriggered(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
-        StartCoroutine(StartNewGameCoroutine(objectBlock, userBlock));
+        StartCoroutine(LoadLevelCoroutine(objectBlock, userBlock));
     }
 
-    private IEnumerator StartNewGameCoroutine(ObjectBlock objectBlock, CharacterBlock userBlock)
+    private IEnumerator LoadLevelCoroutine(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
         // Trigger sound effect and loading screen animation
         // Wait for the screen animation to fully cover the entire screen

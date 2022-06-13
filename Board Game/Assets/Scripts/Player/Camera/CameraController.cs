@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles the movement of the camera in game
+/// </summary>
 public class CameraController : MonoBehaviour
 {
     public PlayerController playerController;

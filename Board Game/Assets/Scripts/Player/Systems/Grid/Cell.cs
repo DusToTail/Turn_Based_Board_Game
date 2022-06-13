@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// English: Smallest component in a 3 dimensional grid with [height, Length, Width] corresponding to [y, z, x] in world coordinates
+/// Smallest component in a 3 dimensional grid with [height, Length, Width] corresponding to [y, z, x] in world coordinates
 /// </summary>
 public class Cell
 {

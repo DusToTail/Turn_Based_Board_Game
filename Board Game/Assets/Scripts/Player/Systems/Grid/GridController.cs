@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// English: Controller of the main grid used in the scene
+/// Controller of the main grid used in the scene
 /// </summary>
 [ExecuteAlways]
 public class GridController : MonoBehaviour
@@ -39,7 +39,7 @@ public class GridController : MonoBehaviour
     }
 
     /// <summary>
-    /// English: Only use 2 dimensional grid with odd number of columns. 0 means ignore the cell, 1 means return the cell
+    /// Only use 2 dimensional grid with odd number of columns. 0 means ignore the cell, 1 means return the cell
     /// Only use for cells on the same height level
     /// </summary>
     /// <param name="fromCell"></param>
@@ -127,7 +127,7 @@ public class GridController : MonoBehaviour
     }
 
     /// <summary>
-    /// English: Initialize the default grid
+    /// Initialize the default grid
     /// </summary>
     public void InitializeGrid()
     {
@@ -148,13 +148,11 @@ public class GridController : MonoBehaviour
         }
 
         if(OnGridInitialized != null)
-        {
             OnGridInitialized(this);
-        }
     }
 
     /// <summary>
-    /// English: Initialize the 3 dimensional grid with [height, Length, Width] corresponding to [y, z, x] in world coordinates
+    /// Initialize the 3 dimensional grid with [height, Length, Width] corresponding to [y, z, x] in world coordinates
     /// </summary>
     public void InitializeGrid(Vector3Int gridSize)
     {
@@ -176,9 +174,7 @@ public class GridController : MonoBehaviour
         }
 
         if (OnGridInitialized != null)
-        {
             OnGridInitialized(this);
-        }
     }
 
     private void OnDrawGizmosSelected()

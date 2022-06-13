@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// An extension for handling weapons in a character/object block
+/// </summary>
 public class WeaponHandler : MonoBehaviour
 {
     public Weapon weapon;

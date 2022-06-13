@@ -2,7 +2,7 @@ using UnityEngine;
 using System.IO;
 
 /// <summary>
-/// English: A static class for handling all saving and loading in the runtime / editor
+/// A static class for handling all saving and loading in the runtime / editor
 /// </summary>
 public static class SaveSystem
 {

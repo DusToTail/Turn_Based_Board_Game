@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Player agent that controls a character block via keyboard input in different modes to give diversity in commands
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
     public CharacterBlock playerBlock;
@@ -13,9 +16,9 @@ public class PlayerController : MonoBehaviour
 
     public enum ControlMode
     {
-        Character,
-        RevealSkill,
-        Survey
+        Character, // Perform basic actions of the character
+        RevealSkill, // Move the focus cell around the map to reveal an area
+        Survey // Move the focus cell around the map to see the field
     }
 
     [SerializeField]
@@ -65,163 +68,187 @@ public class PlayerController : MonoBehaviour
         if (!_canControl) { return; }
         if(playerBlock == null) { return; }
 
-        if(Input.GetKeyDown(KeyCode.W))
+        // Keyboard Input (If Else)
         {
-            if(_controlMode == ControlMode.Character)
+            if (Input.GetKeyDown(KeyCode.W))
             {
-                // Move forward
-                Cell toCell = gameManager.gridController.GetCellFromCellWithDirection(playerBlock.cell, playerBlock.forwardDirection);
-                if (CellIsValidToMove(toCell))
+                if (_controlMode == ControlMode.Character)
                 {
-                    PreventInput();
-                    MovePlayerForward();
-                    FocusCellMoveInDirection(playerBlock.forwardDirection);
+                    // Move forward
+                    Cell toCell = gameManager.gridController.GetCellFromCellWithDirection(playerBlock.cell, playerBlock.forwardDirection);
+                    if (CellIsValidToMove(toCell))
+                    {
+                        PreventInput();
+                        MovePlayerForward();
+                        FocusCellMoveInDirection(playerBlock.forwardDirection);
+                    }
+                }
+                else if (_controlMode == ControlMode.Survey)
+                {
+                    FocusCellMoveInDirection(GridDirection.Forward);
+
+                }
+                else if (_controlMode == ControlMode.RevealSkill)
+                {
+                    FocusCellMoveInDirection(GridDirection.Forward);
+
                 }
             }
-            else if(_controlMode == ControlMode.Survey)
+            else if (Input.GetKeyDown(KeyCode.S))
             {
-                FocusCellMoveInDirection(GridDirection.Forward);
-
-            }
-            else if (_controlMode == ControlMode.RevealSkill)
-            {
-                FocusCellMoveInDirection(GridDirection.Forward);
-
-            }
-        }
-        else if(Input.GetKeyDown(KeyCode.S))
-        {
-            if(_controlMode == ControlMode.Character)
-            {
-                // Skip Action
-                PreventInput();
-                SkipAction();
-            }
-            else if(_controlMode == ControlMode.Survey)
-            {
-                FocusCellMoveInDirection(GridDirection.Backward);
-
-            }
-            else if (_controlMode == ControlMode.RevealSkill)
-            {
-                FocusCellMoveInDirection(GridDirection.Backward);
-
-            }
-        }
-        else if(Input.GetKeyDown(KeyCode.D))
-        {
-            if (_controlMode == ControlMode.Character)
-            {
-                // Rotate right
-                PreventInput();
-                RotatePlayer(Block.Rotations.Right);
-            }
-            else if (_controlMode == ControlMode.Survey)
-            {
-                FocusCellMoveInDirection(GridDirection.Right);
-
-            }
-            else if (_controlMode == ControlMode.RevealSkill)
-            {
-                FocusCellMoveInDirection(GridDirection.Right);
-
-            }
-        }
-        else if(Input.GetKeyDown(KeyCode.A))
-        {
-            if (_controlMode == ControlMode.Character)
-            {
-                // Rotate left
-                PreventInput();
-                RotatePlayer(Block.Rotations.Left);
-            }
-            else if (_controlMode == ControlMode.Survey)
-            {
-                FocusCellMoveInDirection(GridDirection.Left);
-
-            }
-            else if (_controlMode == ControlMode.RevealSkill)
-            {
-                FocusCellMoveInDirection(GridDirection.Left);
-
-            }
-        }
-        else if(Input.GetKeyDown(KeyCode.Space))
-        {
-            if (_controlMode == ControlMode.Character)
-            {
-                // Attack forward
-                PreventInput();
-                AttackForward();
-            }
-            else if(_controlMode == ControlMode.Survey)
-            {
-
-            }
-            else if (_controlMode == ControlMode.RevealSkill && revealSkill.IsOffCooldown)
-            {
-                PreventInput();
-                RevealArea(focusCell);
-            }
-
-        }
-        else if(Input.GetKeyDown(KeyCode.E))
-        {
-            if (_controlMode == ControlMode.Character)
-            {
-                // Activate forward
-                Cell forwardCell = gameManager.gridController.GetCellFromCellWithDirection(playerBlock.cell, playerBlock.forwardDirection);
-                if (ObjectAtCellIsValidToActivate(forwardCell))
+                if (_controlMode == ControlMode.Character)
                 {
+                    // Skip Action
                     PreventInput();
-                    ActivateForward();
+                    SkipAction();
+                }
+                else if (_controlMode == ControlMode.Survey)
+                {
+                    FocusCellMoveInDirection(GridDirection.Backward);
+
+                }
+                else if (_controlMode == ControlMode.RevealSkill)
+                {
+                    FocusCellMoveInDirection(GridDirection.Backward);
+
                 }
             }
-            
+            else if (Input.GetKeyDown(KeyCode.D))
+            {
+                if (_controlMode == ControlMode.Character)
+                {
+                    // Rotate right
+                    PreventInput();
+                    RotatePlayer(Block.Rotations.Right);
+                }
+                else if (_controlMode == ControlMode.Survey)
+                {
+                    FocusCellMoveInDirection(GridDirection.Right);
+
+                }
+                else if (_controlMode == ControlMode.RevealSkill)
+                {
+                    FocusCellMoveInDirection(GridDirection.Right);
+
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.A))
+            {
+                if (_controlMode == ControlMode.Character)
+                {
+                    // Rotate left
+                    PreventInput();
+                    RotatePlayer(Block.Rotations.Left);
+                }
+                else if (_controlMode == ControlMode.Survey)
+                {
+                    FocusCellMoveInDirection(GridDirection.Left);
+
+                }
+                else if (_controlMode == ControlMode.RevealSkill)
+                {
+                    FocusCellMoveInDirection(GridDirection.Left);
+
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (_controlMode == ControlMode.Character)
+                {
+                    // Attack forward
+                    PreventInput();
+                    AttackForward();
+                }
+                else if (_controlMode == ControlMode.Survey)
+                {
+
+                }
+                else if (_controlMode == ControlMode.RevealSkill && revealSkill.IsOffCooldown)
+                {
+                    PreventInput();
+                    RevealArea(focusCell);
+                }
+
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                if (_controlMode == ControlMode.Character)
+                {
+                    // Activate forward
+                    Cell forwardCell = gameManager.gridController.GetCellFromCellWithDirection(playerBlock.cell, playerBlock.forwardDirection);
+                    if (ObjectAtCellIsValidToActivate(forwardCell))
+                    {
+                        PreventInput();
+                        ActivateForward();
+                    }
+                }
+
+            }
+            else if (Input.GetKeyDown(KeyCode.Q))
+            {
+                if (_controlMode == ControlMode.Character)
+                {
+                    _controlMode = ControlMode.RevealSkill;
+                }
+                else if (_controlMode == ControlMode.RevealSkill)
+                {
+                    _controlMode = ControlMode.Survey;
+                }
+                else if (_controlMode == ControlMode.Survey)
+                {
+                    _controlMode = ControlMode.Character;
+                }
+                FocusCellBackToPlayer();
+            }
         }
-        else if(Input.GetKeyDown(KeyCode.Q))
-        {
-            if (_controlMode == ControlMode.Character)
-            {
-                _controlMode = ControlMode.RevealSkill;
-            }
-            else if(_controlMode == ControlMode.RevealSkill)
-            {
-                _controlMode = ControlMode.Survey; 
-            }
-            else if (_controlMode == ControlMode.Survey)
-            {
-                _controlMode = ControlMode.Character;
-            }
-            FocusCellBackToPlayer();
-        }
+        
     }
 
+    /// <summary>
+    /// Do nothing and consume 1 action point
+    /// </summary>
     private void SkipAction()
     {
         playerBlock.SkipAction();
     }
 
+    /// <summary>
+    /// Rotate the controlled character block to a direction relative to it's orientation
+    /// </summary>
+    /// <param name="rotation"></param>
     private void RotatePlayer(Block.Rotations rotation)
     {
         playerBlock.RotateHorizontally(rotation);
     }
 
+    /// <summary>
+    /// Move the controlled character block to the cell in front of its position
+    /// </summary>
     private void MovePlayerForward()
     {
         playerBlock.MoveFoward();
     }
 
+    /// <summary>
+    /// Attack the cell in front of its position
+    /// </summary>
     private void AttackForward()
     {
         playerBlock.Attack();
     }
 
+    /// <summary>
+    /// Activate an object block in front of its position
+    /// </summary>
     private void ActivateForward()
     {
         playerBlock.ActivateForward();
     }
 
+    /// <summary>
+    /// Start revealing an area at a cell's position
+    /// </summary>
+    /// <param name="atCell"></param>
     private void RevealArea(Cell atCell)
     {
         StartCoroutine(RevealAreaCoroutine(atCell));
@@ -236,8 +263,6 @@ public class PlayerController : MonoBehaviour
 
     private bool CellIsValidToMove(Cell cell)
     {
-        // Anticipate obstacles, enemies, end goal
-        // May refactor to have the validation check be calculated before hand for obstacles. Keep for enemies to trigger hit and goal to clear level
         if (gameManager.levelPlane.CheckIfCellIsOccupied(cell))
         {
             Debug.Log($"{cell.gridPosition} is terrain, cant move");

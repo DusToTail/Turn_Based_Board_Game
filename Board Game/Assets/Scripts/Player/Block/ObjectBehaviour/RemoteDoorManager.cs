@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// English: Manage the information of all remote doors
+/// Manage the information of all remote doors
 /// </summary>
 [ExecuteAlways]
 public class RemoteDoorManager : MonoBehaviour

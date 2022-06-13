@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// English: Manage the information of all remote triggers
+/// Manage the information of all remote triggers
 /// </summary>
 [ExecuteAlways]
 public class RemoteTriggerManager : MonoBehaviour

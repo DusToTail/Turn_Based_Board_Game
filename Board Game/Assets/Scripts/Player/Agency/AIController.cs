@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// AI agent that controls a character block via a behaviour tree runner
+/// </summary>
 public class AIController : MonoBehaviour
 {
     public static List<AIController> AIs = new List<AIController>();
@@ -59,29 +62,32 @@ public class AIController : MonoBehaviour
         OnAIIsFinished -= IncrementCompletedAICount;
     }
 
+    /// <summary>
+    /// Start running the behaviour tree to perform an action
+    /// </summary>
     public void PerformAction()
     {
         Debug.Log($"AI {name} performs something");
-        //RotateSelf(Block.Rotations.Left);
         StartCoroutine(_behaviourTreeRunner.RunTree());
     }
 
-    public void RotateSelf(Block.Rotations rotation)
-    {
-        controlBlock.RotateHorizontally(rotation);
-    }
 
-    public void MoveForward()
-    {
-        controlBlock.MoveFoward();
-    }
-
+    /// <summary>
+    /// Perform action via behaviour tree runner when GameManager.OnNextMoveRequired event is sent 
+    /// ONLY IF the block that initiated the event is the same is this block
+    /// </summary>
+    /// <param name="compareBlock"></param>
     public void ContinueToMoveIfAllowed(CharacterBlock compareBlock)
     {
         if (compareBlock != controlBlock) { return; }
         PerformAction();
     }
 
+    /// <summary>
+    /// Announce that this AI agent is finished with its turn when GameManager.OnCharacterRanOutOfMoves event is sent 
+    /// ONLY IF the block that initiated the event is the same is this block
+    /// </summary>
+    /// <param name="compareBlock"></param>
     public void CallAIIsFinished(CharacterBlock compareBlock)
     {
         if(compareBlock != controlBlock) { return; }
@@ -90,6 +96,13 @@ public class AIController : MonoBehaviour
             OnAIIsFinished(this);
     }
 
+    /// <summary>
+    /// Increase the completed during the turn AI count by one when this.OnAIIsFinished event is sent 
+    /// ONLY IF the AI agent that initiated the event is the same is this agent to ensure incrementing only ONCE
+    /// If all AI are finished, inform the game manager to switch turn back to player
+    /// else, start the next AI in the list to perform action
+    /// </summary>
+    /// <param name="ai"></param>
     public void IncrementCompletedAICount(AIController ai)
     {
         if(ai != this) { return; }
@@ -105,6 +118,9 @@ public class AIController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Reset all AI's stat and the completedAICount to 0 when GameManager.OnLevelStarted is sent
+    /// </summary>
     public static void ResetAIsStats()
     {
         foreach (AIController ai in AIs)
@@ -115,6 +131,9 @@ public class AIController : MonoBehaviour
         completedAICount = 0;
     }
 
+    /// <summary>
+    /// Reset all AI's available move points when GameManager.OnAITurnStarted is sent and start the first AI action
+    /// </summary>
     public static void ResetAIsMoves()
     {
         foreach (AIController ai in AIs)
@@ -127,7 +146,9 @@ public class AIController : MonoBehaviour
         StartNextAIPerform();
     }
 
-
+    /// <summary>
+    /// Start next AI's action
+    /// </summary>
     public static void StartNextAIPerform()
     {
         if(AIs.Count == 0) 
@@ -139,7 +160,12 @@ public class AIController : MonoBehaviour
         AIs[completedAICount].PerformAction();
     }
 
-
+    /// <summary>
+    /// Predicate for sorting the AI performing list by its action sorting ID (which AI performs before) when enabled and disabled
+    /// </summary>
+    /// <param name="A"></param>
+    /// <param name="B"></param>
+    /// <returns></returns>
     private static int CompareActionSortingID(AIController A, AIController B)
     {
         if(A == null)

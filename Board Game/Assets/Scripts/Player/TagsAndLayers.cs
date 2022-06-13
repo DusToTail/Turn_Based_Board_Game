@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Tags
+/// <summary>
+/// Contain strings for game object's layers and tags
+/// </summary>
+public class TagsAndLayers
 {
     public static readonly string SELECTABLE_LAYER = "Selectable";
     public static readonly string CHARACTER_LAYER = "Character";

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// A controller for the game's UI canvas and its children
+/// </summary>
 public class UIController : MonoBehaviour
 {
     public Canvas canvas;
@@ -73,7 +76,7 @@ public class UIController : MonoBehaviour
                 break;
             }
             blackScreen.color = new Color(0, 0, 0, t);
-            t -= 0.2f;
+            t -= 0.25f;
         }
     }
 
@@ -97,7 +100,7 @@ public class UIController : MonoBehaviour
                 break;
             }
             blackScreen.color = new Color(0, 0, 0, t);
-            t -= 0.2f;
+            t -= 0.25f;
         }
 
         OnUIControllerInitialized(this);
@@ -119,7 +122,7 @@ public class UIController : MonoBehaviour
                 break;
             }
             blackScreen.color = new Color(0, 0, 0, t);
-            t += 0.2f;
+            t += 0.25f;
         }
 
         // Show a scene where the statue is with the prize, surrounded by stalking eyes in the dark
@@ -135,7 +138,7 @@ public class UIController : MonoBehaviour
                 break;
             }
             blackScreen.color = new Color(0, 0, 0, t);
-            t -= 0.2f;
+            t -= 0.25f;
         }
 
         Debug.Log("UI: level clear finished");
@@ -156,7 +159,7 @@ public class UIController : MonoBehaviour
                 break;
             }
             blackScreen.color = new Color(0, 0, 0, t);
-            t += 0.2f;
+            t += 0.25f;
         }
 
         // Show a scene where the statue is broken, surrounded by stalking eyes in the dark
@@ -172,7 +175,7 @@ public class UIController : MonoBehaviour
                 break;
             }
             blackScreen.color = new Color(0, 0, 0, t);
-            t -= 0.2f;
+            t -= 0.25f;
         }
 
         Debug.Log("UI: level fail finished");

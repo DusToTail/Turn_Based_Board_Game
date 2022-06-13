@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// English: A class that directly moves blocks (specifically characters) on the level plane
+/// A class that initialize the movement trajectory between cells with bezier curve
 /// </summary>
 public class BlockMovementController : MonoBehaviour
 {

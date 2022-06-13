@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Base class for all weapons
+/// </summary>
 public abstract class Weapon : MonoBehaviour
 {
     public WeaponScriptableObject data;
@@ -30,6 +33,13 @@ public abstract class Weapon : MonoBehaviour
         usageCost = data.usageCost;
         InitializeAttackGrid(data.attackGrid, data.attackGridWidth, data.attackGridLength);
     }
+
+    // An attack grid's root is at the user block's cell position and the direction that it extends/grows is relative to the user's orientation
+    // Example: 1x1 grid with one int element as 1 means, it will attack the cell at the user's position
+    // Example: 2x1 grid with [0,0] as 0 and [1,0] as 1 means, it will attack the forward cell
+    // Note: use grid with width as an odd integer
+    // Notion of n x m: Height x width
+
     public void InitializeAttackGrid(int[] oneDimensionalGrid, int width, int length)
     {
         _attackGridWidth = width;

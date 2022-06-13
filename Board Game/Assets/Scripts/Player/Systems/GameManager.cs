@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manage other systems and facilitate communication between them
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     public UIController ui;
@@ -14,20 +17,22 @@ public class GameManager : MonoBehaviour
     public RemoteTriggerManager remoteTriggerManager;
     public RemoteDoorManager remoteDoorManager;
 
-    // Grid Controller
-    // Level Plane
-    // Character Plane
-    // Object Plane
-    // UI
+    // Preparations:
+    // Grid Controller Åö
+    // Level Plane Å´
+    // Character Plane Å´
+    // Object Plane Å´
+    // UIÅ@Åö
     public int prepCount = 5;
     public int currentPrepCount;
 
     public int currentLevelIndex;
     public string levelFileNameFormat;
     public LevelDesign currentLevel;
+
+    // Levels
     public delegate void LevelLoadingStarted(LevelDesign levelDesign);
     public static event LevelLoadingStarted OnLevelLoadingStarted;
-
     public delegate void LevelStarted();
     public static event LevelStarted OnLevelStarted;
     public delegate void LevelFinished();
@@ -35,11 +40,8 @@ public class GameManager : MonoBehaviour
     public delegate void LevelFailed();
     public static event LevelFailed OnLevelFailed;
 
-    public delegate void BlockStartedBehaviour(Block behavingBlock);
-    public static event BlockStartedBehaviour OnBlockStartedBehaviour;
-    public delegate void BlockEndedBehaviour(Block behavingBlock);
-    public static event BlockEndedBehaviour OnBlockEndedBehaviour;
-
+    
+    // Turns
     public delegate void PlayerTurnStarted();
     public static event PlayerTurnStarted OnPlayerTurnStarted;
     public delegate void PlayerTurnEnded();
@@ -50,6 +52,7 @@ public class GameManager : MonoBehaviour
     public delegate void AITurnEnded();
     public static event AITurnEnded OnAITurnEnded;
 
+    // Characters
     public delegate void CharacterRanOutOfMoves(CharacterBlock noMovesBlock);
     public static event CharacterRanOutOfMoves OnCharacterRanOutOfMoves;
     public delegate void NextMoveRequired(CharacterBlock needMovesBlock);
@@ -57,6 +60,13 @@ public class GameManager : MonoBehaviour
 
     public delegate void CharacterChangedPosition(CharacterBlock movedBlock, Cell toCell);
     public static event CharacterChangedPosition OnCharacterChangedPosition;
+
+    // Blocks
+    public delegate void BlockStartedBehaviour(Block behavingBlock);
+    public static event BlockStartedBehaviour OnBlockStartedBehaviour;
+    public delegate void BlockEndedBehaviour(Block behavingBlock);
+    public static event BlockEndedBehaviour OnBlockEndedBehaviour;
+
 
     private void Start()
     {
@@ -69,6 +79,7 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
+        // Inverse Dependency Injection
         GridController.OnGridInitialized += InitializeGridController;
         LevelPlane.OnLevelPlaneInitialized += InitializeLevelPlane;
         CharacterPlane.OnCharacterPlaneInitialized += InitializeCharacterPlane;
@@ -87,6 +98,7 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
+        // Inverse Dependency Injection
         GridController.OnGridInitialized -= InitializeGridController;
         LevelPlane.OnLevelPlaneInitialized -= InitializeLevelPlane;
         CharacterPlane.OnCharacterPlaneInitialized -= InitializeCharacterPlane;
@@ -103,7 +115,10 @@ public class GameManager : MonoBehaviour
     }
 
     
-
+    /// <summary>
+    /// Start loading a level with levelIndex
+    /// </summary>
+    /// <param name="levelIndex"></param>
     public void CallLevelLoadingStarted(int levelIndex)
     {
         currentPrepCount = 0;
@@ -113,20 +128,27 @@ public class GameManager : MonoBehaviour
             Debug.Log("Grid is not initialized in the editor");
             return;
         }
+
+        // Block player's view
         ui.PlayLevelTransitionScene();
+
+        // Load data from saved files
         currentLevel = new LevelDesign();
         LevelDesign saved = SaveSystem.LoadLevelDesign(levelFileNameFormat + $" {levelIndex}");
+        // grid size
         currentLevel.gridHeight = saved.gridHeight;
         currentLevel.gridLength = saved.gridLength;
         currentLevel.gridWidth = saved.gridWidth;
+        // grid of each plane in 1 dimensional array
         currentLevel.terrainGrid = saved.terrainGrid;
         currentLevel.characterGrid = saved.characterGrid;
         currentLevel.objectGrid = saved.objectGrid;
 
+        // Initialize planes' 3 dimensional id grid in scene
+        // id is used to identify each block uniquely
         levelPlane.idGrid = new int[currentLevel.gridHeight, currentLevel.gridLength, currentLevel.gridWidth];
         characterPlane.idGrid = new int[currentLevel.gridHeight, currentLevel.gridLength, currentLevel.gridWidth];
         objectPlane.idGrid = new int[currentLevel.gridHeight, currentLevel.gridLength, currentLevel.gridWidth];
-
         int count = 0;
         for (int h = 0; h < currentLevel.gridHeight; h++)
         {
@@ -142,20 +164,21 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        // Initialize Stairs
         if(stairsManager != null)
         {
             currentLevel.stairsData = new int[saved.stairsData.Length];
             saved.stairsData.CopyTo(currentLevel.stairsData,0);
             stairsManager.InitializeStairsData(currentLevel.stairsData);
         }
-
+        // Initialize Remote Triggers
         if (remoteTriggerManager != null)
         {
             currentLevel.remoteTriggersData = new int[saved.remoteTriggersData.Length];
             saved.remoteTriggersData.CopyTo(currentLevel.remoteTriggersData, 0);
             remoteTriggerManager.InitializeRemoteTriggersData(currentLevel.remoteTriggersData);
         }
-
+        // Initialize Remote Doors
         if (remoteDoorManager != null)
         {
             currentLevel.remoteDoorsData = new int[saved.remoteDoorsData.Length];
@@ -163,8 +186,8 @@ public class GameManager : MonoBehaviour
             remoteDoorManager.InitializeRemoteDoorsData(currentLevel.remoteDoorsData);
         }
 
+        // Start loading the level with the initialized data transfered to the corresponding planes
         OnLevelLoadingStarted(currentLevel);
-
         Vector3Int gridSize = new Vector3Int(currentLevel.gridWidth, currentLevel.gridHeight, currentLevel.gridLength);
         gridController.InitializeGrid(gridSize);
     }
@@ -181,7 +204,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("Level Finished");
         if (OnLevelFinished != null)
             OnLevelFinished();
-
     }
 
     public void CallLevelFailed()
@@ -189,7 +211,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("Level Failed");
         if (OnLevelFailed != null)
             OnLevelFailed();
-
     }
 
     public void CallPlayerTurnStarted()
@@ -197,7 +218,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("Player Turn Started");
         if (OnPlayerTurnStarted != null)
             OnPlayerTurnStarted();
-
     }
 
     public void CallPlayerTurnEnded()
@@ -269,14 +289,12 @@ public class GameManager : MonoBehaviour
     {
         levelPlane = plane;
         IncrementPrepCount();
-
     }
 
     private void InitializeCharacterPlane(CharacterPlane plane)
     {
         characterPlane = plane;
         IncrementPrepCount();
-
     }
 
     private void InitializeObjectPlane(ObjectPlane plane)
@@ -295,13 +313,6 @@ public class GameManager : MonoBehaviour
     {
         currentPrepCount++;
         if (currentPrepCount == prepCount)
-        {
-            // Grid controller
-            // Level Plane
-            // Character Plane
-            // Object Plane
-            // Transition
             CallLevelStarted();
-        }
     }
 }

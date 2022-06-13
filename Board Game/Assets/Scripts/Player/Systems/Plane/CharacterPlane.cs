@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Linq;
 
 /// <summary>
-/// English: A plane made out of character blocks, used to keep track of all character in the level
+/// A plane made out of character blocks, used to keep track of all character in the level
 /// </summary>
 [ExecuteAlways]
 public class CharacterPlane : MonoBehaviour
@@ -23,7 +23,6 @@ public class CharacterPlane : MonoBehaviour
         GridController.OnGridInitialized += InitializeGrid;
         CharacterBlock.OnCharacterAdded += IncrementActiveCount;
         CharacterBlock.OnCharacterRemoved += DecrementActiveCount;
-
     }
 
     private void OnDisable()
@@ -120,6 +119,7 @@ public class CharacterPlane : MonoBehaviour
                 }
             }
         }
+
         Debug.Log($"Character grid initialized");
         if (OnCharacterPlaneInitialized != null)
             OnCharacterPlaneInitialized(this);

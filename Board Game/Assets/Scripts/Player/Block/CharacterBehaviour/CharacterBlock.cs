@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A character block can make movements, activation, interaction with objects and attacks
+/// </summary>
 [RequireComponent(typeof(Rigidbody))]
 public class CharacterBlock : Block
 {
@@ -26,8 +29,11 @@ public class CharacterBlock : Block
     public AudioHandler audioHandler;
 
     public int curHealth { get { return _curHealth; }}
+
+    // To know when to send events regarding running out of moves
     public int curMovesLeft { get { return _curMovesLeft; } }
 
+    // To know when can the attact coroutine continues
     [HideInInspector] public int attackedEntityCount;
     [HideInInspector] public int curAttackedEntityCount;
 
@@ -50,7 +56,7 @@ public class CharacterBlock : Block
         OnCharacterRanOutOfMoves += gameManager.CallCharacterRanOutOfMoves;
         OnNextMoveRequired += gameManager.CallNextMoveRequired;
 
-        // May need to reimplement (use when importing level design)
+        // Will need to reimplement (use when importing level design with more data about each block)
         forwardDirection = GridDirection.Forward;
         movesPerTurn = characterData.movesPerTurn;
         maxHealth = characterData.maxHealth;
@@ -66,15 +72,12 @@ public class CharacterBlock : Block
         OnPositionUpdated -= gameManager.CallCharacterChangedPosition;
         OnCharacterRanOutOfMoves -= gameManager.CallCharacterRanOutOfMoves;
         OnNextMoveRequired -= gameManager.CallNextMoveRequired;
-
-
     }
 
     private void OnEnable()
     {
         if(OnCharacterAdded != null)
             OnCharacterAdded();
-
         GameManager.OnLevelFinished += StopBehaviour;
     }
 
@@ -83,12 +86,11 @@ public class CharacterBlock : Block
         if(OnCharacterRemoved != null)
             OnCharacterRemoved();
         GameManager.OnLevelFinished -= StopBehaviour;
-
     }
 
 
     /// <summary>
-    /// English: Rotate the block horizontally with hop animation
+    /// Rotate the block horizontally with hop animation
     /// </summary>
     /// <param name="rotation"></param>
     public override void RotateHorizontally(Rotations rotation)
@@ -109,11 +111,14 @@ public class CharacterBlock : Block
 
         // Set up movement controller
         movementController.InitializeMovement(transform, forwardDirection, cell, cell, BlockMovementController.MovementType.BasicHop);
-        // Movement no cost
+        // Movement one cost
         StartCoroutine(MovementCoroutine(1));
 
     }
 
+    /// <summary>
+    /// Move the block forward with hop animation
+    /// </summary>
     public void MoveFoward()
     {
         // Get one forward cell
@@ -123,60 +128,157 @@ public class CharacterBlock : Block
         movementController.InitializeMovement(transform, forwardDirection, cell, toCell, BlockMovementController.MovementType.BasicHop);
         OnPositionUpdated(this, toCell);
         cell = toCell;
-        // Movement 1 cost
+        // Movement one cost
         StartCoroutine(MovementCoroutine(1));
     }
+
+    /// <summary>
+    /// Activate the object block forward
+    /// </summary>
+    public void ActivateForward()
+    {
+        StartCoroutine(ActivateForwardCoroutine());
+    }
+
+    /// <summary>
+    /// Attack using the weapon handler with the equipped weapon
+    /// </summary>
+    public void Attack()
+    {
+        StartCoroutine(AttackCoroutine());
+    }
+
+    /// <summary>
+    /// Take damage from a character block
+    /// </summary>
+    /// <param name="fromCharacter"></param>
+    /// <param name="damageAmount"></param>
+    public void TakeDamage(CharacterBlock fromCharacter, int damageAmount)
+    {
+        StartCoroutine(TakeDamageCoroutine(fromCharacter, damageAmount));
+    }
+
+    /// <summary>
+    /// Take damage from an object block
+    /// </summary>
+    /// <param name="fromObject"></param>
+    /// <param name="damageAmount"></param>
+    public void TakeDamage(ObjectBlock fromObject, int damageAmount)
+    {
+        StartCoroutine(TakeDamageCoroutine(fromObject, damageAmount));
+    }
+
+    /// <summary>
+    /// Skip one action
+    /// </summary>
+    public void SkipAction()
+    {
+        StartCoroutine(SkipActionCoroutine());
+    }
+
+    public void HealHealth(int healAmount)
+    {
+        PlusHealth(healAmount);
+    }
+
+    public void ResetHealth()
+    {
+        _curHealth = maxHealth;
+    }
+
+    public void ResetCurrentMoves()
+    {
+        _curMovesLeft = movesPerTurn;
+    }
+
+    /// <summary>
+    /// Check for moves and send the corresponsding event (to game manager)
+    /// </summary>
+    public void CheckForLeftOverMoves()
+    {
+        if(NoMoreMoves())
+        {
+            if(OnCharacterRanOutOfMoves != null)
+            {
+                OnCharacterRanOutOfMoves(this);
+            }
+        }
+        else
+        {
+            if (OnNextMoveRequired != null)
+            {
+                OnNextMoveRequired(this);
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// Send an event that the character's position has updated (to character plane)
+    /// </summary>
+    /// <param name="toCell"></param>
+    public void CallOnPositionUpdated(Cell toCell)
+    {
+        OnPositionUpdated(this, toCell);
+        cell = toCell;
+    }
+
 
     private IEnumerator MovementCoroutine(int moveCost)
     {
         float t = 0;
         Cell steppedOnCell = cell;
-        if(movementController.movementType == BlockMovementController.MovementType.BasicHop)
+        if (movementController.movementType == BlockMovementController.MovementType.BasicHop)
         {
+            // Initialize the trajectory to be used
             Transform one = movementController.transform.GetChild(0);
             Transform second = movementController.transform.GetChild(1);
             Transform third = movementController.transform.GetChild(2);
 
+            // Update position and rotation per frame
             while (true)
             {
                 yield return null;
                 if (t >= 1)
                 {
                     t = 1;
-                    MovementUtilities.QuadraticBezierLerp(transform, one, third, second, t, true);
+                    MovementUtilities.MoveQuadraticBezierLerp(transform, one, third, second, t, true);
                     break;
                 }
                 t += Time.deltaTime * movementController.speed * (1 + t);
-                MovementUtilities.QuadraticBezierLerp(transform, one, third, second, t, true);
+                MovementUtilities.MoveQuadraticBezierLerp(transform, one, third, second, t, true);
             }
         }
-        else if(movementController.movementType == BlockMovementController.MovementType.Slide)
+        else if (movementController.movementType == BlockMovementController.MovementType.Slide)
         {
+            // Initialize the trajectory to be used
             Transform one = movementController.transform.GetChild(0);
             Transform second = movementController.transform.GetChild(1);
+
+            // Update position and rotation per frame
             while (true)
             {
                 yield return null;
                 if (t >= 1)
                 {
                     t = 1;
-                    MovementUtilities.LinearLerp(transform, one, second, t, true);
+                    MovementUtilities.MoveLinearLerp(transform, one, second, t, true);
                     break;
                 }
                 t += Time.deltaTime * movementController.speed * (1 + t);
-                MovementUtilities.LinearLerp(transform, one, second, t, true);
+                MovementUtilities.MoveLinearLerp(transform, one, second, t, true);
             }
         }
 
-        // Sound Effect
+        // Sound Effect (NOT YET)
 
 
-
+        // Announce to game manager that this character's is technically done
         gameManager.CallBlockEndedBehaviour(this);
 
         // Wait for any object block at the current cell
         GameObject objectBlock = gameManager.objectPlane.grid[steppedOnCell.gridPosition.y, steppedOnCell.gridPosition.z, steppedOnCell.gridPosition.x].block;
-        if(objectBlock != null && objectBlock.GetComponentInChildren<IActivationOnStep>() != null)
+        if (objectBlock != null && objectBlock.GetComponentInChildren<IActivationOnStep>() != null)
         {
             Debug.Log($"{gameObject.name} waiting for {objectBlock.name} to finish");
             yield return new WaitUntil(() => objectBlock.GetComponent<ObjectBlock>().isFinished == true);
@@ -185,15 +287,11 @@ public class CharacterBlock : Block
         {
             Debug.Log($"There is no object at {steppedOnCell.gridPosition} to wait");
         }
-        // Finish movement
+
+        // Officially finish and minus the action points (or move cost)
         MinusMoves(moveCost);
-
     }
 
-    public void ActivateForward()
-    {
-        StartCoroutine(ActivateForwardCoroutine());
-    }
 
     private IEnumerator ActivateForwardCoroutine()
     {
@@ -210,9 +308,32 @@ public class CharacterBlock : Block
         MinusMoves(1);
     }
 
-    public void SkipAction()
+    private IEnumerator AttackCoroutine()
     {
-        StartCoroutine(SkipActionCoroutine());
+        weaponHandler.UseWeapon(this);
+
+        yield return new WaitUntil(() => curAttackedEntityCount >= attackedEntityCount);
+
+        gameManager.CallBlockEndedBehaviour(this);
+        MinusMoves(weaponHandler.weapon.usageCost);
+    }
+
+    private IEnumerator TakeDamageCoroutine(CharacterBlock fromCharacter, int damageAmount)
+    {
+        yield return null;
+        MinusHealth(damageAmount);
+        Debug.Log($"{gameObject} took {damageAmount} damages from {fromCharacter.name}.");
+
+        fromCharacter.curAttackedEntityCount++;
+    }
+
+    private IEnumerator TakeDamageCoroutine(ObjectBlock fromObject, int damageAmount)
+    {
+        yield return null;
+        MinusHealth(damageAmount);
+        Debug.Log($"{gameObject} took {damageAmount} damages from {fromObject.name}.");
+
+        fromObject.activationBehaviour.GetComponent<IDamageOnActivation>().curAttackedCharacterCount++;
     }
 
     private IEnumerator SkipActionCoroutine()
@@ -234,92 +355,6 @@ public class CharacterBlock : Block
         }
 
         MinusMoves(1);
-    }
-
-
-    public void Attack()
-    {
-        StartCoroutine(AttackCoroutine());
-    }
-
-    private IEnumerator AttackCoroutine()
-    {
-        weaponHandler.UseWeapon(this);
-
-        yield return new WaitUntil(() => curAttackedEntityCount >= attackedEntityCount);
-
-
-        // Finish movement
-        gameManager.CallBlockEndedBehaviour(this);
-        MinusMoves(weaponHandler.weapon.usageCost);
-    }
-
-    public void TakeDamage(CharacterBlock fromCharacter, int damageAmount)
-    {
-        StartCoroutine(TakeDamageCoroutine(fromCharacter, damageAmount));
-    }
-
-    private IEnumerator TakeDamageCoroutine(CharacterBlock fromCharacter, int damageAmount)
-    {
-        yield return null;
-        MinusHealth(damageAmount);
-        Debug.Log($"{gameObject} took {damageAmount} damages from {fromCharacter.name}.");
-
-        fromCharacter.curAttackedEntityCount++;
-    }
-
-    public void TakeDamage(ObjectBlock fromObject, int damageAmount)
-    {
-        StartCoroutine(TakeDamageCoroutine(fromObject, damageAmount));
-    }
-
-    private IEnumerator TakeDamageCoroutine(ObjectBlock fromObject, int damageAmount)
-    {
-        yield return null;
-        MinusHealth(damageAmount);
-        Debug.Log($"{gameObject} took {damageAmount} damages from {fromObject.name}.");
-
-        fromObject.activationBehaviour.GetComponent<IDamageOnActivation>().curAttackedCharacterCount++;
-    }
-
-    public void HealHealth(int healAmount)
-    {
-        PlusHealth(healAmount);
-    }
-
-    public void ResetHealth()
-    {
-        _curHealth = maxHealth;
-    }
-
-    public void ResetCurrentMoves()
-    {
-        _curMovesLeft = movesPerTurn;
-    }
-
-    public void CheckForLeftOverMoves()
-    {
-        if(NoMoreMoves())
-        {
-            if(OnCharacterRanOutOfMoves != null)
-            {
-                OnCharacterRanOutOfMoves(this);
-            }
-        }
-        else
-        {
-            if (OnNextMoveRequired != null)
-            {
-                OnNextMoveRequired(this);
-            }
-        }
-
-    }
-
-    public void CallOnPositionUpdated(Cell toCell)
-    {
-        OnPositionUpdated(this, toCell);
-        cell = toCell;
     }
 
     private void MinusHealth(int amount)

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A component attached to player controller that allows calling down a point light at a certain position via Bezier Curve and returns it back up
+/// </summary>
 public class RevealAreaSkill : MonoBehaviour
 {
     public Transform moveTransform;
@@ -41,6 +44,10 @@ public class RevealAreaSkill : MonoBehaviour
         moveLight.range = revealAreaRange;
     }
 
+    /// <summary>
+    /// Start revealing an area at specified cell
+    /// </summary>
+    /// <param name="atCell"></param>
     public void RevealArea(Cell atCell)
     {
         isFinished = false;
@@ -50,6 +57,7 @@ public class RevealAreaSkill : MonoBehaviour
 
     private IEnumerator RevealAreaCoroutine(Cell atCell)
     {
+        // Setting up bezier curve's control points
         Cell fromCell = _gridController.GetCellFromCellWithDirection(atCell, GridDirection.Left);
         fromCell = _gridController.grid[_gridController.gridSize.y - 1, fromCell.gridPosition.z, fromCell.gridPosition.x];
         from.position = fromCell.worldPosition + Vector3.up * 10;
@@ -61,6 +69,8 @@ public class RevealAreaSkill : MonoBehaviour
         controlPoint.position = atCell.worldPosition - Vector3.up * 10;
         controlPoint.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
 
+        // movement depends on t
+        // t depends on x
         float t = 0;
         float x = 0;
         while (true)
@@ -69,11 +79,11 @@ public class RevealAreaSkill : MonoBehaviour
             if (t >= 1)
             {
                 t = 1;
-                MovementUtilities.QuadraticBezierLerp(moveTransform, from, to, controlPoint, t, true);
+                MovementUtilities.MoveQuadraticBezierLerp(moveTransform, from, to, controlPoint, t, true);
                 break;
             }
             t = YFunction(x);
-            MovementUtilities.QuadraticBezierLerp(moveTransform, from, to, controlPoint, t, true);
+            MovementUtilities.MoveQuadraticBezierLerp(moveTransform, from, to, controlPoint, t, true);
             x += Time.deltaTime * speed;
         }
         isFinished = true;
@@ -84,6 +94,9 @@ public class RevealAreaSkill : MonoBehaviour
         return 4 * (x - 0.5f) * (x - 0.5f) * (x - 0.5f) + 0.5f;
     }
 
+    /// <summary>
+    /// Decrement the cooldown when GameManager.OnPlayerTurnEnded event is sent
+    /// </summary>
     private void DecrementCurrentCooldown()
     {
         currentCooddown--;

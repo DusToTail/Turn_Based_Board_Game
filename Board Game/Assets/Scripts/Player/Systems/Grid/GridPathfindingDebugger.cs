@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// English: Simple tester (debugger) for grid pathfinding
+/// Simple tester (debugger) for grid pathfinding
 /// </summary>
 public class GridPathfindingDebugger : MonoBehaviour
 {

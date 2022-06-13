@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// English: A plane made out of terrain blocks, used to define the terrains on the board game
+/// A plane made out of terrain blocks, used to define the terrains on the board game
 /// </summary>
 [ExecuteAlways]
 public class LevelPlane : MonoBehaviour
@@ -13,14 +13,9 @@ public class LevelPlane : MonoBehaviour
 
     public GameObject[,,] grid { get; private set; }
     public int[,,] idGrid { get; set; }
+
     [SerializeField]
     private BlockIDContainer blockIDs;
-
-    public bool CheckIfCellIsOccupied(Cell cell)
-    {
-        if(grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x] != null) { return true; }
-        return false;
-    }
 
     private void OnEnable()
     {
@@ -31,6 +26,14 @@ public class LevelPlane : MonoBehaviour
     {
         GridController.OnGridInitialized -= InitializeGrid;
     }
+
+    public bool CheckIfCellIsOccupied(Cell cell)
+    {
+        if(grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x] != null) { return true; }
+        return false;
+    }
+
+    
 
     /// <summary>
     /// English: Initialize the default grid of blocks
@@ -75,6 +78,7 @@ public class LevelPlane : MonoBehaviour
                 }
             }
         }
+
         Debug.Log($"Terrain grid intialized with {count} blocks");
         if(OnLevelPlaneInitialized != null)
             OnLevelPlaneInitialized(this);

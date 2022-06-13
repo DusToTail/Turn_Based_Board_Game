@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// English: Base class for all building blocks of a level
+/// Base class for all blocks of a level
 /// </summary>
 public abstract class Block : MonoBehaviour
 {
@@ -19,7 +19,7 @@ public abstract class Block : MonoBehaviour
     }
 
     /// <summary>
-    /// English: Rotate the block horizontally
+    /// Rotate the block horizontally
     /// </summary>
     /// <param name="rotation"></param>
     public virtual void RotateHorizontally(Rotations rotation)
@@ -41,7 +41,7 @@ public abstract class Block : MonoBehaviour
     }
 
     /// <summary>
-    /// English: Snap the block to the position of the cell
+    /// Snap the block to the position of the cell
     /// </summary>
     /// <param name="cell"></param>
     public virtual void SnapToCell(Cell cell)

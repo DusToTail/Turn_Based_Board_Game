@@ -1,11 +1,11 @@
 using UnityEngine;
 
 /// <summary>
-/// English: A Utility class that is designed to manipulate position and rotation of transforms
+/// A Utility class that is designed to manipulate position and rotation of transforms
 /// </summary>
 public class MovementUtilities
 {
-    public static void LinearLerp(Transform moveTransform, Transform fromPosition, Transform toPosition, float t, bool lerpRotation = false)
+    public static void MoveLinearLerp(Transform moveTransform, Transform fromPosition, Transform toPosition, float t, bool lerpRotation = false)
     {
         if(moveTransform == null) { return; }
         if (fromPosition == null) { return; }
@@ -17,7 +17,7 @@ public class MovementUtilities
         moveTransform.rotation = Quaternion.Lerp(fromPosition.rotation, toPosition.rotation, t);
     }
 
-    public static void QuadraticBezierLerp(Transform moveTransform, Transform fromPosition, Transform toPosition, Transform controlPoint, float t, bool lerpRotation = false)
+    public static void MoveQuadraticBezierLerp(Transform moveTransform, Transform fromPosition, Transform toPosition, Transform controlPoint, float t, bool lerpRotation = false)
     {
         if(moveTransform == null) { return; }
         if (fromPosition == null) { return; }
@@ -38,7 +38,7 @@ public class MovementUtilities
 
     }
 
-    public static void CubicBezierLerp(Transform moveTransform, Transform fromPosition, Transform toPosition, Transform[] controlPoints, float t, bool lerpRotation = false)
+    public static void MoveCubicBezierLerp(Transform moveTransform, Transform fromPosition, Transform toPosition, Transform[] controlPoints, float t, bool lerpRotation = false)
     {
         if (moveTransform == null) { return; }
         if (fromPosition == null) { return; }

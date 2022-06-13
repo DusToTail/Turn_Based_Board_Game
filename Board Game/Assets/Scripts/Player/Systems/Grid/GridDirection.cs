@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// English: A class that normalizes the directions on a 3D grid
+/// A class that normalizes the directions on a 3D grid
 /// </summary>
 public class GridDirection
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// English: A plane made out of object blocks, used to keep track of all objects in the level. Object is not passable like terrain
+/// A plane made out of object blocks, used to keep track of all objects in the level
 /// </summary>
 [ExecuteAlways]
 public class ObjectPlane : MonoBehaviour
@@ -17,21 +17,20 @@ public class ObjectPlane : MonoBehaviour
     [SerializeField]
     private BlockIDContainer blockIDs;
 
-    public bool CheckIfCellIsOccupied(Cell cell)
-    {
-        if (grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block != null) { return true; }
-        return false;
-    }
-
     private void OnEnable()
     {
         GridController.OnGridInitialized += InitializeGrid;
-
     }
 
     private void OnDisable()
     {
         GridController.OnGridInitialized -= InitializeGrid;
+    }
+
+    public bool CheckIfCellIsOccupied(Cell cell)
+    {
+        if (grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block != null) { return true; }
+        return false;
     }
 
     private void InitializeGrid(GridController controller)
@@ -75,6 +74,7 @@ public class ObjectPlane : MonoBehaviour
                 }
             }
         }
+
         Debug.Log($"Object grid initialized");
         if (OnObjectPlaneInitialized != null)
             OnObjectPlaneInitialized(this);

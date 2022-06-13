@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Wrapper of a cell and a game object (block), used in Character and Object Plane's grid
+/// </summary>
 public class CellAndBlock
 {
     public Cell cell;

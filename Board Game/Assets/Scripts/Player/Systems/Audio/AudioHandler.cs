@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A component attached to game objects (similar to weapon handler) used to process audio
+/// </summary>
 public class AudioHandler : MonoBehaviour
 {
     public AudioData[] datas;

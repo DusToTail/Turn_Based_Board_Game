@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// An object block in general is able to be interacted by players and does not necessarily have cube mesh
+/// Can be added with object behaviours to add functionality (however, in general, limits to 1 behaviour per object)
+/// </summary>
 public class ObjectBlock : Block
 {
     public GameObject activationBehaviour;

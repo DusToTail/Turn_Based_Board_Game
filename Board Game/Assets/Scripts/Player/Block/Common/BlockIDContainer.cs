@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Linq;
 
 /// <summary>
-/// English: A container for prefabs
+/// A container for prefabs (blocks with ID)
 /// </summary>
 public class BlockIDContainer : MonoBehaviour
 {
