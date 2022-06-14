@@ -21,6 +21,9 @@ public class CharacterBlock : Block
     public delegate void PositionUpdated(CharacterBlock thisBlock, Cell targetCell);
     public event PositionUpdated OnPositionUpdated;
 
+    public delegate void DamageTaken(CharacterBlock thisBlock, int damageTaken);
+    public static event DamageTaken OnDamageTaken;
+
     public CharacterDataScriptableObject characterData;
     [HideInInspector] public int movesPerTurn;
     [HideInInspector] public int maxHealth;
@@ -325,6 +328,8 @@ public class CharacterBlock : Block
         Debug.Log($"{gameObject} took {damageAmount} damages from {fromCharacter.name}.");
 
         fromCharacter.curAttackedEntityCount++;
+        if(OnDamageTaken != null)
+            OnDamageTaken(this, damageAmount);
     }
 
     private IEnumerator TakeDamageCoroutine(ObjectBlock fromObject, int damageAmount)
@@ -334,6 +339,8 @@ public class CharacterBlock : Block
         Debug.Log($"{gameObject} took {damageAmount} damages from {fromObject.name}.");
 
         fromObject.activationBehaviour.GetComponent<IDamageOnActivation>().curAttackedCharacterCount++;
+        if(OnDamageTaken != null)
+            OnDamageTaken(this, damageAmount);
     }
 
     private IEnumerator SkipActionCoroutine()
