@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
+/// <summary>
+/// Tips for controls in each control mode
+/// </summary>
 public class TipUI : MonoBehaviour
 {
     [SerializeField]
