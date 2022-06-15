@@ -23,14 +23,18 @@ public class MovesUI : MonoBehaviour
 
     private void OnEnable()
     {
+        GameManager.OnLevelLoadingStarted += DestroyAllIcons;
         GameManager.OnLevelStarted += InitializeMovesUI;
+        GameManager.OnLevelFailed += RemoveAllIcons;
         GameManager.OnBlockEndedBehaviour += DecrementMove;
         GameManager.OnPlayerTurnStarted += ResetMove;
     }
 
     private void OnDisable()
     {
+        GameManager.OnLevelLoadingStarted -= DestroyAllIcons;
         GameManager.OnLevelStarted -= InitializeMovesUI;
+        GameManager.OnLevelFailed -= RemoveAllIcons;
         GameManager.OnBlockEndedBehaviour -= DecrementMove;
         GameManager.OnPlayerTurnStarted -= ResetMove;
     }
@@ -50,13 +54,26 @@ public class MovesUI : MonoBehaviour
             transform.GetChild(i).GetComponent<MoveIcon>().OnAdded();
     }
 
-    private void InitializeMovesUI()
+    private void RemoveAllIcons()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).GetComponent<MoveIcon>().OnRemoved();
+        }
+        currentIcons = 0;
+    }
+
+    private void DestroyAllIcons(LevelDesign level)
     {
         for (int i = 0; i < transform.childCount; i++)
         {
             Destroy(transform.GetChild(i).gameObject);
         }
         currentIcons = 0;
+    }
+
+    private void InitializeMovesUI()
+    {
         trackingCharacter = gameManager.playerController.playerBlock;
         for (int i = 0; i < trackingCharacter.curMovesLeft; i++)
         {

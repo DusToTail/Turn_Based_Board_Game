@@ -23,14 +23,18 @@ public class RevealSkillUI : MonoBehaviour
 
     private void OnEnable()
     {
+        GameManager.OnLevelLoadingStarted += DestroyAllIcons;
         GameManager.OnLevelStarted += InitializeRevealSkillUI;
+        GameManager.OnLevelFailed += RemoveAllIcons;
         RevealAreaSkill.OnCooldownDecremented += AddIcon;
         RevealAreaSkill.OnCooldownRewinded += RemoveAllIcons;
     }
 
     private void OnDisable()
     {
+        GameManager.OnLevelLoadingStarted -= DestroyAllIcons;
         GameManager.OnLevelStarted -= InitializeRevealSkillUI;
+        GameManager.OnLevelFailed -= RemoveAllIcons;
         RevealAreaSkill.OnCooldownDecremented -= AddIcon;
         RevealAreaSkill.OnCooldownRewinded -= RemoveAllIcons;
     }
@@ -47,8 +51,17 @@ public class RevealSkillUI : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++)
         {
             transform.GetChild(i).GetComponent<RevealSkillIcon>().OnRemoved();
-            currentIcons--;
         }
+        currentIcons = 0;
+    }
+
+    private void DestroyAllIcons(LevelDesign level)
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+        currentIcons = 0;
     }
 
     private void InitializeRevealSkillUI()

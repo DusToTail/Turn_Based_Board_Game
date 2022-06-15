@@ -34,13 +34,13 @@ public class RevealAreaSkill : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnPlayerTurnEnded += DecrementCurrentCooldown;
-        //GameManager.OnLevelStarted += RewindCooldown;
+        GameManager.OnLevelStarted += RewindCooldown;
     }
 
     private void OnDisable()
     {
         GameManager.OnPlayerTurnEnded -= DecrementCurrentCooldown;
-        //GameManager.OnLevelStarted -= RewindCooldown;
+        GameManager.OnLevelStarted -= RewindCooldown;
     }
 
     private void Start()

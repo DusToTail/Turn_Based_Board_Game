@@ -23,12 +23,14 @@ public class HealthUI : MonoBehaviour
 
     private void OnEnable()
     {
+        GameManager.OnLevelLoadingStarted += DestroyAllIcons;
         GameManager.OnLevelStarted += InitializeHealthUI;
         CharacterBlock.OnDamageTaken += DecrementHealth;
     }
 
     private void OnDisable()
     {
+        GameManager.OnLevelLoadingStarted -= DestroyAllIcons;
         GameManager.OnLevelStarted -= InitializeHealthUI;
         CharacterBlock.OnDamageTaken -= DecrementHealth;
     }
@@ -47,6 +49,15 @@ public class HealthUI : MonoBehaviour
     private void IncrementHealth(CharacterBlock trackingBlock, int healAmount)
     {
         transform.GetChild(trackingCharacter.curHealth - 1).GetComponent<HealthIcon>().OnAdded();
+    }
+
+    private void DestroyAllIcons(LevelDesign level)
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+        currentHearts = 0;
     }
 
     private void InitializeHealthUI()

@@ -25,15 +25,15 @@ public class TipUI : MonoBehaviour
     private void OnEnable()
     {
         PlayerController.OnControlModeSwitched += ChangeBottomTip;
-        GameManager.OnPlayerTurnEnded += ChangeBottomTipOnTurnEnded;
-        GameManager.OnPlayerTurnStarted += ChangeBottomTipOnTurnStarted;
+        GameManager.OnAITurnStarted += ChangeBottomTipOnAITurnStarted;
+        GameManager.OnPlayerTurnStarted += ChangeBottomTipOnPlayerTurnStarted;
     }
 
     private void OnDisable()
     {
         PlayerController.OnControlModeSwitched -= ChangeBottomTip;
-        GameManager.OnPlayerTurnEnded -= ChangeBottomTipOnTurnEnded;
-        GameManager.OnPlayerTurnStarted -= ChangeBottomTipOnTurnStarted;
+        GameManager.OnAITurnStarted -= ChangeBottomTipOnAITurnStarted;
+        GameManager.OnPlayerTurnStarted -= ChangeBottomTipOnPlayerTurnStarted;
     }
 
     private void Update()
@@ -52,12 +52,13 @@ public class TipUI : MonoBehaviour
             textUI.text = surveyTip;
     }
 
-    private void ChangeBottomTipOnTurnEnded()
+    private void ChangeBottomTipOnAITurnStarted()
     {
+        if(AIController.AIs.Count == 0) { return; }
         textUI.text = waitText;
     }
 
-    private void ChangeBottomTipOnTurnStarted()
+    private void ChangeBottomTipOnPlayerTurnStarted()
     {
         textUI.text = characterModeTip;
     }
