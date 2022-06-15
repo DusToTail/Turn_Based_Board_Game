@@ -23,14 +23,14 @@ public class MovesUI : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnLevelStarted += InitializeHealthUI;
+        GameManager.OnLevelStarted += InitializeMovesUI;
         GameManager.OnBlockEndedBehaviour += DecrementMove;
         GameManager.OnPlayerTurnStarted += ResetMove;
     }
 
     private void OnDisable()
     {
-        GameManager.OnLevelStarted -= InitializeHealthUI;
+        GameManager.OnLevelStarted -= InitializeMovesUI;
         GameManager.OnBlockEndedBehaviour -= DecrementMove;
         GameManager.OnPlayerTurnStarted -= ResetMove;
     }
@@ -50,7 +50,7 @@ public class MovesUI : MonoBehaviour
             transform.GetChild(i).GetComponent<MoveIcon>().OnAdded();
     }
 
-    private void InitializeHealthUI()
+    private void InitializeMovesUI()
     {
         for (int i = 0; i < transform.childCount; i++)
         {

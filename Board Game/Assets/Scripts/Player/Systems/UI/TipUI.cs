@@ -19,14 +19,21 @@ public class TipUI : MonoBehaviour
     [TextArea()]
     [SerializeField] private string surveyTip;
 
+    [TextArea()]
+    [SerializeField] private string waitText;
+
     private void OnEnable()
     {
         PlayerController.OnControlModeSwitched += ChangeBottomTip;
+        GameManager.OnPlayerTurnEnded += ChangeBottomTipOnTurnEnded;
+        GameManager.OnPlayerTurnStarted += ChangeBottomTipOnTurnStarted;
     }
 
     private void OnDisable()
     {
         PlayerController.OnControlModeSwitched -= ChangeBottomTip;
+        GameManager.OnPlayerTurnEnded -= ChangeBottomTipOnTurnEnded;
+        GameManager.OnPlayerTurnStarted -= ChangeBottomTipOnTurnStarted;
     }
 
     private void Update()
@@ -43,6 +50,16 @@ public class TipUI : MonoBehaviour
             textUI.text = revealSkillTip;
         else if(mode == PlayerController.ControlMode.Survey)
             textUI.text = surveyTip;
+    }
+
+    private void ChangeBottomTipOnTurnEnded()
+    {
+        textUI.text = waitText;
+    }
+
+    private void ChangeBottomTipOnTurnStarted()
+    {
+        textUI.text = characterModeTip;
     }
 
 }

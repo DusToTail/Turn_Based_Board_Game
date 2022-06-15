@@ -18,6 +18,11 @@ public class RevealAreaSkill : MonoBehaviour
     public int currentCooddown;
     public bool isFinished;
 
+    public delegate void CooldownRewinded();
+    public static event CooldownRewinded OnCooldownRewinded;
+    public delegate void CooldownDecremented();
+    public static event CooldownDecremented OnCooldownDecremented;
+
     [SerializeField]
     private bool displayGizmos;
     [SerializeField]
@@ -29,13 +34,13 @@ public class RevealAreaSkill : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnPlayerTurnEnded += DecrementCurrentCooldown;
-        GameManager.OnLevelStarted += RewindCooldown;
+        //GameManager.OnLevelStarted += RewindCooldown;
     }
 
     private void OnDisable()
     {
         GameManager.OnPlayerTurnEnded -= DecrementCurrentCooldown;
-        GameManager.OnLevelStarted -= RewindCooldown;
+        //GameManager.OnLevelStarted -= RewindCooldown;
     }
 
     private void Start()
@@ -99,13 +104,17 @@ public class RevealAreaSkill : MonoBehaviour
     /// </summary>
     private void DecrementCurrentCooldown()
     {
+        if(currentCooddown <= 0) { return; }
         currentCooddown--;
-        if(currentCooddown <= 0) { currentCooddown = 0; }
+        if(OnCooldownDecremented != null)
+            OnCooldownDecremented();
     }
 
     private void RewindCooldown()
     {
         currentCooddown = coolDown;
+        if(OnCooldownRewinded != null)
+            OnCooldownRewinded();
     }
 
     private void OnDrawGizmos()
