@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     public GameManager gameManager;
     public delegate void PlayerIsFinished();
     public static event PlayerIsFinished OnPlayerIsFinished;
+    public delegate void ControlModeSwitched(ControlMode mode);
+    public static event ControlModeSwitched OnControlModeSwitched;
 
     public enum ControlMode
     {
@@ -198,6 +200,8 @@ public class PlayerController : MonoBehaviour
                 {
                     _controlMode = ControlMode.Character;
                 }
+                if(OnControlModeSwitched != null)
+                    OnControlModeSwitched(_controlMode);
                 FocusCellBackToPlayer();
             }
         }
@@ -339,6 +343,8 @@ public class PlayerController : MonoBehaviour
         ResetStats();
         focusCell = playerBlock.cell;
         _controlMode = ControlMode.Character;
+        if (OnControlModeSwitched != null)
+            OnControlModeSwitched(_controlMode);
         FindObjectOfType<LightingManager>().playerBlockTransform = playerBlock.transform;
         FindObjectOfType<CameraController>().playerController = this;
     }
