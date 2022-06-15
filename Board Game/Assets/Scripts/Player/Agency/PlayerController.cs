@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
 
     public bool CanControl { get { return _canControl; } }
     private bool _canControl = false;
+    private MovesUI _movesUI;
 
     private void OnEnable()
     {
@@ -62,14 +63,14 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-
+        _movesUI = FindObjectOfType<MovesUI>();
     }
 
     private void Update()
     {
         if (!_canControl) { return; }
         if(playerBlock == null) { return; }
-
+        if (!_movesUI.isFinished) { return; }
         // Keyboard Input (If Else)
         {
             if (Input.GetKeyDown(KeyCode.W))

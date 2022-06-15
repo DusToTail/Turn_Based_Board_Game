@@ -11,6 +11,8 @@ public class MovesUI : MonoBehaviour
     public CharacterBlock trackingCharacter;
     public GameManager gameManager;
 
+    public bool isFinished { get; set; }
+
     [SerializeField]
     private float distanceInPixels;
     private int currentIcons;
@@ -43,12 +45,14 @@ public class MovesUI : MonoBehaviour
     {
         if (trackingBlock != trackingCharacter) { return; }
         if (currentIcons == 0) { return; }
+        isFinished = false;
         transform.GetChild(currentIcons - 1).GetComponent<MoveIcon>().OnRemoved();
         currentIcons--;
     }
 
     private void ResetMove()
     {
+        isFinished = false;
         currentIcons = transform.childCount;
         for(int i = 0; i < currentIcons; i++)
             transform.GetChild(i).GetComponent<MoveIcon>().OnAdded();
@@ -83,5 +87,6 @@ public class MovesUI : MonoBehaviour
             rectTransform.anchoredPosition3D = Vector3.zero + Vector3.left * distanceInPixels * i;
             currentIcons++;
         }
+        isFinished = true;
     }
 }

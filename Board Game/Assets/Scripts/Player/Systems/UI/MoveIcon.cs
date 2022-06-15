@@ -82,6 +82,7 @@ public class MoveIcon : MonoBehaviour
         }
         full.gameObject.SetActive(true);
 
+        transform.GetComponentInParent<MovesUI>().isFinished = true;
     }
 
 
@@ -114,5 +115,7 @@ public class MoveIcon : MonoBehaviour
             move.GetComponent<Image>().color = newColor;
             t += Time.deltaTime * speed;
         }
+
+        transform.GetComponentInParent<MovesUI>().isFinished = true;
     }
 }
