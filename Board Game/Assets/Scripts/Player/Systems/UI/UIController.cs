@@ -12,8 +12,11 @@ public class UIController : MonoBehaviour
 
     public GameObject clearMenu;
     public GameObject failMenu;
-
     public Image blackScreen;
+    public HealthUI healthUI;
+    public MovesUI movesUI;
+    public RevealSkillUI revealSkillUI;
+    public TipUI tipUI;
 
     public delegate void UIControllerInitialized(UIController ui);
     public static event UIControllerInitialized OnUIControllerInitialized;

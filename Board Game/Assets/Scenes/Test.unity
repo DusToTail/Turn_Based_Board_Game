@@ -117514,13 +117514,25 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 6630014072077047720, guid: b13166b29f9534e46a419fe6bcf45e2d, type: 3}
+      propertyPath: tipUI
+      value: 
+      objectReference: {fileID: 1956651306}
+    - target: {fileID: 6630014072077047720, guid: b13166b29f9534e46a419fe6bcf45e2d, type: 3}
       propertyPath: canvas
       value: 
       objectReference: {fileID: 1159213528}
     - target: {fileID: 6630014072077047720, guid: b13166b29f9534e46a419fe6bcf45e2d, type: 3}
+      propertyPath: movesUI
+      value: 
+      objectReference: {fileID: 627604297}
+    - target: {fileID: 6630014072077047720, guid: b13166b29f9534e46a419fe6bcf45e2d, type: 3}
       propertyPath: failMenu
       value: 
       objectReference: {fileID: 931650484}
+    - target: {fileID: 6630014072077047720, guid: b13166b29f9534e46a419fe6bcf45e2d, type: 3}
+      propertyPath: healthUI
+      value: 
+      objectReference: {fileID: 877714928}
     - target: {fileID: 6630014072077047720, guid: b13166b29f9534e46a419fe6bcf45e2d, type: 3}
       propertyPath: clearMenu
       value: 
@@ -117533,6 +117545,10 @@ PrefabInstance:
       propertyPath: blackScreen
       value: 
       objectReference: {fileID: 697099911}
+    - target: {fileID: 6630014072077047720, guid: b13166b29f9534e46a419fe6bcf45e2d, type: 3}
+      propertyPath: revealSkillUI
+      value: 
+      objectReference: {fileID: 1187818942}
     - target: {fileID: 6630014072077047721, guid: b13166b29f9534e46a419fe6bcf45e2d, type: 3}
       propertyPath: m_Name
       value: UIController

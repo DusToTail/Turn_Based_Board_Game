@@ -91,6 +91,7 @@ public class GameManager : MonoBehaviour
         PlayerController.OnPlayerIsFinished += CallPlayerTurnEnded;
         OnPlayerTurnEnded += CallAITurnStarted;
 
+        // Subscribe here instead, because there can be none or many instances for AIController
         OnLevelStarted += AIController.ResetAIsStats;
         OnAITurnStarted += AIController.ResetAIsMoves;
 
@@ -216,6 +217,8 @@ public class GameManager : MonoBehaviour
     public void CallPlayerTurnStarted()
     {
         Debug.Log("Player Turn Started");
+        if(ui.tipUI != null)
+            ui.tipUI.DisplayPlayerText();
         if (OnPlayerTurnStarted != null)
             OnPlayerTurnStarted();
     }
@@ -230,6 +233,8 @@ public class GameManager : MonoBehaviour
     public void CallAITurnStarted()
     {
         Debug.Log("AI Turn Started");
+        if (ui.tipUI != null)
+            ui.tipUI.DisplayWaitingText();
         if (OnAITurnStarted != null)
             OnAITurnStarted();
     }

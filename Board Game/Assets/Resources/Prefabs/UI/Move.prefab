@@ -63,7 +63,7 @@ MonoBehaviour:
   large2: {fileID: 6308363561673366700}
   small1: {fileID: 6308363561499922898}
   small2: {fileID: 6308363560472998993}
-  speed: 2
+  speed: 5
 --- !u!1 &6308363559736219067
 GameObject:
   m_ObjectHideFlags: 0
