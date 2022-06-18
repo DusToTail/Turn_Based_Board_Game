@@ -48,7 +48,7 @@ public class BlockMovementController : MonoBehaviour
             transforms[0].rotation = currentTransform.rotation;
 
             transforms[1].position = toCell.worldPosition;
-            transforms[1].rotation = Quaternion.LookRotation(toCell.worldPosition - fromCell.worldPosition, currentTransform.up);
+            transforms[1].rotation = Quaternion.LookRotation(direction, currentTransform.up);
 
         }
 

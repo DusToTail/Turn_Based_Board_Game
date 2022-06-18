@@ -58,7 +58,7 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
                 toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, GridDirection.Down);
 
             // Initialize trajectory
-            userBlock.movementController.InitializeMovement(userBlock.transform, direction, userBlock.cell, toCell, BlockMovementController.MovementType.BasicHop);
+            userBlock.movementController.InitializeMovement(userBlock.transform, direction, userBlock.cell, toCell, BlockMovementController.MovementType.Slide);
             // Update position in character plane
             userBlock.CallOnPositionUpdated(toCell);
 
@@ -68,7 +68,12 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
                 Transform one = userBlock.movementController.transform.GetChild(0);
                 Transform second = userBlock.movementController.transform.GetChild(1);
                 Transform third = userBlock.movementController.transform.GetChild(2);
-
+                if(i % 1 == 0)
+                    userBlock.animator.SetTrigger("Jump_L");
+                else
+                    userBlock.animator.SetTrigger("Jump_R");
+                userBlock.animator.SetFloat("Speed Multiplier", userBlock.movementController.speed);
+                
                 while (true)
                 {
                     yield return null;
@@ -78,16 +83,18 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
                         MovementUtilities.MoveQuadraticBezierLerp(userBlock.transform, one, third, second, t, true);
                         break;
                     }
-                    t += Time.deltaTime * userBlock.movementController.speed * (1 + t);
+                    t += Time.deltaTime * userBlock.movementController.speed;
                     MovementUtilities.MoveQuadraticBezierLerp(userBlock.transform, one, third, second, t, true);
                 }
+                userBlock.animator.SetTrigger("Idle");
             }
             else if (userBlock.movementController.movementType == BlockMovementController.MovementType.Slide)
             {
                 // Initialize local trajectory to be used
                 Transform one = userBlock.movementController.transform.GetChild(0);
                 Transform second = userBlock.movementController.transform.GetChild(1);
-
+                userBlock.animator.SetTrigger("Move");
+                userBlock.animator.SetFloat("Speed Multiplier", userBlock.movementController.speed);
                 while (true)
                 {
                     yield return null;
@@ -97,9 +104,10 @@ public class StairBehaviour : MonoBehaviour, IActivationOnStep
                         MovementUtilities.MoveLinearLerp(userBlock.transform, one, second, t, true);
                         break;
                     }
-                    t += Time.deltaTime * userBlock.movementController.speed * (1 + t);
+                    t += Time.deltaTime * userBlock.movementController.speed;
                     MovementUtilities.MoveLinearLerp(userBlock.transform, one, second, t, true);
                 }
+                userBlock.animator.SetTrigger("Idle");
             }
 
             Debug.Log($"{userBlock.name} jumped to {toCell.gridPosition} by stair");

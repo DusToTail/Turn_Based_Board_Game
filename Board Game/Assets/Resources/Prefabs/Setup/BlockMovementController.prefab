@@ -146,6 +146,6 @@ MonoBehaviour:
   - {fileID: 6159644850064495263}
   upwardOffset: 1
   movementType: 0
-  speed: 3
+  speed: 1
   currentMoveObject: {fileID: 0}
   displayGizmos: 1

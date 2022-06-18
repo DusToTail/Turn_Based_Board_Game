@@ -12,77 +12,13 @@ ModelImporter:
   - first:
       74: 82017551088757511
     second: 0TPose
-  externalObjects:
   - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: BodyColor
-    second: {fileID: 2100000, guid: 5fac0d2e6de2a754aa4bd59a6f49be53, type: 2}
+      74: 5115314240200912250
+    second: Jump.R
   - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Button
-    second: {fileID: 2100000, guid: b84145bf0d713ab4e9e185629f72a1f9, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: CollarMat
-    second: {fileID: 2100000, guid: b90794b7af99cd743a40715e4a0213c3, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: CottonMat
-    second: {fileID: 2100000, guid: f68d33c75b8979743b818241c6403cc6, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: EyeMat
-    second: {fileID: 2100000, guid: 2fa8ae48e948c9445b997fe23024380d, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: HairMat
-    second: {fileID: 2100000, guid: cf3e19d660756ee40a441da1350b198d, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Hat
-    second: {fileID: 2100000, guid: 9dc16227bb608004f9b4d260f6cbf92a, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: RibbonMat
-    second: {fileID: 2100000, guid: f344e6111810a224fa2ebbc3976e8aec, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Shirt Red Band
-    second: {fileID: 2100000, guid: 1a4ba1448e69ee34fa8713e2f4a195cb, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: ShirtMat
-    second: {fileID: 2100000, guid: f5a0fdf0e2922fb469383f9272c12d65, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: ShoesMat
-    second: {fileID: 2100000, guid: 3e0864117456e5449ace5d4aac8cd141, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: SkirtMat
-    second: {fileID: 2100000, guid: cbbf09a76fea9e14688f3d9794d0a3c1, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Sleeve
-    second: {fileID: 2100000, guid: 211ef8e89dd4c744881e91ef170dbe56, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: SocksMat
-    second: {fileID: 2100000, guid: 7d896c3ba06d17644b82983527b6250b, type: 2}
+      74: 1742149344417256375
+    second: Jump.L
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -175,6 +111,64 @@ ModelImporter:
       internalID: 0
       firstFrame: 0
       lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Jump.R
+      takeName: Jump.R
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 25
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Jump.L
+      takeName: Jump.L
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

@@ -238,7 +238,6 @@ public class CharacterBlock : Block
             Transform one = movementController.transform.GetChild(0);
             Transform second = movementController.transform.GetChild(1);
             Transform third = movementController.transform.GetChild(2);
-
             // Update position and rotation per frame
             while (true)
             {
@@ -249,7 +248,7 @@ public class CharacterBlock : Block
                     MovementUtilities.MoveQuadraticBezierLerp(transform, one, third, second, t, true);
                     break;
                 }
-                t += Time.deltaTime * movementController.speed * (1 + t);
+                t += Time.deltaTime * movementController.speed;
                 MovementUtilities.MoveQuadraticBezierLerp(transform, one, third, second, t, true);
             }
         }
@@ -259,6 +258,7 @@ public class CharacterBlock : Block
             Transform one = movementController.transform.GetChild(0);
             Transform second = movementController.transform.GetChild(1);
             animator.SetTrigger("Move");
+            animator.SetFloat("Speed Multiplier", movementController.speed);
             // Update position and rotation per frame
             while (true)
             {
@@ -269,7 +269,7 @@ public class CharacterBlock : Block
                     MovementUtilities.MoveLinearLerp(transform, one, second, t, true);
                     break;
                 }
-                t += Time.deltaTime * movementController.speed * (1 + t);
+                t += Time.deltaTime * movementController.speed;
                 MovementUtilities.MoveLinearLerp(transform, one, second, t, true);
             }
             animator.SetTrigger("Idle");
