@@ -30,6 +30,7 @@ public class CharacterBlock : Block
     [HideInInspector] public int visionRange;
     public WeaponHandler weaponHandler;
     public AudioHandler audioHandler;
+    public Animator animator;
 
     public int curHealth { get { return _curHealth; }}
 
@@ -128,7 +129,7 @@ public class CharacterBlock : Block
         Cell toCell = gameManager.gridController.GetCellFromCellWithDirection(cell, forwardDirection);
 
         // Set up movement controller
-        movementController.InitializeMovement(transform, forwardDirection, cell, toCell, BlockMovementController.MovementType.BasicHop);
+        movementController.InitializeMovement(transform, forwardDirection, cell, toCell, BlockMovementController.MovementType.Slide);
         OnPositionUpdated(this, toCell);
         cell = toCell;
         // Movement one cost
@@ -257,7 +258,7 @@ public class CharacterBlock : Block
             // Initialize the trajectory to be used
             Transform one = movementController.transform.GetChild(0);
             Transform second = movementController.transform.GetChild(1);
-
+            animator.SetTrigger("Move");
             // Update position and rotation per frame
             while (true)
             {
@@ -271,6 +272,7 @@ public class CharacterBlock : Block
                 t += Time.deltaTime * movementController.speed * (1 + t);
                 MovementUtilities.MoveLinearLerp(transform, one, second, t, true);
             }
+            animator.SetTrigger("Idle");
         }
 
         // Sound Effect (NOT YET)

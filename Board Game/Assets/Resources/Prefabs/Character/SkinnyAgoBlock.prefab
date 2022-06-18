@@ -223,6 +223,7 @@ MonoBehaviour:
   visionRange: 100
   weaponHandler: {fileID: 248611875}
   audioHandler: {fileID: 2028594418997537622}
+  animator: {fileID: 70800720984950255}
   attackedEntityCount: 0
   curAttackedEntityCount: 0
   gameManager: {fileID: 0}
@@ -582,6 +583,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Platform
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d8933429d5a074e47b89e724fc585388, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8933429d5a074e47b89e724fc585388, type: 3}
 --- !u!4 &3824898225739048744 stripped
@@ -606,7 +611,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bc50aea04fb50c24694ed9a295f69498, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.25
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bc50aea04fb50c24694ed9a295f69498, type: 3}
       propertyPath: m_LocalPosition.z
@@ -646,6 +651,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc50aea04fb50c24694ed9a295f69498, type: 3}
+--- !u!1 &3896527640047846798 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: bc50aea04fb50c24694ed9a295f69498, type: 3}
+  m_PrefabInstance: {fileID: 4238545786331609311}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &70800720984950255
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3896527640047846798}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1bfc2e5e3f453ca4a96a276cba152748, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!4 &4420546448504610612 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bc50aea04fb50c24694ed9a295f69498, type: 3}
