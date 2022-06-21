@@ -8,10 +8,9 @@ public class WalkVFXController : EffectTrigger
     [SerializeField] private Transform spawnPosition;
     public override void Trigger()
     {
-        GameObject effect = Instantiate(prefab, spawnPosition, true);
-        effect.transform.position = spawnPosition.position;
-
-        effect.transform.rotation = Quaternion.LookRotation((spawnPosition.position - pivot.position).normalized);
+        Quaternion rotation = Quaternion.LookRotation((spawnPosition.position - pivot.position).normalized);
+        GameObject effect = Instantiate(prefab, spawnPosition.position, rotation);
 
     }
+
 }
