@@ -315,7 +315,7 @@ public class CharacterBlock : Block
 
     private IEnumerator AttackCoroutine()
     {
-        weaponHandler.UseWeapon(this);
+        animator.SetTrigger("Attack");
 
         yield return new WaitUntil(() => curAttackedEntityCount >= attackedEntityCount);
 
