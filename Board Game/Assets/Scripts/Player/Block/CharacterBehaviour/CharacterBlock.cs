@@ -315,8 +315,10 @@ public class CharacterBlock : Block
 
     private IEnumerator AttackCoroutine()
     {
+        GetComponentInChildren<AttackImpactEventTrigger>().isTriggered = false;
         animator.SetTrigger("Attack");
-
+        animator.SetFloat("Speed Multiplier", movementController.speed);
+        yield return new WaitUntil(() => GetComponentInChildren<AttackImpactEventTrigger>().isTriggered);
         yield return new WaitUntil(() => curAttackedEntityCount >= attackedEntityCount);
 
         gameManager.CallBlockEndedBehaviour(this);

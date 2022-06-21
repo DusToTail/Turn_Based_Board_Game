@@ -9,6 +9,8 @@ public class AttackImpactEventTrigger : AnimationEventTrigger
     [SerializeField] private WeaponHandler weaponHandler;
     [SerializeField] private Block userBlock;
 
+    public bool isTriggered { get; set; }
+
     public void AttackImpact() => Trigger();
 
     public override void Trigger()
@@ -21,6 +23,8 @@ public class AttackImpactEventTrigger : AnimationEventTrigger
             weaponHandler.UseWeapon(characterBlock);
         else if(userBlock is ObjectBlock objectBlock)
             weaponHandler.UseWeapon(objectBlock);
+
+        isTriggered = true;
     }
 
     
