@@ -13,7 +13,7 @@ public class LevelEditorToolsManager : MonoBehaviour
     public Transform pool;
 
     public GridController gridController;
-    public LevelPlane levelPlane;
+    public TerrainPlane terrainPlane;
     public CharacterPlane characterPlane;
     public ObjectPlane objectPlane;
     public StairsManager stairsManager;
@@ -45,7 +45,7 @@ public class LevelEditorToolsManager : MonoBehaviour
 
     public void SaveDesign()
     {
-        if(gridController == null || levelPlane == null || characterPlane == null || objectPlane == null)
+        if(gridController == null || terrainPlane == null || characterPlane == null || objectPlane == null)
         {
             Debug.Log("Grid is not initialized in the editor");
             return;
@@ -59,6 +59,7 @@ public class LevelEditorToolsManager : MonoBehaviour
         editingDesign.terrainGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
         editingDesign.characterGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
         editingDesign.objectGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
+        editingDesign.rotations = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
 
         int count = 0;
         for (int h = 0; h < gridController.gridSize.y; h++)
@@ -67,55 +68,51 @@ public class LevelEditorToolsManager : MonoBehaviour
             {
                 for (int w = 0; w < gridController.gridSize.x; w++)
                 {
-                    // Save terrain grid (Level Plane)
-                    if (levelPlane.grid[h, l, w] == null)
+                    Cell cell = gridController.grid[h, l, w];
+                    // Save rotations
+                    editingDesign.rotations[count] = 0;
+
+                    // Save terrain grid (Terrain Plane)
+                    Block terrainBlock = terrainPlane.GetBlockFromCell(cell);
+                    if (terrainBlock == null)
                     {
                         editingDesign.terrainGrid[count] = 0;
                     }
                     else
                     {
-                        editingDesign.terrainGrid[count] = levelPlane.grid[h, l, w].GetComponent<Block>().id;
+                        editingDesign.terrainGrid[count] = terrainBlock.id;
+                        editingDesign.rotations[count] = GridDirection.GetIntFromDirection(terrainBlock.forwardDirection);
                     }
 
                     // Save character grid (Character Plane)
-                    if (characterPlane.grid[h, l, w].block == null)
+                    Block characterBlock = characterPlane.GetBlockFromCell(cell);
+                    if (characterBlock == null)
                     {
                         editingDesign.characterGrid[count] = 0;
                     }
                     else
                     {
-                        editingDesign.characterGrid[count] = characterPlane.grid[h, l, w].block.GetComponent<Block>().id;
+                        editingDesign.characterGrid[count] = characterBlock.id;
+                        editingDesign.rotations[count] = GridDirection.GetIntFromDirection(characterBlock.forwardDirection);
                     }
 
                     // Save object grid (Object Plane)
-                    if (objectPlane.grid[h, l, w].block == null)
+                    Block objectBlock = objectPlane.GetBlockFromCell(cell);
+                    if (objectBlock == null)
                     {
                         editingDesign.objectGrid[count] = 0;
                     }
                     else
                     {
-                        editingDesign.objectGrid[count] = objectPlane.grid[h, l, w].block.GetComponent<Block>().id;
+                        editingDesign.objectGrid[count] = objectBlock.id;
+                        editingDesign.rotations[count] = GridDirection.GetIntFromDirection(objectBlock.forwardDirection);
                     }
                     count++;
                 }
             }
         }
 
-        if(stairsManager != null)
-        {
-            editingDesign.stairsData = new int[stairsManager.stairs.Count * 6];
-            for(int i = 0; i < stairsManager.stairs.Count; i++)
-            {
-                editingDesign.stairsData[6 * i] = stairsManager.stairs[i].startBlock.cell.gridPosition.x;
-                editingDesign.stairsData[6 * i + 1] = stairsManager.stairs[i].startBlock.cell.gridPosition.y;
-                editingDesign.stairsData[6 * i + 2] = stairsManager.stairs[i].startBlock.cell.gridPosition.z;
-                editingDesign.stairsData[6 * i + 3] = stairsManager.stairs[i].endBlock.cell.gridPosition.x;
-                editingDesign.stairsData[6 * i + 4] = stairsManager.stairs[i].endBlock.cell.gridPosition.y;
-                editingDesign.stairsData[6 * i + 5] = stairsManager.stairs[i].endBlock.cell.gridPosition.z;
-
-            }
-        }
-
+        
         if (remoteTriggerManager != null)
         {
             editingDesign.remoteTriggersData = new int[remoteTriggerManager.remoteTriggers.Count * 3];
@@ -142,9 +139,9 @@ public class LevelEditorToolsManager : MonoBehaviour
 
     public void LoadDesign()
     {
-        if (gridController == null || levelPlane == null || characterPlane == null || objectPlane == null)
+        if (gridController == null || terrainPlane == null || characterPlane == null || objectPlane == null)
         {
-            Debug.Log("Grid is not initialized in the editor");
+            Debug.Log("Grids are not initialized during loading");
             return;
         }
         editingDesign = new LevelDesign();
@@ -155,11 +152,11 @@ public class LevelEditorToolsManager : MonoBehaviour
         editingDesign.terrainGrid = saved.terrainGrid;
         editingDesign.characterGrid = saved.characterGrid;
         editingDesign.objectGrid = saved.objectGrid;
-        editingDesign.stairsData = saved.stairsData;
+        editingDesign.rotations = saved.rotations;
         editingDesign.remoteTriggersData = saved.remoteTriggersData;
         editingDesign.remoteDoorsData = saved.remoteDoorsData;
 
-        levelPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
+        terrainPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
         characterPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
         objectPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
 
@@ -170,7 +167,7 @@ public class LevelEditorToolsManager : MonoBehaviour
             {
                 for (int w = 0; w < editingDesign.gridWidth; w++)
                 {
-                    levelPlane.idGrid[h, l, w] =  editingDesign.terrainGrid[count];
+                    terrainPlane.idGrid[h, l, w] =  editingDesign.terrainGrid[count];
                     characterPlane.idGrid[h, l, w] = editingDesign.characterGrid[count];
                     objectPlane.idGrid[h, l, w] = editingDesign.objectGrid[count];
                     count++;
@@ -178,30 +175,17 @@ public class LevelEditorToolsManager : MonoBehaviour
             }
         }
 
-        if (stairsManager != null)
-        {
-            stairsManager.InitializeStairsData(editingDesign.stairsData);
-        }
+        remoteTriggerManager?.InitializeRemoteTriggersData(editingDesign.remoteTriggersData);
+        remoteDoorManager?.InitializeRemoteDoorsData(editingDesign.remoteDoorsData);
 
-        if (remoteTriggerManager != null)
-        {
-            remoteTriggerManager.InitializeRemoteTriggersData(editingDesign.remoteTriggersData);
-        }
-
-        if (remoteDoorManager != null)
-        {
-            remoteDoorManager.InitializeRemoteDoorsData(editingDesign.remoteDoorsData);
-        }
-
-        Vector3Int gridSize = new Vector3Int(editingDesign.gridWidth, editingDesign.gridHeight, editingDesign.gridLength);
-        gridController.InitializeGrid(gridSize);
+        gridController.InitializeGrid(editingDesign);
     }
 
     public void LoadDefaultDesign()
     {
-        if (gridController == null || levelPlane == null || characterPlane == null || objectPlane == null)
+        if (gridController == null || terrainPlane == null || characterPlane == null || objectPlane == null)
         {
-            Debug.Log("Grid is not initialized in the editor");
+            Debug.Log("Grids are not initialized during loading");
             return;
         }
         editingDesign = new LevelDesign();
@@ -211,6 +195,7 @@ public class LevelEditorToolsManager : MonoBehaviour
         editingDesign.terrainGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
         editingDesign.characterGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
         editingDesign.objectGrid = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
+        editingDesign.rotations = new int[editingDesign.gridHeight * editingDesign.gridLength * editingDesign.gridWidth];
 
         int count = 0;
         for (int h = 0; h < 1; h++)
@@ -220,13 +205,14 @@ public class LevelEditorToolsManager : MonoBehaviour
                 for (int w = 0; w < editingDesign.gridWidth; w++)
                 {
                     editingDesign.terrainGrid[count] = 100;
+                    editingDesign.rotations[count] = 1;
                     count++;
                 }
             }
         }
 
 
-        levelPlane.idGrid = new int[editingDesign.gridHeight,  editingDesign.gridLength, editingDesign.gridWidth];
+        terrainPlane.idGrid = new int[editingDesign.gridHeight,  editingDesign.gridLength, editingDesign.gridWidth];
         characterPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
         objectPlane.idGrid = new int[editingDesign.gridHeight, editingDesign.gridLength, editingDesign.gridWidth];
 
@@ -237,7 +223,7 @@ public class LevelEditorToolsManager : MonoBehaviour
             {
                 for (int w = 0; w < editingDesign.gridWidth; w++)
                 {
-                    levelPlane.idGrid[h, l, w] = editingDesign.terrainGrid[count];
+                    terrainPlane.idGrid[h, l, w] = editingDesign.terrainGrid[count];
                     characterPlane.idGrid[h, l, w] = editingDesign.characterGrid[count];
                     objectPlane.idGrid[h, l, w] = editingDesign.objectGrid[count];
                     count++;
@@ -245,14 +231,13 @@ public class LevelEditorToolsManager : MonoBehaviour
             }
         }
 
-        Vector3Int gridSize = new Vector3Int(editingDesign.gridWidth, editingDesign.gridHeight, editingDesign.gridLength);
-        gridController.InitializeGrid(gridSize);
+        gridController.InitializeGrid(editingDesign);
     }
 
     private void OnEnable()
     {
         GridController.OnGridInitialized += InitializeGridController;
-        LevelPlane.OnLevelPlaneInitialized += InitializeLevelPlane;
+        TerrainPlane.OnLevelPlaneInitialized += InitializeTerrainPlane;
         CharacterPlane.OnCharacterPlaneInitialized += InitializeCharacterPlane;
         ObjectPlane.OnObjectPlaneInitialized += InitializeObjectPlane;
     }
@@ -260,19 +245,19 @@ public class LevelEditorToolsManager : MonoBehaviour
     private void OnDisable()
     {
         GridController.OnGridInitialized -= InitializeGridController;
-        LevelPlane.OnLevelPlaneInitialized -= InitializeLevelPlane;
+        TerrainPlane.OnLevelPlaneInitialized -= InitializeTerrainPlane;
         CharacterPlane.OnCharacterPlaneInitialized -= InitializeCharacterPlane;
         ObjectPlane.OnObjectPlaneInitialized -= InitializeObjectPlane;
     }
 
-    private void InitializeGridController(GridController gridController)
+    private void InitializeGridController(GridController gridController, LevelDesign levelDesign)
     {
         this.gridController = gridController;
     }
 
-    private void InitializeLevelPlane(LevelPlane levelPlane)
+    private void InitializeTerrainPlane(TerrainPlane terrainPlane)
     {
-        this.levelPlane = levelPlane;
+        this.terrainPlane = terrainPlane;
     }
 
     private void InitializeCharacterPlane(CharacterPlane characterPlane)

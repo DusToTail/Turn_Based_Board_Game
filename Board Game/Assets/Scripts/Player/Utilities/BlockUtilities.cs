@@ -10,40 +10,40 @@ public class BlockUtilities
 {
     public static List<GameObject> blockPool  = new List<GameObject>();
 
-    public static void PlaceTerrainBlockAtCell(GameObject block, LevelPlane plane, Cell cell)
+    public static void PlaceTerrainBlockAtCell(GameObject block, TerrainPlane plane, Cell cell)
     {
-        if(plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x] != null) { return; }
+        if(plane.GetCellAndBlockFromCell(cell).block != null) { return; }
 
         block.GetComponent<Block>().SnapToCell(cell);
-        plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x] = block;
+        plane.GetCellAndBlockFromCell(cell).block = block;
     }
 
     public static void PlaceCharacterBlockAtCell(GameObject block, CharacterPlane plane, Cell cell)
     {
-        if (plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block != null) { return; }
+        if (plane.GetCellAndBlockFromCell(cell).block != null) { return; }
 
         block.GetComponent<Block>().SnapToCell(cell);
-        plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block = block;
+        plane.GetCellAndBlockFromCell(cell).block = block;
     }
 
     public static void PlaceObjectBlockAtCell(GameObject block, ObjectPlane plane, Cell cell)
     {
-        if (plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block != null) { return; }
+        if (plane.GetCellAndBlockFromCell(cell).block != null) { return; }
 
         block.GetComponent<Block>().SnapToCell(cell);
-        plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block = block;
+        plane.GetCellAndBlockFromCell(cell).block = block;
     }
 
-    public static void MoveTerrainBlockAtCellToPool(LevelPlane plane, Cell cell, Transform pool)
+    public static void MoveTerrainBlockAtCellToPool(TerrainPlane plane, Cell cell, Transform pool)
     {
-        GameObject block = plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x];
+        GameObject block = plane.GetCellAndBlockFromCell(cell).block;
         if(block == null) { return; }
 
         block.transform.parent = pool;
         block.transform.localPosition = Vector3.zero;
         block.SetActive(false);
         blockPool.Add(block);
-        plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x] = null;
+        plane.GetCellAndBlockFromCell(cell).block = null;
     }
 
     public static void MoveCharacterBlockAtCellToPool(CharacterPlane plane, Cell cell, Transform pool)
@@ -55,7 +55,7 @@ public class BlockUtilities
         block.transform.localPosition = Vector3.zero;
         block.SetActive(false);
         blockPool.Add(block);
-        plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block = null;
+        plane.GetCellAndBlockFromCell(cell).block = null;
     }
 
     public static void MoveObjectBlockAtCellToPool(ObjectPlane plane, Cell cell, Transform pool)
@@ -67,10 +67,10 @@ public class BlockUtilities
         block.transform.localPosition = Vector3.zero;
         block.SetActive(false);
         blockPool.Add(block);
-        plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block = null;
+        plane.GetCellAndBlockFromCell(cell).block = null;
     }
 
-    public static void DrawWireframeAtCell(Cell cell)
+    public static void DrawWireframeAtCell(Cell cell, int gridDirectionInt)
     {
         if(cell == null) { return; }
         if (Application.isPlaying) { return; }
@@ -78,7 +78,33 @@ public class BlockUtilities
         #if UNITY_EDITOR
         Handles.color = Color.magenta;
         Handles.DrawWireCube(cell.worldPosition, Vector3.one);
-        #endif
+        switch(gridDirectionInt)
+        {
+            case 1:
+                Handles.DrawLine(cell.worldPosition, cell.worldPosition + Vector3.forward);
+                break;
+            case -1:
+                Handles.DrawLine(cell.worldPosition, cell.worldPosition + Vector3.back);
+                break;
+            case 2:
+                Handles.DrawLine(cell.worldPosition, cell.worldPosition + Vector3.left);
+                break;
+            case -2:
+                Handles.DrawLine(cell.worldPosition, cell.worldPosition + Vector3.right);
+                break;
+            case 3:
+                Handles.DrawLine(cell.worldPosition, cell.worldPosition + Vector3.up);
+                break;
+            case -3:
+                Handles.DrawLine(cell.worldPosition, cell.worldPosition + Vector3.down);
+                break;
+            case 0:
+                break;
+            default:
+                break;
+
+        }
+#endif
 
     }
     

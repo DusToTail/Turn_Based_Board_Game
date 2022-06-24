@@ -268,21 +268,6 @@ public class PlayerController : MonoBehaviour
 
     private bool CellIsValidToMove(Cell cell)
     {
-        if (gameManager.levelPlane.CheckIfCellIsOccupied(cell))
-        {
-            Debug.Log($"{cell.gridPosition} is terrain, cant move");
-            return false;
-        }
-        else
-        {
-            Cell cellBelow = gameManager.gridController.GetCellFromCellWithDirection(cell, GridDirection.Down);
-            if(!gameManager.levelPlane.CheckIfCellIsOccupied(cellBelow))
-            {
-                Debug.Log($"{cell.gridPosition} is cliff, cant move");
-                return false;
-            }
-        }
-
         if (gameManager.characterPlane.CheckIfCellIsOccupied(cell))
         {
             Debug.Log($"{cell.gridPosition} is character, cant move");
@@ -291,18 +276,38 @@ public class PlayerController : MonoBehaviour
 
         if (gameManager.objectPlane.CheckIfCellIsOccupied(cell))
         {
-            ObjectBlock block = gameManager.objectPlane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block.GetComponent<ObjectBlock>();
-            if(block.isPassable)
-            {
-                return true;
-            }
-            else
-            {
-                Debug.Log($"{cell.gridPosition} is impassible object, cant move");
-                return false;
-            }
+            ObjectBlock block = gameManager.objectPlane.GetBlockFromCell(cell);
+            if (block.isPassable) { return true; }
+            if(block.GetComponentInChildren<IActivationOnCollision>() != null) { return true; }
+            Debug.Log($"{cell.gridPosition} is impassible object, cant move");
+            return false;
             
         }
+
+        if (gameManager.terrainPlane.CheckIfCellIsOccupied(cell))
+        {
+            Debug.Log($"{cell.gridPosition} is terrain, cant move");
+            return false;
+        }
+        else
+        {
+            Cell cellBelow = gameManager.gridController.GetCellFromCellWithDirection(cell, GridDirection.Down);
+            if(gameManager.objectPlane.CheckIfCellIsOccupied(cellBelow))
+            {
+                var block = gameManager.objectPlane.grid[cellBelow.gridPosition.y, cellBelow.gridPosition.z, cellBelow.gridPosition.x].block.GetComponent<ObjectBlock>();
+                if (block.activationBehaviour.GetComponentInChildren<StairBehaviour>() != null)
+                {
+                    return true;
+                }
+            }
+            
+            if (!gameManager.terrainPlane.CheckIfCellIsOccupied(cellBelow))
+            {
+                Debug.Log($"{cell.gridPosition} is cliff, cant move");
+                return false;
+            }
+        }
+
 
         return true;
     }
@@ -379,18 +384,18 @@ public class PlayerController : MonoBehaviour
     private void FocusCellMoveInDirection(GridDirection direction)
     {
         Cell nextCell = gameManager.gridController.GetCellFromCellWithDirection(focusCell, direction);
-        if (gameManager.levelPlane.CheckIfCellIsOccupied(nextCell))
+        if (gameManager.terrainPlane.CheckIfCellIsOccupied(nextCell))
         {
             Debug.Log($"{nextCell.gridPosition} is terrain, move focus cell up");
 
             Cell cellAbove = gameManager.gridController.GetCellFromCellWithDirection(nextCell, GridDirection.Up);
-            if(gameManager.levelPlane.CheckIfCellIsOccupied(cellAbove))
+            if(gameManager.terrainPlane.CheckIfCellIsOccupied(cellAbove))
             {
                 int curHeight = nextCell.gridPosition.y;
                 while (curHeight < gameManager.gridController.gridSize.y)
                 {
                     Cell cellAboveAbove = gameManager.gridController.GetCellFromCellWithDirection(cellAbove, GridDirection.Up);
-                    if (!gameManager.levelPlane.CheckIfCellIsOccupied(cellAboveAbove))
+                    if (!gameManager.terrainPlane.CheckIfCellIsOccupied(cellAboveAbove))
                     {
                         Debug.Log($"{cellAboveAbove.gridPosition} is empty, stop focus cell at {cellAbove.gridPosition}");
                         cellAbove = cellAboveAbove;
@@ -417,14 +422,14 @@ public class PlayerController : MonoBehaviour
         else
         {
             Cell cellBelow = gameManager.gridController.GetCellFromCellWithDirection(nextCell, GridDirection.Down);
-            if (!gameManager.levelPlane.CheckIfCellIsOccupied(cellBelow))
+            if (!gameManager.terrainPlane.CheckIfCellIsOccupied(cellBelow))
             {
                 Debug.Log($"{nextCell.gridPosition} is cliff, move focus cell down");
                 int curHeight = nextCell.gridPosition.y;
                 while(curHeight > 0)
                 {
                     Cell cellBelowBelow = gameManager.gridController.GetCellFromCellWithDirection(cellBelow, GridDirection.Down);
-                    if(!gameManager.levelPlane.CheckIfCellIsOccupied(cellBelowBelow))
+                    if(!gameManager.terrainPlane.CheckIfCellIsOccupied(cellBelowBelow))
                     {
                         Debug.Log($"{cellBelowBelow.gridPosition} is empty, move focus cell down");
                         cellBelow = cellBelowBelow;

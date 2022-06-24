@@ -19,6 +19,8 @@ public class ObjectBlock : Block
         GameManager.OnBlockEndedBehaviour += ActivateAfterBehaviourAtCurrentCell;
 
         GameManager.OnLevelFinished += StopBehaviour;
+        GameManager.OnAITurnStarted += ResetFinishedState;
+        GameManager.OnPlayerTurnStarted += ResetFinishedState;
     }
 
     private void OnDisable()
@@ -27,6 +29,8 @@ public class ObjectBlock : Block
         GameManager.OnBlockEndedBehaviour -= ActivateAfterBehaviourAtCurrentCell;
 
         GameManager.OnLevelFinished -= StopBehaviour;
+        GameManager.OnAITurnStarted -= ResetFinishedState;
+        GameManager.OnPlayerTurnStarted -= ResetFinishedState;
 
     }
 
@@ -67,8 +71,6 @@ public class ObjectBlock : Block
 
     }
 
-    private void StopBehaviour()
-    {
-        StopAllCoroutines();
-    }
+    private void StopBehaviour() => StopAllCoroutines();
+    private void ResetFinishedState() => isFinished = false;
 }

@@ -10,8 +10,9 @@ public class StairsManager : MonoBehaviour
 {
     public ObjectPlane objectPlane;
     public List<StairBehaviour> stairs = new List<StairBehaviour>();
-    public int[] stairsData;
+    //public int[] stairsDirection;
 
+    /*
     private void OnEnable()
     {
         ObjectPlane.OnObjectPlaneInitialized += InitializeStairsList;
@@ -26,10 +27,10 @@ public class StairsManager : MonoBehaviour
     {
         if(data == null) { Debug.Log("No Stair Data"); return; }
         Debug.Log("Initialize stair data");
-        stairsData = new int[data.Length];
+        stairsDirection = new int[data.Length];
         for (int i = 0; i < data.Length; i++)
         {
-            stairsData[i] = data[i];
+            stairsDirection[i] = data[i];
 
         }
     }
@@ -57,14 +58,14 @@ public class StairsManager : MonoBehaviour
             }
         }
 
-        if(stairsData != null)
+        if(stairsDirection != null)
         {
-            if(stairsData.Length > 0)
+            if(stairsDirection.Length > 0)
             {
                 for (int i = 0; i < stairs.Count; i++)
                 {
-                    Vector3Int startGridPosition = new Vector3Int(stairsData[6 * i], stairsData[6 * i + 1], stairsData[6 * i + 2]);
-                    Vector3Int endGridPosition = new Vector3Int(stairsData[6 * i + 3], stairsData[6 * i + 4], stairsData[6 * i + 5]);
+                    Vector3Int startGridPosition = new Vector3Int(stairsDirection[6 * i], stairsDirection[6 * i + 1], stairsDirection[6 * i + 2]);
+                    Vector3Int endGridPosition = new Vector3Int(stairsDirection[6 * i + 3], stairsDirection[6 * i + 4], stairsDirection[6 * i + 5]);
                     stairs[i].startBlock = objectPlane.grid[startGridPosition.y, startGridPosition.z, startGridPosition.x].block.GetComponent<Block>();
                     stairs[i].endBlock = objectPlane.grid[endGridPosition.y, endGridPosition.z, endGridPosition.x].block.GetComponent<Block>();
                 }
@@ -73,6 +74,6 @@ public class StairsManager : MonoBehaviour
 
         Debug.Log($"Stairs Manager initialized with {stairs.Count} stairs");
     }
-
+    */
 
 }

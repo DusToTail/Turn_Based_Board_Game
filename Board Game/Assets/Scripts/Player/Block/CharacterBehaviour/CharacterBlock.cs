@@ -19,7 +19,7 @@ public class CharacterBlock : Block
     public event NextMoveRequired OnNextMoveRequired;
 
     public delegate void PositionUpdated(CharacterBlock thisBlock, Cell targetCell);
-    public event PositionUpdated OnPositionUpdated;
+    public static event PositionUpdated OnPositionUpdated;
 
     public delegate void DamageTaken(CharacterBlock thisBlock, int damageTaken);
     public static event DamageTaken OnDamageTaken;
@@ -56,12 +56,10 @@ public class CharacterBlock : Block
     {
         gameManager = FindObjectOfType<GameManager>();
         movementController = FindObjectOfType<BlockMovementController>();
-        OnPositionUpdated += gameManager.CallCharacterChangedPosition;
         OnCharacterRanOutOfMoves += gameManager.CallCharacterRanOutOfMoves;
         OnNextMoveRequired += gameManager.CallNextMoveRequired;
 
         // Will need to reimplement (use when importing level design with more data about each block)
-        forwardDirection = GridDirection.Forward;
         movesPerTurn = characterData.movesPerTurn;
         maxHealth = characterData.maxHealth;
         visionRange = characterData.visionRange;
@@ -73,7 +71,6 @@ public class CharacterBlock : Block
 
     private void OnDestroy()
     {
-        OnPositionUpdated -= gameManager.CallCharacterChangedPosition;
         OnCharacterRanOutOfMoves -= gameManager.CallCharacterRanOutOfMoves;
         OnNextMoveRequired -= gameManager.CallNextMoveRequired;
     }
@@ -93,10 +90,6 @@ public class CharacterBlock : Block
     }
 
 
-    /// <summary>
-    /// Rotate the block horizontally with hop animation
-    /// </summary>
-    /// <param name="rotation"></param>
     public override void RotateHorizontally(Rotations rotation)
     {
         if (rotation != Rotations.Left && rotation != Rotations.Right) { return; }
@@ -116,122 +109,80 @@ public class CharacterBlock : Block
         // Set up movement controller
         movementController.InitializeMovement(transform, forwardDirection, cell, cell, BlockMovementController.MovementType.BasicHop);
         // Movement one cost
-        StartCoroutine(MovementCoroutine(1));
+        StartCoroutine(MovementCoroutine(1, cell, cell));
 
     }
 
-    /// <summary>
-    /// Move the block forward with hop animation
-    /// </summary>
     public void MoveFoward()
     {
-        // Get one forward cell
         Cell toCell = gameManager.gridController.GetCellFromCellWithDirection(cell, forwardDirection);
-
-        // Set up movement controller
         movementController.InitializeMovement(transform, forwardDirection, cell, toCell, BlockMovementController.MovementType.Slide);
-        OnPositionUpdated(this, toCell);
-        cell = toCell;
-        // Movement one cost
-        StartCoroutine(MovementCoroutine(1));
+        StartCoroutine(MovementCoroutine(1, cell, toCell));
     }
 
-    /// <summary>
-    /// Activate the object block forward
-    /// </summary>
-    public void ActivateForward()
-    {
-        StartCoroutine(ActivateForwardCoroutine());
-    }
-
-    /// <summary>
-    /// Attack using the weapon handler with the equipped weapon
-    /// </summary>
-    public void Attack()
-    {
-        StartCoroutine(AttackCoroutine());
-    }
-
-    /// <summary>
-    /// Take damage from a character block
-    /// </summary>
-    /// <param name="fromCharacter"></param>
-    /// <param name="damageAmount"></param>
+    public void ActivateForward() => StartCoroutine(ActivateForwardCoroutine());
+    public void Attack() => StartCoroutine(AttackCoroutine());
     public void TakeDamage(CharacterBlock fromCharacter, int damageAmount)
-    {
-        StartCoroutine(TakeDamageCoroutine(fromCharacter, damageAmount));
-    }
-
-    /// <summary>
-    /// Take damage from an object block
-    /// </summary>
-    /// <param name="fromObject"></param>
-    /// <param name="damageAmount"></param>
+        => StartCoroutine(TakeDamageCoroutine(fromCharacter, damageAmount));
     public void TakeDamage(ObjectBlock fromObject, int damageAmount)
-    {
-        StartCoroutine(TakeDamageCoroutine(fromObject, damageAmount));
-    }
+        => StartCoroutine(TakeDamageCoroutine(fromObject, damageAmount));
+    public void SkipAction() => StartCoroutine(SkipActionCoroutine());
+    public void HealHealth(int healAmount) => PlusHealth(healAmount);
+    public void ResetHealth() => _curHealth = maxHealth;
+    public void ResetCurrentMoves() => _curMovesLeft = movesPerTurn;
 
-    /// <summary>
-    /// Skip one action
-    /// </summary>
-    public void SkipAction()
-    {
-        StartCoroutine(SkipActionCoroutine());
-    }
-
-    public void HealHealth(int healAmount)
-    {
-        PlusHealth(healAmount);
-    }
-
-    public void ResetHealth()
-    {
-        _curHealth = maxHealth;
-    }
-
-    public void ResetCurrentMoves()
-    {
-        _curMovesLeft = movesPerTurn;
-    }
-
-    /// <summary>
-    /// Check for moves and send the corresponsding event (to game manager)
-    /// </summary>
-    public void CheckForLeftOverMoves()
+    public void CallMovesSituation()
     {
         if(NoMoreMoves())
         {
             if(OnCharacterRanOutOfMoves != null)
-            {
                 OnCharacterRanOutOfMoves(this);
-            }
+            return;
         }
-        else
+
+        if (OnNextMoveRequired != null)
+            OnNextMoveRequired(this);
+        return;
+    }
+    public void CallOnPositionUpdated(Cell toCell) { OnPositionUpdated(this, toCell); }
+
+    private IEnumerator MovementCoroutine(int moveCost, Cell from, Cell to)
+    {
+        // Check for collision if move foward
+        if(from != to)
         {
-            if (OnNextMoveRequired != null)
+            Cell collidedBlockCell = gameManager.gridController.GetCellFromCellWithDirection(cell, forwardDirection);
+            ObjectBlock collidedObject = gameManager.objectPlane.GetBlockFromCell(collidedBlockCell);
+            Cell belowCell = gameManager.gridController.GetCellFromCellWithDirection(collidedBlockCell, GridDirection.Down);
+            ObjectBlock belowObject = gameManager.objectPlane.GetBlockFromCell(belowCell);
+            if (collidedObject != null && collidedObject.activationBehaviour.GetComponent<IActivationOnCollision>() != null)
             {
-                OnNextMoveRequired(this);
+                Debug.Log($"{gameObject.name} waiting for {collidedObject.name} to finish");
+                collidedObject.activationBehaviour.GetComponent<IActivationOnCollision>().OnCollision(collidedObject, this);
+                yield return new WaitUntil(() => collidedObject.isFinished == true);
+                gameManager.CallBlockEndedBehaviour(this);
+                MinusMoves(moveCost);
+                yield break;
             }
+            else if(belowObject != null && belowObject.activationBehaviour.GetComponent<StairBehaviour>() != null)
+            {
+                Debug.Log($"{gameObject.name} waiting for {belowObject.name} to finish");
+                belowObject.activationBehaviour.GetComponent<StairBehaviour>().OnCollision(belowObject, this);
+                yield return new WaitUntil(() => belowObject.isFinished == true);
+                gameManager.CallBlockEndedBehaviour(this);
+                MinusMoves(moveCost);
+                yield break;
+            }
+            else
+                Debug.Log($"There is no object at {collidedBlockCell.gridPosition} to wait");
         }
 
-    }
+        
 
-    /// <summary>
-    /// Send an event that the character's position has updated (to character plane)
-    /// </summary>
-    /// <param name="toCell"></param>
-    public void CallOnPositionUpdated(Cell toCell)
-    {
-        OnPositionUpdated(this, toCell);
-        cell = toCell;
-    }
-
-
-    private IEnumerator MovementCoroutine(int moveCost)
-    {
         float t = 0;
-        Cell steppedOnCell = cell;
+        Cell steppedOnCell = to;
+        ObjectBlock objectBlock = gameManager.objectPlane.GetBlockFromCell(steppedOnCell);
+
         if (movementController.movementType == BlockMovementController.MovementType.BasicHop)
         {
             // Initialize the trajectory to be used
@@ -280,9 +231,9 @@ public class CharacterBlock : Block
 
         // Announce to game manager that this character's is technically done
         gameManager.CallBlockEndedBehaviour(this);
-
+        CallOnPositionUpdated(steppedOnCell);
         // Wait for any object block at the current cell
-        GameObject objectBlock = gameManager.objectPlane.grid[steppedOnCell.gridPosition.y, steppedOnCell.gridPosition.z, steppedOnCell.gridPosition.x].block;
+        objectBlock = gameManager.objectPlane.grid[steppedOnCell.gridPosition.y, steppedOnCell.gridPosition.z, steppedOnCell.gridPosition.x].block?.GetComponent<ObjectBlock>();
         if (objectBlock != null && objectBlock.GetComponentInChildren<IActivationOnStep>() != null)
         {
             Debug.Log($"{gameObject.name} waiting for {objectBlock.name} to finish");
@@ -292,11 +243,9 @@ public class CharacterBlock : Block
         {
             Debug.Log($"There is no object at {steppedOnCell.gridPosition} to wait");
         }
-
         // Officially finish and minus the action points (or move cost)
         MinusMoves(moveCost);
     }
-
 
     private IEnumerator ActivateForwardCoroutine()
     {
@@ -398,7 +347,7 @@ public class CharacterBlock : Block
         _curMovesLeft -= movesNum;
         if (_curMovesLeft < 0) { _curMovesLeft = 0; }
 
-        CheckForLeftOverMoves();
+        CallMovesSituation();
     }
 
     private void PlusMoves(int movesNum)

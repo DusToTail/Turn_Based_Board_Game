@@ -1,23 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 /// <summary>
 /// Simple tester (debugger) for grid pathfinding
 /// </summary>
 public class GridPathfindingDebugger : MonoBehaviour
 {
+    public static GridPathfinding.PathfindingCell[,,] grid;
+
     public GridController gridController;
-    public LevelPlane levelPlane;
+    public TerrainPlane levelPlane;
     public CharacterPlane characterPlane;
     public ObjectPlane objectPlane;
 
     public Vector3Int fromPosition;
     public Vector3Int toPosition;
+    [SerializeField] private int displayHeight;
+    [SerializeField] private bool displayGrid;
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.P))
+        if (!displayGrid) { return; }
+        if (Input.GetKeyDown(KeyCode.P))
         {
             if (gridController.grid == null) { return; }
             Debug.Log("***********************    START   ************************");
@@ -30,8 +36,38 @@ public class GridPathfindingDebugger : MonoBehaviour
             }
             Debug.Log("***********************    END   ************************");
         }
+        else if(Input.GetKeyDown(KeyCode.O))
+        {
+            grid = null;
+        }
 
         
+    }
+
+    #if UNITY_EDITOR
+    private void OnGUI()
+    {
+        if (!displayGrid) { return; }
+        if (grid == null) { return; }
+        GUIStyle style = new GUIStyle();
+        style.normal.textColor = Color.black;
+        for (int i = 0; i < grid.GetLength(1); i++)
+        {
+            for(int j = 0; j < grid.GetLength(2); j++)
+            {
+                if(displayHeight > grid.GetLength(0)) { displayHeight = grid.GetLength(0) - 1; }
+                if(displayHeight < 0) { displayHeight = 0; }
+                GridPathfinding.PathfindingCell cell = grid[displayHeight, i, j];
+                Handles.Label(cell.cell.worldPosition, cell.gCost.ToString(), style);
+
+            }
+        }
+    }
+    #endif
+
+    public static void SetGrid(GridPathfinding.PathfindingCell[,,] checkGrid)
+    {
+        grid = checkGrid;
     }
 
 }

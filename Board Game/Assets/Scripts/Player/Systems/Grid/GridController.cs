@@ -12,7 +12,7 @@ public class GridController : MonoBehaviour
 
     public Cell[,,] grid { get; private set; }
 
-    public delegate void GridInitialized(GridController controller);
+    public delegate void GridInitialized(GridController controller, LevelDesign levelDesign);
     public static event GridInitialized OnGridInitialized;
     [SerializeField]
     private bool displayGizmos;
@@ -31,7 +31,7 @@ public class GridController : MonoBehaviour
 
     public Cell GetCellFromCellWithDirection(Cell cell, GridDirection direction)
     {
-        Vector3Int newGridPosition = cell.gridPosition + direction;
+        Vector3Int newGridPosition = cell.gridPosition + direction.direction;
         if(IsWithinGrid(newGridPosition))
             return grid[newGridPosition.y, newGridPosition.z, newGridPosition.x];
 
@@ -148,14 +148,15 @@ public class GridController : MonoBehaviour
         }
 
         if(OnGridInitialized != null)
-            OnGridInitialized(this);
+            OnGridInitialized(this, null);
     }
 
     /// <summary>
     /// Initialize the 3 dimensional grid with [height, Length, Width] corresponding to [y, z, x] in world coordinates
     /// </summary>
-    public void InitializeGrid(Vector3Int gridSize)
+    public void InitializeGrid(LevelDesign levelDesign)
     {
+        Vector3Int gridSize = new Vector3Int(levelDesign.gridWidth, levelDesign.gridHeight, levelDesign.gridLength);
         this.gridSize = gridSize;
         grid = new Cell[gridSize.y, gridSize.z, gridSize.x];
         for (int h = 0; h < gridSize.y; h++)
@@ -174,7 +175,7 @@ public class GridController : MonoBehaviour
         }
 
         if (OnGridInitialized != null)
-            OnGridInitialized(this);
+            OnGridInitialized(this, levelDesign);
     }
 
     private void OnDrawGizmosSelected()

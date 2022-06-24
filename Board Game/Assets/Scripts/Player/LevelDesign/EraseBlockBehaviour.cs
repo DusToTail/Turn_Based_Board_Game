@@ -4,7 +4,7 @@ using UnityEngine;
 public class EraseBlockBehaviour : MonoBehaviour
 {
 
-    public void EraseBlockAtCursor(LevelPlane plane, Transform poolTransform, LayerMask mask)
+    public void EraseBlockAtCursor(TerrainPlane plane, Transform poolTransform, LayerMask mask)
     {
         // Get block at cursor to ensure continuity of blocks
         GameObject block = BlockUtilities.GetBlockInLevelFromCursor(mask);
