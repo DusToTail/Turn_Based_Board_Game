@@ -8,12 +8,10 @@ public static class SaveSystem
 {
     public static readonly string LEVEL_DESIGN_SAVE_FOLDER_NAME = "/Level Design/";
 
-
     public static bool SaveLevelDesign(string fileName, LevelDesign level)
     {
         if(level == null) { return false; }
         string path = Application.dataPath + "/Resources" + LEVEL_DESIGN_SAVE_FOLDER_NAME + $"{fileName}.txt";
-
         // Test if save folder exists
         if (!Directory.Exists(Application.dataPath + "/Resources" + LEVEL_DESIGN_SAVE_FOLDER_NAME))
             Directory.CreateDirectory(Application.dataPath + "/Resources" + LEVEL_DESIGN_SAVE_FOLDER_NAME);
@@ -34,7 +32,6 @@ public static class SaveSystem
             Debug.Log($"No file at {path}");
             return null;
         }
-
         // Test if overlapping file exists
         if (File.Exists(path))
         {
@@ -51,8 +48,4 @@ public static class SaveSystem
         }
 
     }
-
-
-
-
 }

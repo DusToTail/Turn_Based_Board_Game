@@ -3,16 +3,13 @@ using System;
 
 public class PriorityQueue<T>
 {
+    
+    public int Count { get { return _queue.Count; } }
     private List<Node> _queue = new List<Node>();
     private int _heapSize = -1;
     private bool _isMinPriorityQueue;
-    public int Count { get { return _queue.Count; } }
-    
-    public PriorityQueue(bool isMinPriorityQueue = false)
-    {
-        _isMinPriorityQueue = isMinPriorityQueue;
-    }
 
+    public PriorityQueue(bool isMinPriorityQueue = false) { _isMinPriorityQueue = isMinPriorityQueue; }
     public void Enqueue(int priority, T obj)
     {
         Node node = new Node() { priority = priority, item = obj };
@@ -24,7 +21,6 @@ public class PriorityQueue<T>
         else
             BuildHeapMax(_heapSize);
     }
-
     public T Dequeue()
     {
         if (_heapSize > -1)
@@ -41,11 +37,8 @@ public class PriorityQueue<T>
             return returnVal;
         }
         else
-        {
             throw new Exception("Queue is empty");
-        }
     }
-
     public void UpdatePriority(T obj, int priority)
     {
         for (int i = 0; i <= _heapSize; i++)
@@ -67,7 +60,6 @@ public class PriorityQueue<T>
             }
         }
     }
-
     public bool IsInQueue(T obj)
     {
         foreach (Node node in _queue)
@@ -75,7 +67,6 @@ public class PriorityQueue<T>
                 return true;
         return false;
     }
-
     private void BuildHeapMax(int i)
     {
         while (i >= 0 && _queue[(i - 1) / 2].priority < _queue[i].priority)
@@ -128,31 +119,19 @@ public class PriorityQueue<T>
             MinHeapify(lowest);
         }
     }
-
     private void Swap(int i, int j)
     {
         var temp = _queue[i];
         _queue[i] = _queue[j];
         _queue[j] = temp;
     }
-
-    private int ChildIndexLeft(int i)
-    {
-        return i * 2 + 1;
-    }
-    private int ChildIndexRight(int i)
-    {
-        return i * 2 + 2;
-    }
+    private int ChildIndexLeft(int i) { return i * 2 + 1; }
+    private int ChildIndexRight(int i) { return i * 2 + 2; }
     private int ParentIndex(int i)
     {
         if (i == 0) { return 0; }
         return i / 2;
     }
-
-
-
-    
 
     private class Node
     {

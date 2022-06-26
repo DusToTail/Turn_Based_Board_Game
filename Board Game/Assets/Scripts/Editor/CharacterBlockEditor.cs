@@ -10,8 +10,8 @@ public class CharacterBlockEditor : Editor
 
         DrawDefaultInspector();
         GUILayout.Label("***Current Stats***");
-        GUILayout.Label($"Health: {characterBlock.curHealth}");
-        GUILayout.Label($"Moves Left: {characterBlock.curMovesLeft}");
+        GUILayout.Label($"Health: {characterBlock.CurHealth}");
+        GUILayout.Label($"Moves Left: {characterBlock.CurMovesLeft}");
         GUILayout.Label($"****************");
 
     }

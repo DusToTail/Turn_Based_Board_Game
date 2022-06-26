@@ -48,7 +48,7 @@ public class BlockUtilities
 
     public static void MoveCharacterBlockAtCellToPool(CharacterPlane plane, Cell cell, Transform pool)
     {
-        GameObject block = plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block;
+        GameObject block = plane.GetCellAndBlockFromCell(cell).block;
         if (block == null) { return; }
 
         block.transform.parent = pool;
@@ -60,7 +60,7 @@ public class BlockUtilities
 
     public static void MoveObjectBlockAtCellToPool(ObjectPlane plane, Cell cell, Transform pool)
     {
-        GameObject block = plane.grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block;
+        GameObject block = plane.GetCellAndBlockFromCell(cell).block;
         if (block == null) { return; }
 
         block.transform.parent = pool;
@@ -78,34 +78,9 @@ public class BlockUtilities
         #if UNITY_EDITOR
         Handles.color = Color.magenta;
         Handles.DrawWireCube(cell.worldPosition, Vector3.one);
-        switch(gridDirectionInt)
-        {
-            case 1:
-                Handles.DrawLine(cell.worldPosition, cell.worldPosition + Vector3.forward);
-                break;
-            case -1:
-                Handles.DrawLine(cell.worldPosition, cell.worldPosition + Vector3.back);
-                break;
-            case 2:
-                Handles.DrawLine(cell.worldPosition, cell.worldPosition + Vector3.left);
-                break;
-            case -2:
-                Handles.DrawLine(cell.worldPosition, cell.worldPosition + Vector3.right);
-                break;
-            case 3:
-                Handles.DrawLine(cell.worldPosition, cell.worldPosition + Vector3.up);
-                break;
-            case -3:
-                Handles.DrawLine(cell.worldPosition, cell.worldPosition + Vector3.down);
-                break;
-            case 0:
-                break;
-            default:
-                break;
-
-        }
-#endif
-
+        Vector3 direction = GridDirection.GetDirectionFromInt(gridDirectionInt);
+        Handles.DrawLine(cell.worldPosition, cell.worldPosition + direction);
+        #endif
     }
     
 

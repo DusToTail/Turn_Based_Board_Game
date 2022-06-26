@@ -14,6 +14,7 @@ public class LoadLevelBehaviour : MonoBehaviour, IActivationOnTrigger
 
     public void OnTriggered(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
+        objectBlock.isFinished = false;
         StartCoroutine(LoadLevelCoroutine(objectBlock, userBlock));
     }
 
@@ -25,6 +26,7 @@ public class LoadLevelBehaviour : MonoBehaviour, IActivationOnTrigger
 
         // Trigger game loading
         gameManager.CallLevelLoadingStarted(levelIndex);
+        objectBlock.isFinished = true;
         Debug.Log($"{objectBlock} called level {levelIndex} loading started");
 
 

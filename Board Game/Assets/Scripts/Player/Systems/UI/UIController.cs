@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class UIController : MonoBehaviour
 {
     public Canvas canvas;
-
     public GameObject clearMenu;
     public GameObject failMenu;
     public Image blackScreen;
@@ -21,13 +20,12 @@ public class UIController : MonoBehaviour
     public delegate void UIControllerInitialized(UIController ui);
     public static event UIControllerInitialized OnUIControllerInitialized;
 
-    private GameManager gameManager;
-
-    private bool sceneReady;
+    private GameManager _gameManager;
+    private bool _sceneReady;
 
     private void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        _gameManager = FindObjectOfType<GameManager>();
     }
 
     private void OnEnable()
@@ -40,33 +38,18 @@ public class UIController : MonoBehaviour
         CharacterPlane.OnCharacterPlaneInitialized -= SetSceneReady;
     }
 
-    public void PlayGameOpeningScene()
-    {
-        StartCoroutine(GameOpeningCoroutine());
-    }
-
-    public void PlayLevelTransitionScene()
-    {
-        StartCoroutine(LevelTransitionCoroutine());
-    }
-
-    public void PlayLevelClearScene()
-    {
-        StartCoroutine(LevelClearCoroutine());
-    }
-
-    public void PlayLevelFailScene()
-    {
-        StartCoroutine(LevelFailCoroutine());
-    }
+    public void PlayGameOpeningScene() => StartCoroutine(GameOpeningCoroutine());
+    public void PlayLevelTransitionScene() => StartCoroutine(LevelTransitionCoroutine());
+    public void PlayLevelClearScene() => StartCoroutine(LevelClearCoroutine());
+    public void PlayLevelFailScene() => StartCoroutine(LevelFailCoroutine());
 
     private IEnumerator GameOpeningCoroutine()
     {
-        sceneReady = false;
+        _sceneReady = false;
 
         // The alpha is slowly decreased
         blackScreen.color = Color.black;
-        yield return new WaitUntil(() => sceneReady);
+        yield return new WaitUntil(() => _sceneReady);
 
         float t = 1;
         while(true)
@@ -74,8 +57,7 @@ public class UIController : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             if(t < 0)
             {
-                t = 0;
-                blackScreen.color = new Color(0, 0, 0, t);
+                blackScreen.color = new Color(0, 0, 0, 0);
                 break;
             }
             blackScreen.color = new Color(0, 0, 0, t);
@@ -85,12 +67,12 @@ public class UIController : MonoBehaviour
 
     private IEnumerator LevelTransitionCoroutine()
     {
-        sceneReady = false;
+        _sceneReady = false;
 
         // The alpha is slowly decreased
         blackScreen.color = Color.black;
 
-        yield return new WaitUntil(() => sceneReady);
+        yield return new WaitUntil(() => _sceneReady);
 
         float t = 1;
         while (true)
@@ -98,8 +80,7 @@ public class UIController : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             if (t < 0)
             {
-                t = 0;
-                blackScreen.color = new Color(0, 0, 0, t);
+                blackScreen.color = new Color(0, 0, 0, 0);
                 break;
             }
             blackScreen.color = new Color(0, 0, 0, t);
@@ -120,15 +101,13 @@ public class UIController : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             if (t >1)
             {
-                t = 1;
-                blackScreen.color = new Color(0, 0, 0, t);
+                blackScreen.color = new Color(0, 0, 0, 1);
                 break;
             }
             blackScreen.color = new Color(0, 0, 0, t);
             t += 0.25f;
         }
 
-        // Show a scene where the statue is with the prize, surrounded by stalking eyes in the dark
         // The alpha is slowly increased
         t = 1;
         while (true)
@@ -136,8 +115,7 @@ public class UIController : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             if (t < 0)
             {
-                t = 0;
-                blackScreen.color = new Color(0, 0, 0, t);
+                blackScreen.color = new Color(0, 0, 0, 0);
                 break;
             }
             blackScreen.color = new Color(0, 0, 0, t);
@@ -157,15 +135,13 @@ public class UIController : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             if (t > 1)
             {
-                t = 1;
-                blackScreen.color = new Color(0, 0, 0, t);
+                blackScreen.color = new Color(0, 0, 0, 1);
                 break;
             }
             blackScreen.color = new Color(0, 0, 0, t);
             t += 0.25f;
         }
 
-        // Show a scene where the statue is broken, surrounded by stalking eyes in the dark
         // The alpha is slowly increased
         t = 1;
         while (true)
@@ -173,8 +149,7 @@ public class UIController : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             if (t < 0)
             {
-                t = 0;
-                blackScreen.color = new Color(0, 0, 0, t);
+                blackScreen.color = new Color(0, 0, 0, 0);
                 break;
             }
             blackScreen.color = new Color(0, 0, 0, t);
@@ -184,8 +159,5 @@ public class UIController : MonoBehaviour
         Debug.Log("UI: level fail finished");
     }
 
-    private void SetSceneReady(CharacterPlane plane)
-    {
-        sceneReady = true;
-    }
+    private void SetSceneReady(CharacterPlane plane) { _sceneReady = true; }
 }

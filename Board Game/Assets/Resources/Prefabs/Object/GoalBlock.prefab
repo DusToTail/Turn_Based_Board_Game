@@ -468,5 +468,5 @@ MonoBehaviour:
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 6377975956786101628}
   gameManager: {fileID: 0}
-  isPassable: 1
+  isPassable: 0
   isFinished: 0

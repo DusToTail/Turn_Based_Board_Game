@@ -55860,6 +55860,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 497481623}
     - target: {fileID: 3342998143237366190, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
+      propertyPath: loadLevelIndex
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3342998143237366190, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
       propertyPath: playerController
       value: 
       objectReference: {fileID: 1630875268}

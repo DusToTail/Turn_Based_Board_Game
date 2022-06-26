@@ -52,7 +52,6 @@ public class ObjectBlock : Block
         if (currentBlock.cell.gridPosition != cell.gridPosition) { return; }
         if (currentBlock.GetType() != typeof(CharacterBlock)) { return; }
         Debug.Log($"{currentBlock.name} landed on {name} at cell {cell.gridPosition}");
-
     }
 
     public void ActivateOnStepped(CharacterBlock userBlock)
@@ -60,7 +59,6 @@ public class ObjectBlock : Block
         if(activationBehaviour == null) { return; }
         if(activationBehaviour.GetComponent<IActivationOnStep>() != null)
             activationBehaviour.GetComponent<IActivationOnStep>().OnStepped(this, userBlock);
-        
     }
 
     public void ActivateOnTriggered(CharacterBlock userBlock)
@@ -68,7 +66,6 @@ public class ObjectBlock : Block
         if (activationBehaviour == null) { return; }
         if (activationBehaviour.GetComponent<IActivationOnTrigger>() != null)
             activationBehaviour.GetComponent<IActivationOnTrigger>().OnTriggered(this, userBlock);
-
     }
 
     private void StopBehaviour() => StopAllCoroutines();

@@ -11,9 +11,8 @@ public class RevealSkillUI : MonoBehaviour
     public RevealAreaSkill revealSkill;
     public GameManager gameManager;
 
-    [SerializeField]
-    private float distanceInPixels;
-    private int currentIcons;
+    [SerializeField] private float distanceInPixels;
+    private int _currentIcons;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +22,7 @@ public class RevealSkillUI : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnLevelLoadingStarted += DestroyAllIcons;
+        GameManager.OnLevelLoadingStarted += DestroyAllIconsOnLevelLoaded;
         GameManager.OnLevelStarted += InitializeRevealSkillUI;
         GameManager.OnLevelFailed += RemoveAllIcons;
         RevealAreaSkill.OnCooldownDecremented += AddIcon;
@@ -32,7 +31,7 @@ public class RevealSkillUI : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.OnLevelLoadingStarted -= DestroyAllIcons;
+        GameManager.OnLevelLoadingStarted -= DestroyAllIconsOnLevelLoaded;
         GameManager.OnLevelStarted -= InitializeRevealSkillUI;
         GameManager.OnLevelFailed -= RemoveAllIcons;
         RevealAreaSkill.OnCooldownDecremented -= AddIcon;
@@ -41,36 +40,29 @@ public class RevealSkillUI : MonoBehaviour
 
     private void AddIcon()
     {
-        if(currentIcons == revealSkill.coolDown) { return; }
-        transform.GetChild(currentIcons).GetComponent<RevealSkillIcon>().OnAdded();
-        currentIcons++;
+        if(_currentIcons == revealSkill.coolDown) { return; }
+        transform.GetChild(_currentIcons).GetComponent<RevealSkillIcon>().OnAdded();
+        _currentIcons++;
     }
 
     private void RemoveAllIcons()
     {
         for (int i = 0; i < transform.childCount; i++)
-        {
             transform.GetChild(i).GetComponent<RevealSkillIcon>().OnRemoved();
-        }
-        currentIcons = 0;
+        _currentIcons = 0;
     }
 
-    private void DestroyAllIcons(LevelDesign level)
+    private void DestroyAllIconsOnLevelLoaded(LevelDesign design) => DestroyAllIcons();
+    private void DestroyAllIcons()
     {
         for (int i = 0; i < transform.childCount; i++)
-        {
             Destroy(transform.GetChild(i).gameObject);
-        }
-        currentIcons = 0;
+        _currentIcons = 0;
     }
 
     private void InitializeRevealSkillUI()
     {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            Destroy(transform.GetChild(i).gameObject);
-        }
-        currentIcons = 0;
+        DestroyAllIcons();
         revealSkill = gameManager.playerController.revealSkill;
         for (int i = 0; i < revealSkill.coolDown; i++)
         {
@@ -78,7 +70,7 @@ public class RevealSkillUI : MonoBehaviour
             RectTransform rectTransform = icon.transform as RectTransform;
             rectTransform.SetParent(transform);
             rectTransform.anchoredPosition3D = Vector3.zero + Vector3.down * distanceInPixels * i;
-            currentIcons++;
+            _currentIcons++;
         }
     }
 }

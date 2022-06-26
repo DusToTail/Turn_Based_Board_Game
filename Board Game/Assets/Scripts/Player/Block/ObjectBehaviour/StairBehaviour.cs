@@ -40,7 +40,6 @@ public class StairBehaviour : MonoBehaviour, IActivationOnCollision
 
     private IEnumerator UseStairCoroutine(ObjectBlock objectBlock, CharacterBlock userBlock, bool moveUp)
     {
-        float t = 0;
         Cell toCell = objectBlock.cell;
         if(moveUp)
         {
@@ -48,33 +47,26 @@ public class StairBehaviour : MonoBehaviour, IActivationOnCollision
             toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, objectBlock.forwardDirection);
         }
         else
-        {
             toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, -objectBlock.forwardDirection);
-        }
+
         GridDirection direction = moveUp? objectBlock.forwardDirection : -objectBlock.forwardDirection;
-        // Initialize trajectory
         userBlock.movementController.InitializeMovement(userBlock.transform, direction, userBlock.cell, toCell, BlockMovementController.MovementType.Slide);
-        // Update position in character plane
         userBlock.CallOnPositionUpdated(toCell);
 
-        // Movement
         if (userBlock.movementController.movementType == BlockMovementController.MovementType.BasicHop)
         {
-            // Initialize local trajectory to be used
             Transform one = userBlock.movementController.transform.GetChild(0);
             Transform second = userBlock.movementController.transform.GetChild(1);
             Transform third = userBlock.movementController.transform.GetChild(2);
             userBlock.animator.SetTrigger("Jump_L");
             userBlock.animator.SetFloat("Speed Multiplier", userBlock.movementController.speed);
-
-            // Lerp
+            float t = 0;
             while (true)
             {
                 yield return null;
-                if (t >= 1)
+                if (t > 1)
                 {
-                    t = 1;
-                    MovementUtilities.MoveQuadraticBezierLerp(userBlock.transform, one, third, second, t, true);
+                    MovementUtilities.MoveQuadraticBezierLerp(userBlock.transform, one, third, second, 1, true);
                     break;
                 }
                 t += Time.deltaTime * userBlock.movementController.speed;
@@ -84,20 +76,17 @@ public class StairBehaviour : MonoBehaviour, IActivationOnCollision
         }
         else if (userBlock.movementController.movementType == BlockMovementController.MovementType.Slide)
         {
-            // Initialize local trajectory to be used
             Transform one = userBlock.movementController.transform.GetChild(0);
             Transform second = userBlock.movementController.transform.GetChild(1);
             userBlock.animator.SetTrigger("Move");
             userBlock.animator.SetFloat("Speed Multiplier", userBlock.movementController.speed);
-
-            // Lerp
+            float t = 0;
             while (true)
             {
                 yield return null;
-                if (t >= 1)
+                if (t > 1)
                 {
-                    t = 1;
-                    MovementUtilities.MoveLinearLerp(userBlock.transform, one, second, t, true);
+                    MovementUtilities.MoveLinearLerp(userBlock.transform, one, second, 1, true);
                     break;
                 }
                 t += Time.deltaTime * userBlock.movementController.speed;
@@ -105,22 +94,9 @@ public class StairBehaviour : MonoBehaviour, IActivationOnCollision
             }
             userBlock.animator.SetTrigger("Idle");
         }
-
         Debug.Log($"{userBlock.name} jumped to {toCell.gridPosition} by stair");
-
         gameManager.CallBlockEndedBehaviour(objectBlock);
-
-        GameObject nextObjectBlock = gameManager.objectPlane.grid[toCell.gridPosition.y, toCell.gridPosition.z, toCell.gridPosition.x].block;
-        if (objectBlock != null && objectBlock.GetComponentInChildren<IActivationOnStep>() != null)
-        {
-            Debug.Log($"{gameObject.name} waiting for {objectBlock.name} to finish");
-            yield return new WaitUntil(() => objectBlock.GetComponent<ObjectBlock>().isFinished == true);
-        }
-        else
-        {
-            Debug.Log($"There is no object at {toCell.gridPosition} to wait");
-        }
-
+        yield return ExistsOnStepObjectCoroutine(toCell);
         objectBlock.isFinished = true;
     }
 
@@ -156,4 +132,15 @@ public class StairBehaviour : MonoBehaviour, IActivationOnCollision
         return -1;
     }
 
+    private IEnumerator ExistsOnStepObjectCoroutine(Cell cell)
+    {
+        ObjectBlock onStepObject = gameManager.objectPlane.GetBlockFromCell(cell);
+        if (onStepObject != null && onStepObject.activationBehaviour.GetComponent<IActivationOnStep>() != null)
+        {
+            Debug.Log($"{gameObject.name} waiting for {onStepObject.name} to finish");
+            yield return new WaitUntil(() => onStepObject.isFinished == true);
+            yield break;
+        }
+        Debug.Log($"There is no object at {cell.gridPosition} to wait");
+    }
 }

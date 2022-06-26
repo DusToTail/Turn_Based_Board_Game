@@ -17,18 +17,18 @@ public class GameManager : MonoBehaviour
     public RemoteTriggerManager remoteTriggerManager;
     public RemoteDoorManager remoteDoorManager;
 
+    public LevelDesign currentLevelDesign;
+
+    public const string levelFileNameFormat = "Level";
+    public int loadLevelIndex = 0;
     // Preparations:
     // Grid Controller Åö
     // Level Plane Å´
     // Character Plane Å´
     // Object Plane Å´
     // UIÅ@Åö
-    public int prepCount = 5;
-    public int currentPrepCount;
-
-    public int currentLevelIndex;
-    public string levelFileNameFormat;
-    public LevelDesign currentLevel;
+    public const int prepCount = 5;
+    private int _currentPrepCount;
 
     // Levels
     public delegate void LevelLoadingStarted(LevelDesign levelDesign);
@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour
     public static event LevelFinished OnLevelFinished;
     public delegate void LevelFailed();
     public static event LevelFailed OnLevelFailed;
-
     
     // Turns
     public delegate void PlayerTurnStarted();
@@ -67,11 +66,10 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        // Trigger sound effect and animation before entering the main menu
         ui.PlayGameOpeningScene();
         // Main menu at level index 0
         // Actual levels at index 1, 2, 3 , 4, etc
-        CallLevelLoadingStarted(currentLevelIndex);
+        CallLevelLoadingStarted(loadLevelIndex);
     }
 
     private void OnEnable()
@@ -113,14 +111,10 @@ public class GameManager : MonoBehaviour
     }
 
     
-    /// <summary>
-    /// Start loading a level with levelIndex
-    /// </summary>
-    /// <param name="levelIndex"></param>
     public void CallLevelLoadingStarted(int levelIndex)
     {
-        currentPrepCount = 0;
-        currentLevelIndex = levelIndex;
+        _currentPrepCount = 0;
+        loadLevelIndex = levelIndex;
         if (gridController == null || terrainPlane == null || characterPlane == null)
         {
             Debug.Log("Grid is not initialized in the editor");
@@ -131,52 +125,52 @@ public class GameManager : MonoBehaviour
 
         #region Data Initialization
         // Load data from saved files
-        currentLevel = new LevelDesign();
+        currentLevelDesign = new LevelDesign();
         LevelDesign saved = SaveSystem.LoadLevelDesign(levelFileNameFormat + $" {levelIndex}");
         // grid size
-        currentLevel.gridHeight = saved.gridHeight;
-        currentLevel.gridLength = saved.gridLength;
-        currentLevel.gridWidth = saved.gridWidth;
+        currentLevelDesign.gridHeight = saved.gridHeight;
+        currentLevelDesign.gridLength = saved.gridLength;
+        currentLevelDesign.gridWidth = saved.gridWidth;
         // grid of each plane in 1 dimensional array
-        currentLevel.terrainGrid = saved.terrainGrid;
-        currentLevel.characterGrid = saved.characterGrid;
-        currentLevel.objectGrid = saved.objectGrid;
+        currentLevelDesign.terrainGrid = saved.terrainGrid;
+        currentLevelDesign.characterGrid = saved.characterGrid;
+        currentLevelDesign.objectGrid = saved.objectGrid;
         // block specifics
-        currentLevel.rotations = saved.rotations;
-        currentLevel.remoteTriggersData = new int[saved.remoteTriggersData.Length];
-        saved.remoteTriggersData.CopyTo(currentLevel.remoteTriggersData, 0);
-        currentLevel.remoteDoorsData = new int[saved.remoteDoorsData.Length];
-        saved.remoteDoorsData.CopyTo(currentLevel.remoteDoorsData, 0);
+        currentLevelDesign.rotations = saved.rotations;
+        currentLevelDesign.remoteTriggersData = new int[saved.remoteTriggersData.Length];
+        saved.remoteTriggersData.CopyTo(currentLevelDesign.remoteTriggersData, 0);
+        currentLevelDesign.remoteDoorsData = new int[saved.remoteDoorsData.Length];
+        saved.remoteDoorsData.CopyTo(currentLevelDesign.remoteDoorsData, 0);
 
         // Initialize planes' 3 dimensional id grid in scene
         // id is used to identify each block uniquely
-        terrainPlane.idGrid = new int[currentLevel.gridHeight, currentLevel.gridLength, currentLevel.gridWidth];
-        characterPlane.idGrid = new int[currentLevel.gridHeight, currentLevel.gridLength, currentLevel.gridWidth];
-        objectPlane.idGrid = new int[currentLevel.gridHeight, currentLevel.gridLength, currentLevel.gridWidth];
+        terrainPlane.idGrid = new int[currentLevelDesign.gridHeight, currentLevelDesign.gridLength, currentLevelDesign.gridWidth];
+        characterPlane.idGrid = new int[currentLevelDesign.gridHeight, currentLevelDesign.gridLength, currentLevelDesign.gridWidth];
+        objectPlane.idGrid = new int[currentLevelDesign.gridHeight, currentLevelDesign.gridLength, currentLevelDesign.gridWidth];
         int count = 0;
-        for (int h = 0; h < currentLevel.gridHeight; h++)
+        for (int h = 0; h < currentLevelDesign.gridHeight; h++)
         {
-            for (int l = 0; l < currentLevel.gridLength; l++)
+            for (int l = 0; l < currentLevelDesign.gridLength; l++)
             {
-                for (int w = 0; w < currentLevel.gridWidth; w++)
+                for (int w = 0; w < currentLevelDesign.gridWidth; w++)
                 {
                     // Transfer data from 1D arrays to 3D arrays
-                    terrainPlane.idGrid[h, l, w] = currentLevel.terrainGrid[count];
-                    characterPlane.idGrid[h, l, w] = currentLevel.characterGrid[count];
-                    objectPlane.idGrid[h, l, w] = currentLevel.objectGrid[count];
+                    terrainPlane.idGrid[h, l, w] = currentLevelDesign.terrainGrid[count];
+                    characterPlane.idGrid[h, l, w] = currentLevelDesign.characterGrid[count];
+                    objectPlane.idGrid[h, l, w] = currentLevelDesign.objectGrid[count];
                     count++;
                 }
             }
         }
 
-        remoteTriggerManager?.InitializeRemoteTriggersData(currentLevel.remoteTriggersData);
-        remoteDoorManager?.InitializeRemoteDoorsData(currentLevel.remoteDoorsData);
+        remoteTriggerManager?.InitializeRemoteTriggersData(currentLevelDesign.remoteTriggersData);
+        remoteDoorManager?.InitializeRemoteDoorsData(currentLevelDesign.remoteDoorsData);
         #endregion
 
         // Start loading the level with the initialized data transfered to the corresponding planes
         if (OnLevelLoadingStarted != null)
-            OnLevelLoadingStarted(currentLevel);
-        gridController.InitializeGrid(currentLevel);
+            OnLevelLoadingStarted(currentLevelDesign);
+        gridController.InitializeGrid(currentLevelDesign);
     }
 
     public void CallLevelStarted()
@@ -292,8 +286,8 @@ public class GameManager : MonoBehaviour
 
     private void IncrementPrepCount()
     {
-        currentPrepCount++;
-        if (currentPrepCount == prepCount)
+        _currentPrepCount++;
+        if (_currentPrepCount == prepCount)
             CallLevelStarted();
     }
 }

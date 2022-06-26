@@ -7,21 +7,19 @@ using UnityEngine;
 /// </summary>
 public abstract class Block : MonoBehaviour
 {
-    public int id;
-    public Cell cell;
-    public GridDirection forwardDirection;
-    public Vector3Int cellBasedSize;
-
     public enum Rotations
     {
         Left,
         Right,
     }
+    public int id;
+    public Cell cell;
+    public GridDirection forwardDirection;
+    public Vector3Int cellBasedSize;
 
     public virtual void RotateHorizontally(Rotations rotation)
     {
         if(rotation != Rotations.Left && rotation != Rotations.Right) { return; }
-
         switch(rotation)
         {
             case Rotations.Left:
@@ -34,21 +32,18 @@ public abstract class Block : MonoBehaviour
                 break;
         }
     }
-
     public virtual void SnapToCell(Cell cell)
     {
         if (cell == null) { return; }
         this.cell = cell;
         transform.position = cell.worldPosition;
     }
-
     public virtual void SnapGridDirection(GridDirection direction)
     {
         if (cell == null) { return; }
         forwardDirection = direction;
         transform.rotation = Quaternion.LookRotation((Vector3)forwardDirection);
     }
-
     public void Initialize(Cell cell, int gridDirectionInt)
     {
         this.cell = cell;

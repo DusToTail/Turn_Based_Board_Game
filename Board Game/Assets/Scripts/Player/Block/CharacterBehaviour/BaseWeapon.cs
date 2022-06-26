@@ -5,10 +5,9 @@ using UnityEngine;
 /// <summary>
 /// Base class for all weapons
 /// </summary>
-public abstract class Weapon : MonoBehaviour
+public abstract class BaseWeapon : MonoBehaviour
 {
     public WeaponScriptableObject data;
-
     public string weaponName;
     public string weaponDescription;
 
@@ -39,7 +38,6 @@ public abstract class Weapon : MonoBehaviour
     // Example: 2x1 grid with [0,0] as 0 and [1,0] as 1 means, it will attack the forward cell
     // Note: use grid with width as an odd integer
     // Notion of n x m: Height x width
-
     public void InitializeAttackGrid(int[] oneDimensionalGrid, int width, int length)
     {
         _attackGridWidth = width;
@@ -56,6 +54,5 @@ public abstract class Weapon : MonoBehaviour
             }
         }
     }
-
     public int[,] GetAttackGrid() { return _attackGrid; }
 }

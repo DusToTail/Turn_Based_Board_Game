@@ -7,20 +7,11 @@ using UnityEngine;
 /// </summary>
 public class TipUI : MonoBehaviour
 {
-    [SerializeField]
-    private TMPro.TextMeshProUGUI textUI;
-
-    [TextArea()]
-    [SerializeField] private string characterModeTip;
-
-    [TextArea()]
-    [SerializeField] private string revealSkillTip;
-
-    [TextArea()]
-    [SerializeField] private string surveyTip;
-
-    [TextArea()]
-    [SerializeField] private string waitText;
+    [SerializeField] private TMPro.TextMeshProUGUI textUI;
+    [SerializeField] [TextArea()] private string characterModeTip;
+    [SerializeField] [TextArea()] private string revealSkillTip;
+    [SerializeField] [TextArea()] private string surveyTip;
+    [SerializeField] [TextArea()] private string waitText;
 
     private void OnEnable()
     {

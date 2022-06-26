@@ -24,9 +24,7 @@ public class DestroyableBehaviour : MonoBehaviour, IDestroyableOnAttacked
             StartCoroutine(OnDestroyedCoroutine(self, attackingBlock));
         }
         else
-        {
             StartCoroutine(OnAttackedCoroutine(self, attackingBlock));
-        }
     }
 
     private IEnumerator OnAttackedCoroutine(ObjectBlock self, CharacterBlock attackingBlock)
