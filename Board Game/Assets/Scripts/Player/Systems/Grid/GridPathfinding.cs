@@ -12,10 +12,7 @@ public static class GridPathfinding
     {
         List<PathfindingCell> backtrackList = GetBacktrackPath(fromCell, toCell, gridController, levelPlane, characterPlane, objectPlane);
         if(backtrackList.Count < 2) 
-        {
-            Debug.Log("Pathfinding: There is no solution");
             return GridDirection.None; 
-        }
         Vector3Int resultVector3Int = backtrackList[backtrackList.Count - 2].cell.gridPosition - backtrackList[backtrackList.Count - 1].cell.gridPosition ;
         resultVector3Int -= new Vector3Int(0, resultVector3Int.y, 0);
         resultVector3Int /= (int)resultVector3Int.magnitude;
@@ -31,15 +28,17 @@ public static class GridPathfinding
 
         while (queue.Count > 0)
         {
-            PathfindingCell current = queue.Dequeue();
-            Debug.Log(current.cell.gridPosition);
-            //Debug.DrawLine(current.cell.worldPosition, current.cell.worldPosition + Vector3.up, Color.blue, 10);
-            if(DestinationIsReached(current, fromCell, toCell, backtrackList)) { return backtrackList; }
+            PathfindingCell dequeued = queue.Dequeue();
+            if (DestinationIsReached(dequeued, fromCell, toCell, backtrackList)) { return backtrackList; }
 
             foreach (GridDirection direction in GridDirection.AllDirections)
             {
                 if (direction == GridDirection.Up || direction == GridDirection.Down) { continue; }
-                Cell neighborCell = gridController.GetCellFromCellWithDirection(current.cell, direction);
+
+                Cell neighborCell = gridController.GetCellFromCellWithDirection(dequeued.cell, direction);
+                PathfindingCell toBeEnqueued = GetPathfindingCellFromCell(grid, neighborCell);
+
+
                 ObjectBlock objectBlock = objectPlane.GetBlockFromCell(neighborCell);
                 CharacterBlock characterBlock = characterPlane.GetBlockFromCell(neighborCell);
                 Block terrainBlockMid = terrainPlane.GetBlockFromCell(neighborCell);
@@ -47,17 +46,16 @@ public static class GridPathfinding
                 Cell belowCell = gridController.GetCellFromCellWithDirection(neighborCell, GridDirection.Down);
                 ObjectBlock belowObject = objectPlane.GetBlockFromCell(belowCell);
                 Block terrainBlockBelow = terrainPlane.GetBlockFromCell(belowCell);
-                PathfindingCell toBeEnqueued = GetPathfindingCellFromCell(grid, neighborCell);
 
-                if (ExistsCharacter(characterBlock)) { continue; }
-                if (ExistsObject(queue,grid, current,toCell, objectBlock)) { continue; }
-                if (ExistsObject(queue,grid, current,toCell, belowObject)) { continue; }
-                if(ExistsTerrain(queue,grid,toBeEnqueued,toCell, terrainBlockMid)) { continue; }
+                if (ExistsCharacter(queue, grid, toCell, characterBlock)) { continue; }
+                if (ExistsObject(queue,grid, dequeued,toCell, objectBlock)) { continue; }
+                if (ExistsObject(queue,grid, dequeued,toCell, belowObject)) { continue; }
+                if(ExistsTerrain(terrainBlockMid)) { continue; }
                 else
-                    if(!ExistsTerrain(queue,grid,toBeEnqueued,toCell, terrainBlockBelow)) { continue; }
+                    if(!ExistsTerrain(terrainBlockBelow)) { continue; }
 
-                toBeEnqueued = PathfindingCell.CheckCell(current, toBeEnqueued, toCell);
-                if(toBeEnqueued != null) { queue.Enqueue(toBeEnqueued.gCost, toBeEnqueued); }
+                toBeEnqueued = PathfindingCell.CheckCell(dequeued, toBeEnqueued, toCell);
+                if(toBeEnqueued != null) { queue.Enqueue(toBeEnqueued.fCost, toBeEnqueued); }
             }
             GridPathfindingDebugger.SetGrid(grid);
         }
@@ -65,41 +63,39 @@ public static class GridPathfinding
         return backtrackList;
     }
 
-    private static bool ExistsTerrain(PriorityQueue<PathfindingCell> queue, PathfindingCell[,,] grid, PathfindingCell checkCell, Cell destination, Block terrain)
+    private static bool ExistsTerrain(Block terrain)
     {
         if (terrain != null)
             return true;
         return false;
     }
 
-    private static bool ExistsCharacter(CharacterBlock characterBlock)
+    private static bool ExistsCharacter(PriorityQueue<PathfindingCell> queue, PathfindingCell[,,] grid, Cell destination, CharacterBlock characterBlock)
     {
-        if (characterBlock != null)
-        {
+        if (characterBlock != null && characterBlock.cell != destination)
             return true;
-        }
         return false;
     }
 
-    private static bool ExistsObject(PriorityQueue<PathfindingCell> queue, PathfindingCell[,,] grid, PathfindingCell currentCell, Cell destination, ObjectBlock objectBlock)
+    private static bool ExistsObject(PriorityQueue<PathfindingCell> queue, PathfindingCell[,,] grid, PathfindingCell previousCell, Cell destination, ObjectBlock objectBlock)
     {
-        if (objectBlock != null)
+        if (objectBlock != null && objectBlock.cell != destination)
         {
             if (!objectBlock.isPassable && objectBlock.activationBehaviour.GetComponent<StairBehaviour>() == null)
                 return true;
             StairBehaviour stair = objectBlock.activationBehaviour.GetComponent<StairBehaviour>();
             if (stair != null)
             {
-                if (stair.UsageCaseInt(objectBlock, currentCell.cell) != -1)
+                if (stair.UsageCaseInt(objectBlock, previousCell.cell) != -1)
                 {
-                    Cell start = currentCell.cell;
+                    Cell start = previousCell.cell;
                     PathfindingCell stairStart = GetPathfindingCellFromCell(grid, start);
                     Cell end = stair.GetCellAtOtherEnd(objectBlock, start);
                     PathfindingCell stairEnd = GetPathfindingCellFromCell(grid, end);
                     PathfindingCell result = PathfindingCell.CheckCell(stairStart, stairEnd, destination);
                     if(result!= null)
                     {
-                        queue.Enqueue(result.gCost, result);
+                        queue.Enqueue(result.fCost, result);
                         return true;
                     }
                 }
@@ -114,9 +110,7 @@ public static class GridPathfinding
         {
             returnPathIfTrue.Add(checkCell);
             while (returnPathIfTrue[returnPathIfTrue.Count - 1].cell != start)
-            {
                 returnPathIfTrue.Add(returnPathIfTrue[returnPathIfTrue.Count - 1].parent);
-            }
             return true;
         }
         return false;

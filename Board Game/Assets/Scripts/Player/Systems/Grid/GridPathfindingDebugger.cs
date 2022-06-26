@@ -58,7 +58,7 @@ public class GridPathfindingDebugger : MonoBehaviour
                 if(displayHeight > grid.GetLength(0)) { displayHeight = grid.GetLength(0) - 1; }
                 if(displayHeight < 0) { displayHeight = 0; }
                 GridPathfinding.PathfindingCell cell = grid[displayHeight, i, j];
-                Handles.Label(cell.cell.worldPosition, cell.gCost.ToString(), style);
+                Handles.Label(cell.cell.worldPosition, cell.fCost.ToString(), style);
 
             }
         }

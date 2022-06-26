@@ -56084,7 +56084,7 @@ PrefabInstance:
       objectReference: {fileID: 1119240555}
     - target: {fileID: 5423177905920001874, guid: c243bb3ab19975043b58fb2fbeecf5d9, type: 3}
       propertyPath: displayGrid
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5423177905920001874, guid: c243bb3ab19975043b58fb2fbeecf5d9, type: 3}
       propertyPath: displayHeight
@@ -56350,20 +56350,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 594892999}
     - target: {fileID: 6709134565718883245, guid: 2d186af406fc62c419fad0a8b1da3e46, type: 3}
+      propertyPath: displayGrid
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6709134565718883245, guid: 2d186af406fc62c419fad0a8b1da3e46, type: 3}
       propertyPath: objectPlane
       value: 
       objectReference: {fileID: 914535450}
     - target: {fileID: 6709134565718883245, guid: 2d186af406fc62c419fad0a8b1da3e46, type: 3}
       propertyPath: toPosition.x
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6709134565718883245, guid: 2d186af406fc62c419fad0a8b1da3e46, type: 3}
       propertyPath: toPosition.y
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6709134565718883245, guid: 2d186af406fc62c419fad0a8b1da3e46, type: 3}
       propertyPath: toPosition.z
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6709134565718883245, guid: 2d186af406fc62c419fad0a8b1da3e46, type: 3}
       propertyPath: displayHeight
@@ -56379,7 +56383,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6709134565718883245, guid: 2d186af406fc62c419fad0a8b1da3e46, type: 3}
       propertyPath: fromPosition.z
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6709134565718883245, guid: 2d186af406fc62c419fad0a8b1da3e46, type: 3}
       propertyPath: gridController
