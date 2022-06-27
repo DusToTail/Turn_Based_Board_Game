@@ -5,10 +5,8 @@ using UnityEngine;
 public class LightingManager : MonoBehaviour
 {
     public List<PseudoLightSource> sources = new List<PseudoLightSource>();
-
     public Light playerLight;
     public Transform playerBlockTransform;
-
     [SerializeField] private Vector3 playerLightOffset;
 
     private void OnEnable()
@@ -24,21 +22,15 @@ public class LightingManager : MonoBehaviour
     }
 
     private void AddLightSource(PseudoLightSource source)
-    {
-        sources.Add(source);
-    }
+        => sources.Add(source);
 
     private void RemoveLightSource(PseudoLightSource source)
-    {
-        sources.Remove(source);
-    }
-
+        => sources.Remove(source);
 
     private void LateUpdate()
     {
         if(playerLight == null) { return; }
         if(playerBlockTransform == null) { return; }
-
         playerLight.transform.position = playerBlockTransform.position + playerLightOffset;
     }
     

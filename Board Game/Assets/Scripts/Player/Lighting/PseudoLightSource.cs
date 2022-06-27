@@ -11,13 +11,10 @@ public class PseudoLightSource : MonoBehaviour
 {
     public delegate void LightSourceAdded(PseudoLightSource source);
     public delegate void LightSourceRemoved(PseudoLightSource source);
-
     public static event LightSourceAdded OnLightSourceAdded;
     public static event LightSourceRemoved OnLightSourceRemoved;
-
     [SerializeField] private int rangeInCells;
     private float _actualRange;
-
     private SphereCollider _collider;
     private Light _light;
 
@@ -31,7 +28,6 @@ public class PseudoLightSource : MonoBehaviour
     {
         if(OnLightSourceRemoved != null)
             OnLightSourceRemoved(this);
-
     }
 
     private void Awake()
@@ -72,7 +68,6 @@ public class PseudoLightSource : MonoBehaviour
             }
             else
                 TagsAndLayers.ChangeLayersRecursively(other.gameObject, TagsAndLayers.DISCOVERED_LAYER);
-
             //Debug.Log($"{other.transform.parent.name} is off light source {transform.parent.gameObject.name}");
         }
     }

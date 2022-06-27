@@ -15,18 +15,16 @@ public class ObjectBlock : Block
 
     private void OnEnable()
     {
-        GameManager.OnBlockStartedBehaviour += ActivateBeforeBehaviourAtCurrentCell;
-        GameManager.OnBlockEndedBehaviour += ActivateAfterBehaviourAtCurrentCell;
-
         GameManager.OnLevelFinished += StopBehaviour;
+        GameManager.OnAITurnStarted += ResetFinishedState;
+        GameManager.OnPlayerTurnStarted += ResetFinishedState;
     }
 
     private void OnDisable()
     {
-        GameManager.OnBlockStartedBehaviour -= ActivateBeforeBehaviourAtCurrentCell;
-        GameManager.OnBlockEndedBehaviour -= ActivateAfterBehaviourAtCurrentCell;
-
         GameManager.OnLevelFinished -= StopBehaviour;
+        GameManager.OnAITurnStarted -= ResetFinishedState;
+        GameManager.OnPlayerTurnStarted -= ResetFinishedState;
 
     }
 
@@ -35,28 +33,11 @@ public class ObjectBlock : Block
         gameManager = FindObjectOfType<GameManager>();
     }
 
-    public void ActivateAfterBehaviourAtCurrentCell(Block currentBlock)
-    {
-        if(currentBlock.cell.gridPosition != cell.gridPosition) { return; }
-        if(currentBlock.GetType() != typeof(CharacterBlock)) { return; }
-        Debug.Log($"{currentBlock.name} landed on {name} at cell {cell.gridPosition}");
-        ActivateOnStepped((CharacterBlock)currentBlock);
-    }
-
-    public void ActivateBeforeBehaviourAtCurrentCell(Block currentBlock)
-    {
-        if (currentBlock.cell.gridPosition != cell.gridPosition) { return; }
-        if (currentBlock.GetType() != typeof(CharacterBlock)) { return; }
-        Debug.Log($"{currentBlock.name} landed on {name} at cell {cell.gridPosition}");
-
-    }
-
     public void ActivateOnStepped(CharacterBlock userBlock)
     {
         if(activationBehaviour == null) { return; }
         if(activationBehaviour.GetComponent<IActivationOnStep>() != null)
             activationBehaviour.GetComponent<IActivationOnStep>().OnStepped(this, userBlock);
-        
     }
 
     public void ActivateOnTriggered(CharacterBlock userBlock)
@@ -64,11 +45,8 @@ public class ObjectBlock : Block
         if (activationBehaviour == null) { return; }
         if (activationBehaviour.GetComponent<IActivationOnTrigger>() != null)
             activationBehaviour.GetComponent<IActivationOnTrigger>().OnTriggered(this, userBlock);
-
     }
 
-    private void StopBehaviour()
-    {
-        StopAllCoroutines();
-    }
+    private void StopBehaviour() => StopAllCoroutines();
+    private void ResetFinishedState() => isFinished = false;
 }

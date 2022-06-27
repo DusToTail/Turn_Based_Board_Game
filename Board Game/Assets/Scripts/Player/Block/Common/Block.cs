@@ -7,53 +7,47 @@ using UnityEngine;
 /// </summary>
 public abstract class Block : MonoBehaviour
 {
-    public int id;
-    public Cell cell;
-    public GridDirection forwardDirection;
-    public Vector3Int cellBasedSize;
-
     public enum Rotations
     {
         Left,
         Right,
     }
+    public int id;
+    public Cell cell;
+    public GridDirection forwardDirection;
+    public Vector3Int cellBasedSize;
 
-    /// <summary>
-    /// Rotate the block horizontally
-    /// </summary>
-    /// <param name="rotation"></param>
     public virtual void RotateHorizontally(Rotations rotation)
     {
         if(rotation != Rotations.Left && rotation != Rotations.Right) { return; }
-
         switch(rotation)
         {
             case Rotations.Left:
-                forwardDirection = GridDirection.RotateLeft(forwardDirection);
+                SnapGridDirection(GridDirection.RotateLeft(forwardDirection));
                 break;
             case Rotations.Right:
-                forwardDirection = GridDirection.RotateRight(forwardDirection);
+                SnapGridDirection(GridDirection.RotateRight(forwardDirection));
                 break;
             default:
                 break;
         }
-        transform.rotation = Quaternion.LookRotation((Vector3)forwardDirection);
     }
-
-    /// <summary>
-    /// Snap the block to the position of the cell
-    /// </summary>
-    /// <param name="cell"></param>
     public virtual void SnapToCell(Cell cell)
     {
         if (cell == null) { return; }
         this.cell = cell;
         transform.position = cell.worldPosition;
     }
-
-    public void Initialize(Cell cell, GridDirection forwardDirection)
+    public virtual void SnapGridDirection(GridDirection direction)
+    {
+        if (cell == null) { return; }
+        forwardDirection = direction;
+        transform.rotation = Quaternion.LookRotation((Vector3)forwardDirection);
+    }
+    public void Initialize(Cell cell, int gridDirectionInt)
     {
         this.cell = cell;
-        this.forwardDirection = forwardDirection;
+        SnapToCell(cell);
+        SnapGridDirection(GridDirection.GetDirectionFromInt(gridDirectionInt));
     }
 }

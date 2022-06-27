@@ -5,6 +5,7 @@ using UnityEditor;
 [CustomEditor(typeof(LevelEditorToolsManager))]
 public class LevelEditorToolsManagerEditor : Editor
 {
+    public int gridDirectionInteger;
     public override void OnInspectorGUI()
     {
         LevelEditorToolsManager manager = (LevelEditorToolsManager)target;
@@ -42,15 +43,19 @@ public class LevelEditorToolsManagerEditor : Editor
 
         if (manager.toolType == LevelEditorToolsManager.ToolTypes.Rotate)
         {
-            if(Event.current.type == EventType.MouseDown)
+            DisplayPredictedBlockAtCursor(manager.gridController, manager.editingLayers, gridDirectionInteger);
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
             {
+                Debug.Log("Left Mouse Clicked");
                 if (Event.current.control)
                 {
-                    if (Event.current.button == 0)
-                    {
-                        manager.rotateTool.currentBlock = BlockUtilities.GetBlockInLevelFromCursor(manager.editingLayers).GetComponent<Block>();
-                        manager.rotateTool.RotateSelectedBlock(manager.rotateTool.currentBlock, Block.Rotations.Left);
-                    }
+                    Debug.Log("Rotate");
+                    manager.rotateTool.currentGridDirectionInt++;
+                    if(manager.rotateTool.currentGridDirectionInt > 3)
+                        manager.rotateTool.currentGridDirectionInt = -3;
+                    manager.paintTool.gridDirectionInt = manager.rotateTool.currentGridDirectionInt;
+                    gridDirectionInteger = manager.rotateTool.currentGridDirectionInt;
+
                 }
             }
         }
@@ -58,24 +63,25 @@ public class LevelEditorToolsManagerEditor : Editor
 
         if (manager.toolType == LevelEditorToolsManager.ToolTypes.Paint)
         {
-            manager.paintTool.DisplayPredictedBlockAtCursor(manager.gridController, manager.editingLayers);
-
+            DisplayPredictedBlockAtCursor(manager.gridController, manager.editingLayers, gridDirectionInteger);
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
             {
+                Debug.Log("Left Mouse Clicked");
+
                 // May need to reimplement to use pooling instead of instantiation
-                if(Event.current.control)
+                if (Event.current.control)
                 {
                     if (manager.editingPlane == LevelEditorToolsManager.Planes.Character)
                     {
-                        manager.paintTool.PaintBlockAtCursor(manager.objectList[manager.objectIndex], manager.gridController, manager.levelPlane, manager.characterPlane, manager.editingLayers);
+                        manager.paintTool.PaintBlockAtCursor(manager.objectList[manager.objectIndex], manager.gridController, manager.terrainPlane, manager.characterPlane, manager.editingLayers);
                     }
                     else if (manager.editingPlane == LevelEditorToolsManager.Planes.Terrain)
                     {
-                        manager.paintTool.PaintBlockAtCursor(manager.objectList[manager.objectIndex], manager.gridController, manager.levelPlane, manager.editingLayers);
+                        manager.paintTool.PaintBlockAtCursor(manager.objectList[manager.objectIndex], manager.gridController, manager.terrainPlane, manager.editingLayers);
                     }
                     else if (manager.editingPlane == LevelEditorToolsManager.Planes.Object)
                     {
-                        manager.paintTool.PaintBlockAtCursor(manager.objectList[manager.objectIndex], manager.gridController, manager.levelPlane, manager.objectPlane, manager.editingLayers);
+                        manager.paintTool.PaintBlockAtCursor(manager.objectList[manager.objectIndex], manager.gridController, manager.terrainPlane, manager.objectPlane, manager.editingLayers);
                     }
 
                 }
@@ -85,11 +91,13 @@ public class LevelEditorToolsManagerEditor : Editor
 
         if (manager.toolType == LevelEditorToolsManager.ToolTypes.Erase)
         {
-            manager.paintTool.DisplayPredictedBlockAtCursor(manager.gridController, manager.editingLayers);
+            DisplayPredictedBlockAtCursor(manager.gridController, manager.editingLayers, gridDirectionInteger);
 
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
             {
-                if( Event.current.control)
+                Debug.Log("Left Mouse Clicked");
+
+                if ( Event.current.control)
                 {
                     if (manager.editingPlane == LevelEditorToolsManager.Planes.Character)
                     {
@@ -97,7 +105,7 @@ public class LevelEditorToolsManagerEditor : Editor
                     }
                     else if (manager.editingPlane == LevelEditorToolsManager.Planes.Terrain)
                     {
-                        manager.eraseTool.EraseBlockAtCursor(manager.levelPlane, manager.pool, manager.editingLayers);
+                        manager.eraseTool.EraseBlockAtCursor(manager.terrainPlane, manager.pool, manager.editingLayers);
                     }
                     else if (manager.editingPlane == LevelEditorToolsManager.Planes.Object)
                     {
@@ -108,6 +116,24 @@ public class LevelEditorToolsManagerEditor : Editor
             }
         }
 
+    }
+
+
+
+
+    public void DisplayPredictedBlockAtCursor(GridController gridController, LayerMask mask, int gridDirectionInt)
+    {
+        // Get block at cursor to ensure continuity of blocks
+        GameObject block = BlockUtilities.GetBlockInLevelFromCursor(mask);
+        if (block == null) { return; }
+
+        // Get direction to get the neighboring cell
+        GridDirection direction = BlockUtilities.GetGridDirectionFromBlockInLevelFromCursor(mask);
+        Cell cell = gridController.GetCellFromCellWithDirection(block.GetComponent<Block>().cell, direction);
+        if (cell == null) { return; }
+
+        // Draw a wireframe at the cell in Editor mode
+        BlockUtilities.DrawWireframeAtCell(cell, gridDirectionInt);
     }
 
 }

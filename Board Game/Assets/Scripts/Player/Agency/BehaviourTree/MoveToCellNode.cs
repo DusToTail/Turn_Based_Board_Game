@@ -22,7 +22,7 @@ public class MoveToCellNode : ActionNode
         // Get direction from pathfinding
         Cell fromCell = self.cell;
         GridController gridController = self.gameManager.gridController;
-        LevelPlane levelPlane = self.gameManager.levelPlane;
+        TerrainPlane levelPlane = self.gameManager.terrainPlane;
         CharacterPlane characterPlane = self.gameManager.characterPlane;
         ObjectPlane objectPlane = self.gameManager.objectPlane;
         GridDirection direction = GridPathfinding.GetImmediateDirection(fromCell, toCell, gridController, levelPlane, characterPlane, objectPlane);

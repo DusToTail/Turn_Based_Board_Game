@@ -7,18 +7,17 @@ using UnityEngine;
 /// </summary>
 public class BlockMovementController : MonoBehaviour
 {
+    public enum MovementType
+    {
+        BasicHop,
+        Slide,
+    }
     public Transform[] transforms;
     public float upwardOffset;
     public MovementType movementType;
     public float speed;
     public GameObject currentMoveObject;
     [SerializeField] private bool displayGizmos;
-
-    public enum MovementType
-    {
-        BasicHop,
-        Slide,
-    }
 
     public void InitializeMovement(Transform currentTransform, GridDirection direction, Cell fromCell, Cell toCell, MovementType type)
     {
@@ -49,9 +48,7 @@ public class BlockMovementController : MonoBehaviour
 
             transforms[1].position = toCell.worldPosition;
             transforms[1].rotation = Quaternion.LookRotation(direction, currentTransform.up);
-
         }
-
     }
 
     private void OnDrawGizmos()

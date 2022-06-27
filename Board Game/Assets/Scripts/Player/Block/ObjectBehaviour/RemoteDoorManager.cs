@@ -28,10 +28,7 @@ public class RemoteDoorManager : MonoBehaviour
         Debug.Log("Initialize remote door data");
         remoteDoorsData = new int[data.Length];
         for (int i = 0; i < data.Length; i++)
-        {
             remoteDoorsData[i] = data[i];
-
-        }
     }
 
     private void InitializeRemoteDoorsList(ObjectPlane plane)
@@ -39,6 +36,7 @@ public class RemoteDoorManager : MonoBehaviour
         objectPlane = plane;
         remoteDoors.Clear();
         remoteDoors.TrimExcess();
+        // Add to List
         for (int h = 0; h < plane.grid.GetLength(0); h++)
         {
             for (int l = 0; l < plane.grid.GetLength(1); l++)
@@ -56,7 +54,7 @@ public class RemoteDoorManager : MonoBehaviour
                 }
             }
         }
-
+        // Initialize each door
         if (remoteDoorsData != null)
         {
             if (remoteDoorsData.Length > 0)
@@ -64,13 +62,9 @@ public class RemoteDoorManager : MonoBehaviour
                 for (int i = 0; i < remoteDoors.Count; i++)
                 {
                     if(remoteDoorsData[i] == 0)
-                    {
                         remoteDoors[i].SetPassableBool(false);
-                    }
                     else
-                    {
                         remoteDoors[i].SetPassableBool(true);
-                    }
                 }
             }
         }

@@ -9,27 +9,15 @@ using UnityEngine.UI;
 public class HealthIcon : MonoBehaviour, IRemovableUI
 {
     [Header("Parts")]
-    [SerializeField]
-    private RectTransform full;
-    [SerializeField]
-    private RectTransform left;
-    [SerializeField]
-    private RectTransform right;
-    [SerializeField]
-    private RectTransform large1;
-    [SerializeField]
-    private RectTransform large2;
-    [SerializeField]
-    private RectTransform small1;
-    [SerializeField]
-    private RectTransform small2;
+    [SerializeField] private RectTransform full;
+    [SerializeField] private RectTransform left;
+    [SerializeField] private RectTransform right;
+    [SerializeField] private RectTransform large1;
+    [SerializeField] private RectTransform large2;
+    [SerializeField] private RectTransform small1;
+    [SerializeField] private RectTransform small2;
     [Header("Movement")]
-    [SerializeField]
-    private float speed;
-
-    private void Start()
-    {
-    }
+    [SerializeField] private float speed;
 
     public void OnAdded()
     {
@@ -58,26 +46,19 @@ public class HealthIcon : MonoBehaviour, IRemovableUI
         Transform from = rect.GetChild(0) as Transform;
         Transform control = rect.GetChild(1) as Transform;
         Transform to = rect.GetChild(2) as Transform;
-        Transform move = rect.GetChild(3) as Transform;
+        Transform moveTransform = rect.GetChild(3) as Transform;
 
         // Play sound effect
 
         while (true)
         {
-            if(t < 0)
+            yield return null;
+            if (t < 0)
             {
-                t = 0;
-                MovementUtilities.MoveQuadraticBezierLerp(move, from, to, control, t, true);
-                Color curColor = move.GetComponent<Image>().color;
-                Color endColor = new Color(curColor.r, curColor.g, curColor.b, 1 - t);
-                move.GetComponent<Image>().color = endColor;
+                LerpTransformAndColor(moveTransform, from, to, control, 0);
                 break;
             }
-            yield return null;
-            MovementUtilities.MoveQuadraticBezierLerp(move, from, to, control, t, true);
-            Color currentColor = move.GetComponent<Image>().color;
-            Color newColor = new Color(currentColor.r, currentColor.g, currentColor.b, 1 - t);
-            move.GetComponent<Image>().color = newColor;
+            LerpTransformAndColor(moveTransform, from, to, control, t);
             t -= Time.deltaTime * speed;
         }
         full.gameObject.SetActive(true);
@@ -91,29 +72,29 @@ public class HealthIcon : MonoBehaviour, IRemovableUI
         Transform from = rect.GetChild(0) as Transform;
         Transform control = rect.GetChild(1) as Transform;
         Transform to = rect.GetChild(2) as Transform;
-        Transform move = rect.GetChild(3) as Transform;
+        Transform moveTransform = rect.GetChild(3) as Transform;
         full.gameObject.SetActive(false);
 
         // Play sound effect
 
         while (true)
         {
-            if(t > 1)
+            yield return null;
+            if (t > 1)
             {
-                t = 1;
-                MovementUtilities.MoveQuadraticBezierLerp(move, from, to, control, t, true);
-                Color curColor = move.GetComponent<Image>().color;
-                Color endColor = new Color(curColor.r, curColor.g, curColor.b, 1 - t);
-                move.GetComponent<Image>().color = endColor;
+                LerpTransformAndColor(moveTransform, from, to, control, 1);
                 break;
             }
-            yield return null;
-            MovementUtilities.MoveQuadraticBezierLerp(move, from, to, control, t, true);
-            Color currentColor = move.GetComponent<Image>().color;
-            Color newColor = new Color(currentColor.r, currentColor.g, currentColor.b, 1 - t);
-            move.GetComponent<Image>().color = newColor;
+            LerpTransformAndColor(moveTransform, from, to, control, t);
             t += Time.deltaTime * speed;
         }
     }
 
+    private void LerpTransformAndColor(Transform moveTransform, Transform from, Transform to, Transform control, float t)
+    {
+        MovementUtilities.MoveQuadraticBezierLerp(moveTransform, from, to, control, t, true);
+        Color curColor = moveTransform.GetComponent<Image>().color;
+        Color endColor = new Color(curColor.r, curColor.g, curColor.b, 1 - t);
+        moveTransform.GetComponent<Image>().color = endColor;
+    }
 }

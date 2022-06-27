@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GoalBehaviour : MonoBehaviour, IActivationOnStep
+public class GoalBehaviour : MonoBehaviour, IActivationOnTrigger
 {
     public GameManager gameManager;
 
@@ -11,7 +11,7 @@ public class GoalBehaviour : MonoBehaviour, IActivationOnStep
         gameManager = FindObjectOfType<GameManager>();
     }
 
-    public void OnStepped(ObjectBlock objectBlock, CharacterBlock userBlock)
+    public void OnTriggered(ObjectBlock objectBlock, CharacterBlock userBlock)
     {
         objectBlock.isFinished = false;
         StartCoroutine(GoalEventCoroutine(objectBlock, userBlock));
@@ -21,8 +21,9 @@ public class GoalBehaviour : MonoBehaviour, IActivationOnStep
     {
         // trigger some ending scene before level finished
         yield return new WaitForSeconds(1);
-        gameManager.CallBlockEndedBehaviour(objectBlock);
         objectBlock.isFinished = true;
         gameManager.CallLevelFinished();
     }
+
+    
 }

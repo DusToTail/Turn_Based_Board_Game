@@ -7,7 +7,6 @@ public class LevelFailUI : MonoBehaviour
     public GameObject[] options;
     private int _currentIndex;
     private int _previousIndex;
-
     private GameManager _gameManager;
 
     private void OnEnable()
@@ -22,7 +21,6 @@ public class LevelFailUI : MonoBehaviour
         GameManager.OnLevelFailed -= SetActive;
     }
 
-
     private void Start()
     {
         if (options != null && options.Length > 0)
@@ -36,7 +34,6 @@ public class LevelFailUI : MonoBehaviour
         _gameManager = FindObjectOfType<GameManager>();
 
     }
-
 
     private void Update()
     {
@@ -68,7 +65,7 @@ public class LevelFailUI : MonoBehaviour
     private void LoadLevel()
     {
         if(_currentIndex == 0)
-            _gameManager.CallLevelLoadingStarted(_gameManager.currentLevelIndex);
+            _gameManager.CallLevelLoadingStarted(_gameManager.loadLevelIndex);
         else
             _gameManager.CallLevelLoadingStarted(0);
 

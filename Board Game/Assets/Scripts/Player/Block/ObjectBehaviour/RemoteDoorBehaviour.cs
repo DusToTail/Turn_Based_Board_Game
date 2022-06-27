@@ -10,20 +10,15 @@ public class RemoteDoorBehaviour : MonoBehaviour, IRemoteActivation
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-
     }
 
     public void OnTriggered(ObjectBlock self, ObjectBlock trigger, CharacterBlock userBlock)
     {
         self.isFinished = false;
         if(isOpen)
-        {
             StartCoroutine(CloseDoor(self, trigger, userBlock));
-        }
         else
-        {
             StartCoroutine(OpenDoor(self, trigger, userBlock));
-        }
     }
 
     public void SetPassableBool(bool isPassable)
@@ -38,7 +33,6 @@ public class RemoteDoorBehaviour : MonoBehaviour, IRemoteActivation
 
         SetPassableBool(true);
         yield return null;
-        gameManager.CallBlockEndedBehaviour(self);
         self.isFinished = true;
     }
 
@@ -48,7 +42,6 @@ public class RemoteDoorBehaviour : MonoBehaviour, IRemoteActivation
 
         SetPassableBool(false);
         yield return null;
-        gameManager.CallBlockEndedBehaviour(self);
         self.isFinished = true;
     }
 

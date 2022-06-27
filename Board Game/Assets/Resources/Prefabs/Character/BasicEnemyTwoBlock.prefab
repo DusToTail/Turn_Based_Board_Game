@@ -214,19 +214,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb6bc929c132cca459379a756cbd4249, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2
+  id: 3
   cellBasedSize: {x: 1, y: 1, z: 1}
   characterData: {fileID: 11400000, guid: 0dca1b73e2764444d9c7858eb1954f25, type: 2}
-  movesPerTurn: 2
-  maxHealth: 3
-  visionRange: 100
   weaponHandler: {fileID: 248611875}
   audioHandler: {fileID: 2028594418997537622}
   animator: {fileID: 2014654270555088325}
-  attackedEntityCount: 0
-  curAttackedEntityCount: 0
   gameManager: {fileID: 0}
   movementController: {fileID: 0}
+  movesPerTurn: 2
+  maxHealth: 3
+  visionRange: 100
+  attackedEntityCount: 0
+  curAttackedEntityCount: 0
   displayGizmos: 1
 --- !u!114 &-6608869597593452130
 MonoBehaviour:

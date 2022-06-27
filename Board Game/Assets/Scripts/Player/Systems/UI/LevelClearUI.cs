@@ -27,14 +27,12 @@ public class LevelClearUI : MonoBehaviour
         {
             _previousIndex = 0;
             _currentIndex = 0;
-
             options[0].transform.Find("Arrow").gameObject.SetActive(true);
             for(int i = 1; i < options.Length; i++)
                 options[i].transform.Find("Arrow").gameObject.SetActive(false);
         }
         _gameManager = FindObjectOfType<GameManager>();
     }
-
 
     private void Update()
     {
@@ -66,7 +64,7 @@ public class LevelClearUI : MonoBehaviour
     private void LoadLevel()
     {
         if (_currentIndex == 0)
-            _gameManager.CallLevelLoadingStarted(_gameManager.currentLevelIndex);
+            _gameManager.CallLevelLoadingStarted(_gameManager.loadLevelIndex);
         else
             _gameManager.CallLevelLoadingStarted(0);
         SetInactive();

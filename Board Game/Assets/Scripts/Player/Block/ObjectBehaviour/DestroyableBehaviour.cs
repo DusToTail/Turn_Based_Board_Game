@@ -24,9 +24,7 @@ public class DestroyableBehaviour : MonoBehaviour, IDestroyableOnAttacked
             StartCoroutine(OnDestroyedCoroutine(self, attackingBlock));
         }
         else
-        {
             StartCoroutine(OnAttackedCoroutine(self, attackingBlock));
-        }
     }
 
     private IEnumerator OnAttackedCoroutine(ObjectBlock self, CharacterBlock attackingBlock)
@@ -38,7 +36,6 @@ public class DestroyableBehaviour : MonoBehaviour, IDestroyableOnAttacked
         yield return null;
 
         attackingBlock.curAttackedEntityCount++;
-        gameManager.CallBlockEndedBehaviour(self);
         self.isFinished = true;
     }
 
@@ -50,7 +47,6 @@ public class DestroyableBehaviour : MonoBehaviour, IDestroyableOnAttacked
 
         yield return null;
         attackingBlock.curAttackedEntityCount++;
-        gameManager.CallBlockEndedBehaviour(self);
         self.isFinished = true;
         Destroy(self.gameObject);
     }

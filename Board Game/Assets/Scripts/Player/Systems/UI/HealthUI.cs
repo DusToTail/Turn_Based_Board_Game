@@ -11,9 +11,8 @@ public class HealthUI : MonoBehaviour
     public CharacterBlock trackingCharacter;
     public GameManager gameManager;
 
-    [SerializeField]
-    private float distanceInPixels;
-    private int currentHearts;
+    [SerializeField] private float distanceInPixels;
+    private int _currentIcons;
 
     // Start is called before the first frame update
     void Start()
@@ -23,14 +22,14 @@ public class HealthUI : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnLevelLoadingStarted += DestroyAllIcons;
+        GameManager.OnLevelLoadingStarted += DestroyAllIconsOnLevelLoaded;
         GameManager.OnLevelStarted += InitializeHealthUI;
         CharacterBlock.OnDamageTaken += DecrementHealth;
     }
 
     private void OnDisable()
     {
-        GameManager.OnLevelLoadingStarted -= DestroyAllIcons;
+        GameManager.OnLevelLoadingStarted -= DestroyAllIconsOnLevelLoaded;
         GameManager.OnLevelStarted -= InitializeHealthUI;
         CharacterBlock.OnDamageTaken -= DecrementHealth;
     }
@@ -40,41 +39,32 @@ public class HealthUI : MonoBehaviour
         if(trackingBlock != trackingCharacter) { return; }
         for(int i = 0; i < damageAmount; i++)
         {
-            if(currentHearts == 0) { continue; }
-            transform.GetChild(currentHearts - 1).GetComponent<HealthIcon>().OnRemoved();
-            currentHearts--;
+            if(_currentIcons == 0) { continue; }
+            transform.GetChild(_currentIcons - 1).GetComponent<HealthIcon>().OnRemoved();
+            _currentIcons--;
         }
     }
 
-    private void IncrementHealth(CharacterBlock trackingBlock, int healAmount)
-    {
-        transform.GetChild(trackingCharacter.curHealth - 1).GetComponent<HealthIcon>().OnAdded();
-    }
-
-    private void DestroyAllIcons(LevelDesign level)
+    private void DestroyAllIconsOnLevelLoaded(LevelDesign level) => DestroyAllIcons();
+    private void DestroyAllIcons()
     {
         for (int i = 0; i < transform.childCount; i++)
-        {
             Destroy(transform.GetChild(i).gameObject);
-        }
-        currentHearts = 0;
+        _currentIcons = 0;
     }
 
     private void InitializeHealthUI()
     {
-        for(int i = 0; i < transform.childCount; i++)
-        {
-            Destroy(transform.GetChild(i).gameObject);
-        }
-        currentHearts = 0;
+        _currentIcons = 0;
+        DestroyAllIcons();
         trackingCharacter = gameManager.playerController.playerBlock;
-        for(int i = 0; i < trackingCharacter.curHealth; i++)
+        for(int i = 0; i < trackingCharacter.CurHealth; i++)
         {
             GameObject icon = Instantiate(prefabIcon);
             RectTransform rectTransform = icon.transform as RectTransform;
             rectTransform.SetParent(transform);
             rectTransform.anchoredPosition3D = Vector3.zero + Vector3.right * distanceInPixels * i;
-            currentHearts++;
+            _currentIcons++;
         }
     }
 }

@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 {
     public UIController ui;
     public GridController gridController;
-    public LevelPlane levelPlane;
+    public TerrainPlane terrainPlane;
     public CharacterPlane characterPlane;
     public ObjectPlane objectPlane;
     public PlayerController playerController;
@@ -17,18 +17,18 @@ public class GameManager : MonoBehaviour
     public RemoteTriggerManager remoteTriggerManager;
     public RemoteDoorManager remoteDoorManager;
 
+    public LevelDesign currentLevelDesign;
+
+    public const string levelFileNameFormat = "Level";
+    public int loadLevelIndex = 0;
     // Preparations:
     // Grid Controller Åö
     // Level Plane Å´
     // Character Plane Å´
     // Object Plane Å´
     // UIÅ@Åö
-    public int prepCount = 5;
-    public int currentPrepCount;
-
-    public int currentLevelIndex;
-    public string levelFileNameFormat;
-    public LevelDesign currentLevel;
+    public const int prepCount = 5;
+    private int _currentPrepCount;
 
     // Levels
     public delegate void LevelLoadingStarted(LevelDesign levelDesign);
@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour
     public static event LevelFinished OnLevelFinished;
     public delegate void LevelFailed();
     public static event LevelFailed OnLevelFailed;
-
     
     // Turns
     public delegate void PlayerTurnStarted();
@@ -58,30 +57,19 @@ public class GameManager : MonoBehaviour
     public delegate void NextMoveRequired(CharacterBlock needMovesBlock);
     public static event NextMoveRequired OnNextMoveRequired;
 
-    public delegate void CharacterChangedPosition(CharacterBlock movedBlock, Cell toCell);
-    public static event CharacterChangedPosition OnCharacterChangedPosition;
-
-    // Blocks
-    public delegate void BlockStartedBehaviour(Block behavingBlock);
-    public static event BlockStartedBehaviour OnBlockStartedBehaviour;
-    public delegate void BlockEndedBehaviour(Block behavingBlock);
-    public static event BlockEndedBehaviour OnBlockEndedBehaviour;
-
-
     private void Start()
     {
-        // Trigger sound effect and animation before entering the main menu
         ui.PlayGameOpeningScene();
         // Main menu at level index 0
         // Actual levels at index 1, 2, 3 , 4, etc
-        CallLevelLoadingStarted(0);
+        CallLevelLoadingStarted(loadLevelIndex);
     }
 
     private void OnEnable()
     {
         // Inverse Dependency Injection
         GridController.OnGridInitialized += InitializeGridController;
-        LevelPlane.OnLevelPlaneInitialized += InitializeLevelPlane;
+        TerrainPlane.OnLevelPlaneInitialized += InitializeLevelPlane;
         CharacterPlane.OnCharacterPlaneInitialized += InitializeCharacterPlane;
         ObjectPlane.OnObjectPlaneInitialized += InitializeObjectPlane;
         UIController.OnUIControllerInitialized += InitializeUIController;
@@ -101,7 +89,7 @@ public class GameManager : MonoBehaviour
     {
         // Inverse Dependency Injection
         GridController.OnGridInitialized -= InitializeGridController;
-        LevelPlane.OnLevelPlaneInitialized -= InitializeLevelPlane;
+        TerrainPlane.OnLevelPlaneInitialized -= InitializeLevelPlane;
         CharacterPlane.OnCharacterPlaneInitialized -= InitializeCharacterPlane;
         ObjectPlane.OnObjectPlaneInitialized -= InitializeObjectPlane;
         UIController.OnUIControllerInitialized -= InitializeUIController;
@@ -116,107 +104,91 @@ public class GameManager : MonoBehaviour
     }
 
     
-    /// <summary>
-    /// Start loading a level with levelIndex
-    /// </summary>
-    /// <param name="levelIndex"></param>
     public void CallLevelLoadingStarted(int levelIndex)
     {
-        currentPrepCount = 0;
-        currentLevelIndex = levelIndex;
-        if (gridController == null || levelPlane == null || characterPlane == null)
+        _currentPrepCount = 0;
+        loadLevelIndex = levelIndex;
+        if (gridController == null || terrainPlane == null || characterPlane == null)
         {
             Debug.Log("Grid is not initialized in the editor");
             return;
         }
-
         // Block player's view
         ui.PlayLevelTransitionScene();
 
+        #region Data Initialization
         // Load data from saved files
-        currentLevel = new LevelDesign();
+        currentLevelDesign = new LevelDesign();
         LevelDesign saved = SaveSystem.LoadLevelDesign(levelFileNameFormat + $" {levelIndex}");
         // grid size
-        currentLevel.gridHeight = saved.gridHeight;
-        currentLevel.gridLength = saved.gridLength;
-        currentLevel.gridWidth = saved.gridWidth;
+        currentLevelDesign.gridHeight = saved.gridHeight;
+        currentLevelDesign.gridLength = saved.gridLength;
+        currentLevelDesign.gridWidth = saved.gridWidth;
         // grid of each plane in 1 dimensional array
-        currentLevel.terrainGrid = saved.terrainGrid;
-        currentLevel.characterGrid = saved.characterGrid;
-        currentLevel.objectGrid = saved.objectGrid;
+        currentLevelDesign.terrainGrid = saved.terrainGrid;
+        currentLevelDesign.characterGrid = saved.characterGrid;
+        currentLevelDesign.objectGrid = saved.objectGrid;
+        // block specifics
+        currentLevelDesign.rotations = saved.rotations;
+        currentLevelDesign.remoteTriggersData = new int[saved.remoteTriggersData.Length];
+        saved.remoteTriggersData.CopyTo(currentLevelDesign.remoteTriggersData, 0);
+        currentLevelDesign.remoteDoorsData = new int[saved.remoteDoorsData.Length];
+        saved.remoteDoorsData.CopyTo(currentLevelDesign.remoteDoorsData, 0);
 
         // Initialize planes' 3 dimensional id grid in scene
         // id is used to identify each block uniquely
-        levelPlane.idGrid = new int[currentLevel.gridHeight, currentLevel.gridLength, currentLevel.gridWidth];
-        characterPlane.idGrid = new int[currentLevel.gridHeight, currentLevel.gridLength, currentLevel.gridWidth];
-        objectPlane.idGrid = new int[currentLevel.gridHeight, currentLevel.gridLength, currentLevel.gridWidth];
+        terrainPlane.idGrid = new int[currentLevelDesign.gridHeight, currentLevelDesign.gridLength, currentLevelDesign.gridWidth];
+        characterPlane.idGrid = new int[currentLevelDesign.gridHeight, currentLevelDesign.gridLength, currentLevelDesign.gridWidth];
+        objectPlane.idGrid = new int[currentLevelDesign.gridHeight, currentLevelDesign.gridLength, currentLevelDesign.gridWidth];
         int count = 0;
-        for (int h = 0; h < currentLevel.gridHeight; h++)
+        for (int h = 0; h < currentLevelDesign.gridHeight; h++)
         {
-            for (int l = 0; l < currentLevel.gridLength; l++)
+            for (int l = 0; l < currentLevelDesign.gridLength; l++)
             {
-                for (int w = 0; w < currentLevel.gridWidth; w++)
+                for (int w = 0; w < currentLevelDesign.gridWidth; w++)
                 {
-                    levelPlane.idGrid[h, l, w] = currentLevel.terrainGrid[count];
-                    characterPlane.idGrid[h, l, w] = currentLevel.characterGrid[count];
-                    objectPlane.idGrid[h, l, w] = currentLevel.objectGrid[count];
+                    // Transfer data from 1D arrays to 3D arrays
+                    terrainPlane.idGrid[h, l, w] = currentLevelDesign.terrainGrid[count];
+                    characterPlane.idGrid[h, l, w] = currentLevelDesign.characterGrid[count];
+                    objectPlane.idGrid[h, l, w] = currentLevelDesign.objectGrid[count];
                     count++;
                 }
             }
         }
 
-        // Initialize Stairs
-        if(stairsManager != null)
-        {
-            currentLevel.stairsData = new int[saved.stairsData.Length];
-            saved.stairsData.CopyTo(currentLevel.stairsData,0);
-            stairsManager.InitializeStairsData(currentLevel.stairsData);
-        }
-        // Initialize Remote Triggers
-        if (remoteTriggerManager != null)
-        {
-            currentLevel.remoteTriggersData = new int[saved.remoteTriggersData.Length];
-            saved.remoteTriggersData.CopyTo(currentLevel.remoteTriggersData, 0);
-            remoteTriggerManager.InitializeRemoteTriggersData(currentLevel.remoteTriggersData);
-        }
-        // Initialize Remote Doors
-        if (remoteDoorManager != null)
-        {
-            currentLevel.remoteDoorsData = new int[saved.remoteDoorsData.Length];
-            saved.remoteDoorsData.CopyTo(currentLevel.remoteDoorsData, 0);
-            remoteDoorManager.InitializeRemoteDoorsData(currentLevel.remoteDoorsData);
-        }
+        remoteTriggerManager?.InitializeRemoteTriggersData(currentLevelDesign.remoteTriggersData);
+        remoteDoorManager?.InitializeRemoteDoorsData(currentLevelDesign.remoteDoorsData);
+        #endregion
 
         // Start loading the level with the initialized data transfered to the corresponding planes
-        OnLevelLoadingStarted(currentLevel);
-        Vector3Int gridSize = new Vector3Int(currentLevel.gridWidth, currentLevel.gridHeight, currentLevel.gridLength);
-        gridController.InitializeGrid(gridSize);
+        if (OnLevelLoadingStarted != null)
+            OnLevelLoadingStarted(currentLevelDesign);
+        gridController.InitializeGrid(currentLevelDesign);
     }
 
     public void CallLevelStarted()
     {
-        Debug.Log("Level Started");
+        Debug.Log("Game Manager: Level Started");
         if (OnLevelStarted != null)
             OnLevelStarted();
     }
 
     public void CallLevelFinished()
     {
-        Debug.Log("Level Finished");
+        Debug.Log("Game Manager: Level Finished");
         if (OnLevelFinished != null)
             OnLevelFinished();
     }
 
     public void CallLevelFailed()
     {
-        Debug.Log("Level Failed");
+        Debug.Log("Game Manager: Level Failed");
         if (OnLevelFailed != null)
             OnLevelFailed();
     }
-
     public void CallPlayerTurnStarted()
     {
-        Debug.Log("Player Turn Started");
+        Debug.Log("Game Manager: Player Turn Started");
         if(ui.tipUI != null)
             ui.tipUI.DisplayPlayerText();
         if (OnPlayerTurnStarted != null)
@@ -225,14 +197,14 @@ public class GameManager : MonoBehaviour
 
     public void CallPlayerTurnEnded()
     {
-        Debug.Log("Player Turn Ended");
+        Debug.Log("Game Manager: Player Turn Ended");
         if (OnPlayerTurnEnded != null)
             OnPlayerTurnEnded();
     }
 
     public void CallAITurnStarted()
     {
-        Debug.Log("AI Turn Started");
+        Debug.Log("Game Manager: AI Turn Started");
         if (ui.tipUI != null)
             ui.tipUI.DisplayWaitingText();
         if (OnAITurnStarted != null)
@@ -241,58 +213,34 @@ public class GameManager : MonoBehaviour
 
     public void CallAITurnEnded()
     {
-        Debug.Log("AI Turn Ended");
+        Debug.Log("Game Manager: AI Turn Ended");
         if (OnAITurnEnded != null)
             OnAITurnEnded();
     }
 
     public void CallCharacterRanOutOfMoves(CharacterBlock noMovesBlock)
     {
-        Debug.Log($"{noMovesBlock.name} ran out of moves");
+        Debug.Log($"Game Manager: {noMovesBlock.name} ran out of moves");
         if (OnCharacterRanOutOfMoves != null)
             OnCharacterRanOutOfMoves(noMovesBlock);
     }
 
-    public void CallNextMoveRequired(CharacterBlock needMovesBlock)
+    public void CallCharacterRequiresNextMove(CharacterBlock needMovesBlock)
     {
-        Debug.Log($"{needMovesBlock.name} need more moves");
+        Debug.Log($"Game Manager: {needMovesBlock.name} need more moves");
         if (OnNextMoveRequired != null)
             OnNextMoveRequired(needMovesBlock);
     }
 
-    public void CallCharacterChangedPosition(CharacterBlock block, Cell toCell)
-    {
-        Debug.Log($"{block.name}'s position is updated in Character Plane");
-        characterPlane.UpdateCharacterPosition(block, toCell);
-
-        // Currently not used Event
-        if (OnCharacterChangedPosition != null)
-            OnCharacterChangedPosition(block, toCell);
-    }
-
-    public void CallBlockStartedBehaviour(Block behavingBlock)
-    {
-        Debug.Log($"{behavingBlock.name}'s behaviour started");
-        if (OnBlockStartedBehaviour != null)
-            OnBlockStartedBehaviour(behavingBlock);
-    }
-
-    public void CallBlockEndedBehaviour(Block behavingBlock)
-    {
-        Debug.Log($"{behavingBlock.name}'s behaviour ended");
-        if (OnBlockEndedBehaviour != null)
-            OnBlockEndedBehaviour(behavingBlock);
-    }
-
-    private void InitializeGridController(GridController gridController)
+    private void InitializeGridController(GridController gridController, LevelDesign levelDesign)
     {
         this.gridController = gridController;
         IncrementPrepCount();
     }
 
-    private void InitializeLevelPlane(LevelPlane plane)
+    private void InitializeLevelPlane(TerrainPlane plane)
     {
-        levelPlane = plane;
+        terrainPlane = plane;
         IncrementPrepCount();
     }
 
@@ -316,8 +264,8 @@ public class GameManager : MonoBehaviour
 
     private void IncrementPrepCount()
     {
-        currentPrepCount++;
-        if (currentPrepCount == prepCount)
+        _currentPrepCount++;
+        if (_currentPrepCount == prepCount)
             CallLevelStarted();
     }
 }

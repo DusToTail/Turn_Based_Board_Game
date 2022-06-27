@@ -28,9 +28,7 @@ public class RemoteTriggerManager : MonoBehaviour
         Debug.Log("Initialize remote trigger data");
         remoteTriggersData = new int[data.Length];
         for (int i = 0; i < data.Length; i++)
-        {
             remoteTriggersData[i] = data[i];
-        }
     }
 
     private void InitializeRemoteTriggersList(ObjectPlane plane)
@@ -38,6 +36,7 @@ public class RemoteTriggerManager : MonoBehaviour
         objectPlane = plane;
         remoteTriggers.Clear();
         remoteTriggers.TrimExcess();
+        // Add to List
         for (int h = 0; h < plane.grid.GetLength(0); h++)
         {
             for (int l = 0; l < plane.grid.GetLength(1); l++)
@@ -55,7 +54,7 @@ public class RemoteTriggerManager : MonoBehaviour
                 }
             }
         }
-
+        // Initialize each trigger
         if (remoteTriggersData != null)
         {
             if (remoteTriggersData.Length > 0)

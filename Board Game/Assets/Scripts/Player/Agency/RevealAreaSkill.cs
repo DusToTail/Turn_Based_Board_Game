@@ -15,7 +15,7 @@ public class RevealAreaSkill : MonoBehaviour
     public float revealAreaRange;
     public float speed;
     public int coolDown;
-    public int currentCooddown;
+    public int currentCooldown;
     public bool isFinished;
 
     public delegate void CooldownRewinded();
@@ -28,7 +28,7 @@ public class RevealAreaSkill : MonoBehaviour
     [SerializeField]
     private int drawSegments;
 
-    public bool IsOffCooldown { get { return currentCooddown == 0; } }
+    public bool IsOffCooldown { get { return currentCooldown == 0; } }
     private GridController _gridController;
 
     private void OnEnable()
@@ -49,20 +49,15 @@ public class RevealAreaSkill : MonoBehaviour
         moveLight.range = revealAreaRange;
     }
 
-    /// <summary>
-    /// Start revealing an area at specified cell
-    /// </summary>
-    /// <param name="atCell"></param>
     public void RevealArea(Cell atCell)
     {
         isFinished = false;
         RewindCooldown();
         StartCoroutine(RevealAreaCoroutine(atCell));
     }
-
     private IEnumerator RevealAreaCoroutine(Cell atCell)
     {
-        // Setting up bezier curve's control points
+        // Setting up trajectory with bezier curve's control points
         Cell fromCell = _gridController.GetCellFromCellWithDirection(atCell, GridDirection.Left);
         fromCell = _gridController.grid[_gridController.gridSize.y - 1, fromCell.gridPosition.z, fromCell.gridPosition.x];
         from.position = fromCell.worldPosition + Vector3.up * 10;
@@ -81,46 +76,35 @@ public class RevealAreaSkill : MonoBehaviour
         while (true)
         {
             yield return null;
-            if (t >= 1)
+            if (t > 1)
             {
-                t = 1;
-                MovementUtilities.MoveQuadraticBezierLerp(moveTransform, from, to, controlPoint, t, true);
+                MovementUtilities.MoveQuadraticBezierLerp(moveTransform, from, to, controlPoint, 1, true);
                 break;
             }
-            t = YFunction(x);
             MovementUtilities.MoveQuadraticBezierLerp(moveTransform, from, to, controlPoint, t, true);
             x += Time.deltaTime * speed;
+            t = YFunction(x);
         }
         isFinished = true;
     }
-
     private float YFunction(float x)
     {
         return 4 * (x - 0.5f) * (x - 0.5f) * (x - 0.5f) + 0.5f;
     }
-
-    /// <summary>
-    /// Decrement the cooldown when GameManager.OnPlayerTurnEnded event is sent
-    /// </summary>
     private void DecrementCurrentCooldown()
     {
-        if(currentCooddown <= 0) { return; }
-        currentCooddown--;
+        if(currentCooldown <= 0) { return; }
+        currentCooldown--;
         if(OnCooldownDecremented != null)
             OnCooldownDecremented();
     }
-
     private void RewindCooldown()
     {
-        currentCooddown = coolDown;
+        currentCooldown = coolDown;
         if(OnCooldownRewinded != null)
             OnCooldownRewinded();
     }
-
-    private void ResetCooldown()
-    {
-        currentCooddown = 0;
-    }
+    private void ResetCooldown() { currentCooldown = 0; }
 
     private void OnDrawGizmos()
     {

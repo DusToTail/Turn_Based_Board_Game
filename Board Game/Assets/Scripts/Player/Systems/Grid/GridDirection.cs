@@ -29,6 +29,19 @@ public class GridDirection
     public static implicit operator Vector3Int(GridDirection dir) => dir.direction;
     public static implicit operator Vector3(GridDirection dir) => dir.direction;
     public static implicit operator GridDirection(Vector3Int vector) => new GridDirection(vector);
+    public static GridDirection operator -(GridDirection dir)
+    {
+        return GetDirectionFromVector3Int(-dir.direction);
+    }
+    public static GridDirection operator -(GridDirection left, GridDirection right)
+    {
+        return GetDirectionFromVector3Int(left.direction - right.direction);
+    }
+    public static GridDirection operator +(GridDirection left, GridDirection right)
+    {
+        return GetDirectionFromVector3Int(left.direction - right.direction);
+    }
+
 
     public static readonly GridDirection None = new GridDirection(Vector3Int.zero);
     public static readonly GridDirection Forward = new GridDirection(Vector3Int.forward);
@@ -52,6 +65,49 @@ public class GridDirection
     public static GridDirection GetDirectionFromVector3Int(Vector3Int vector)
     {
         return AllDirections.Where(x => x.direction == vector).DefaultIfEmpty(None).First();
+    }
+    public static GridDirection GetDirectionFromInt(int mode)
+    {
+        GridDirection result = None;
+        switch (mode)
+        {
+            case 1:
+                result = Forward;
+                break;
+            case -1:
+                result = Backward;
+                break;
+            case 2:
+                result = Left;
+                break;
+            case -2:
+                result = Right;
+                break;
+            case 3:
+                result = Up;
+                break;
+            case -3:
+                result = Down;
+                break;
+            case 0:
+                result = None;
+                break;
+            default:
+                break;
+        }
+        return result;
+    }
+
+    public static int GetIntFromDirection(GridDirection direction)
+    {
+        if (direction == Forward) { return 1; }
+        if (direction == Backward) { return -1; }
+        if (direction == Left) { return 2; }
+        if (direction == Right) { return -2; }
+        if (direction == Up) { return 3; }
+        if (direction == Down) { return -3; }
+
+        return 0;
     }
 
     public static GridDirection RotateLeft(GridDirection direction)
