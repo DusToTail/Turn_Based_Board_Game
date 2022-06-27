@@ -47,4 +47,4 @@ MonoBehaviour:
   cellSize: {x: 1, y: 1, z: 1}
   gridSize: {x: 10, y: 5, z: 10}
   displayGizmos: 1
-  untilHeightIndex: 28
+  untilHeightIndex: 5

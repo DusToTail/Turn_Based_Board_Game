@@ -590,7 +590,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 5120
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -692,16 +692,16 @@ MonoBehaviour:
   id: 1
   cellBasedSize: {x: 1, y: 1, z: 1}
   characterData: {fileID: 11400000, guid: 335718f0956bf20499e6d4cfb528f567, type: 2}
-  movesPerTurn: 3
-  maxHealth: 3
-  visionRange: 3
   weaponHandler: {fileID: 1489315947665005370}
   audioHandler: {fileID: 7322724346937915169}
   animator: {fileID: 6525250765212259731}
-  attackedEntityCount: 0
-  curAttackedEntityCount: 0
   gameManager: {fileID: 0}
   movementController: {fileID: 0}
+  movesPerTurn: 3
+  maxHealth: 3
+  visionRange: 3
+  attackedEntityCount: 0
+  curAttackedEntityCount: 0
   displayGizmos: 1
 --- !u!1 &4135399979395412657
 GameObject:

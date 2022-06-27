@@ -17,18 +17,13 @@ public class RevealAreaSkill : MonoBehaviour
     public int coolDown;
     public int currentCooldown;
     public bool isFinished;
-
     public delegate void CooldownRewinded();
     public static event CooldownRewinded OnCooldownRewinded;
     public delegate void CooldownDecremented();
     public static event CooldownDecremented OnCooldownDecremented;
-
-    [SerializeField]
-    private bool displayGizmos;
-    [SerializeField]
-    private int drawSegments;
-
     public bool IsOffCooldown { get { return currentCooldown == 0; } }
+    [SerializeField] private bool displayGizmos;
+    [SerializeField] private int drawSegments;
     private GridController _gridController;
 
     private void OnEnable()
@@ -43,12 +38,14 @@ public class RevealAreaSkill : MonoBehaviour
         GameManager.OnLevelStarted -= ResetCooldown;
     }
 
-    private void Start()
+    private void Awake()
     {
         _gridController = FindObjectOfType<GridController>();
-        moveLight.range = revealAreaRange;
     }
-
+    private void Start()
+    {
+        moveLight.enabled = false;
+    }
     public void RevealArea(Cell atCell)
     {
         isFinished = false;
@@ -57,6 +54,7 @@ public class RevealAreaSkill : MonoBehaviour
     }
     private IEnumerator RevealAreaCoroutine(Cell atCell)
     {
+        moveLight.enabled = true;
         // Setting up trajectory with bezier curve's control points
         Cell fromCell = _gridController.GetCellFromCellWithDirection(atCell, GridDirection.Left);
         fromCell = _gridController.grid[_gridController.gridSize.y - 1, fromCell.gridPosition.z, fromCell.gridPosition.x];
@@ -85,6 +83,7 @@ public class RevealAreaSkill : MonoBehaviour
             x += Time.deltaTime * speed;
             t = YFunction(x);
         }
+        moveLight.enabled = false;
         isFinished = true;
     }
     private float YFunction(float x)

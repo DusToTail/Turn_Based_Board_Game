@@ -33838,7 +33838,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 1
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 0.496
@@ -64100,7 +64100,7 @@ MonoBehaviour:
   sources: []
   playerLight: {fileID: 921069547}
   playerBlockTransform: {fileID: 0}
-  playerLightOffset: {x: 0, y: 1, z: 0}
+  playerLightOffset: {x: 0, y: 1.5, z: 0}
 --- !u!1 &1418846522
 GameObject:
   m_ObjectHideFlags: 0
@@ -94232,14 +94232,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1320227007}
     - target: {fileID: 3342998143237366190, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
-      propertyPath: prepCount
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3342998143237366190, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
-      propertyPath: levelPlane
-      value: 
-      objectReference: {fileID: 594892999}
-    - target: {fileID: 3342998143237366190, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
       propertyPath: objectPlane
       value: 
       objectReference: {fileID: 914535450}
@@ -94260,17 +94252,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 497481623}
     - target: {fileID: 3342998143237366190, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
-      propertyPath: loadLevelIndex
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3342998143237366190, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
       propertyPath: playerController
       value: 
       objectReference: {fileID: 1630875268}
-    - target: {fileID: 3342998143237366190, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
-      propertyPath: currentLevelIndex
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 3342998143237366190, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
       propertyPath: remoteDoorManager
       value: 
@@ -94453,18 +94437,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5082107175158277231, guid: b2445c2dcafeb2d42bd0835f258c0568, type: 3}
-      propertyPath: gridSize.x
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5082107175158277231, guid: b2445c2dcafeb2d42bd0835f258c0568, type: 3}
-      propertyPath: gridSize.y
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5082107175158277231, guid: b2445c2dcafeb2d42bd0835f258c0568, type: 3}
-      propertyPath: gridSize.z
-      value: 10
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b2445c2dcafeb2d42bd0835f258c0568, type: 3}
 --- !u!1001 &5423177904355997401
@@ -94632,10 +94604,6 @@ PrefabInstance:
       propertyPath: clearMenu
       value: 
       objectReference: {fileID: 74555751}
-    - target: {fileID: 6630014072077047720, guid: b13166b29f9534e46a419fe6bcf45e2d, type: 3}
-      propertyPath: gameTitle
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6630014072077047720, guid: b13166b29f9534e46a419fe6bcf45e2d, type: 3}
       propertyPath: blackScreen
       value: 

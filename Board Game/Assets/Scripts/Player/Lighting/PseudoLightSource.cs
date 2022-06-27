@@ -55,6 +55,16 @@ public class PseudoLightSource : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag(TagsAndLayers.MODEL_TAG))
+        {
+            if(other.gameObject.layer != LayerMask.NameToLayer(TagsAndLayers.NEARLIGHT_LAYER))
+            TagsAndLayers.ChangeLayersRecursively(other.gameObject, TagsAndLayers.NEARLIGHT_LAYER);
+            //Debug.Log($"{other.transform.parent.name} is near light source {transform.parent.gameObject.name}");
+        }
+    }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag(TagsAndLayers.MODEL_TAG))

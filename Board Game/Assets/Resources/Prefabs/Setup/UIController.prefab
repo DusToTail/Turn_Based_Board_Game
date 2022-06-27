@@ -45,3 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
+  clearMenu: {fileID: 0}
+  failMenu: {fileID: 0}
+  blackScreen: {fileID: 0}
+  healthUI: {fileID: 0}
+  movesUI: {fileID: 0}
+  revealSkillUI: {fileID: 0}
+  tipUI: {fileID: 0}

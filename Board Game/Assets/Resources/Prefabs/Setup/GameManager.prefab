@@ -46,11 +46,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ui: {fileID: 0}
   gridController: {fileID: 0}
-  levelPlane: {fileID: 0}
+  terrainPlane: {fileID: 0}
   characterPlane: {fileID: 0}
   objectPlane: {fileID: 0}
   playerController: {fileID: 0}
   stairsManager: {fileID: 0}
-  prepCount: 4
-  currentPrepCount: 0
-  levelFileNameFormat: Level
+  remoteTriggerManager: {fileID: 0}
+  remoteDoorManager: {fileID: 0}
+  loadLevelIndex: 0
