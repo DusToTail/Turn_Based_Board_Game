@@ -60,7 +60,8 @@ public class ObjectPlane : MonoBehaviour
     public ObjectBlock GetBlockFromCell(Cell cell)
     {
         ObjectBlock result = null;
-        result = grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block?.GetComponent<ObjectBlock>();
+        if(GetCellAndBlockFromCell(cell).block != null)
+        result = GetCellAndBlockFromCell(cell).block.GetComponent<ObjectBlock>();
         return result;
     }
     public CellAndBlock GetCellAndBlockFromCell(Cell cell)

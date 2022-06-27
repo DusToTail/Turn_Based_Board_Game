@@ -26,7 +26,8 @@ public class MovesUI : MonoBehaviour
         GameManager.OnLevelLoadingStarted += DestroyAllIconsOnLevelLoaded;
         GameManager.OnLevelStarted += InitializeMovesUI;
         GameManager.OnLevelFailed += RemoveAllIcons;
-        GameManager.OnBlockEndedBehaviour += DecrementMove;
+        GameManager.OnNextMoveRequired += DecrementMove;
+        GameManager.OnCharacterRanOutOfMoves += DecrementMove;
         GameManager.OnPlayerTurnStarted += ResetMove;
     }
 
@@ -35,11 +36,12 @@ public class MovesUI : MonoBehaviour
         GameManager.OnLevelLoadingStarted -= DestroyAllIconsOnLevelLoaded;
         GameManager.OnLevelStarted -= InitializeMovesUI;
         GameManager.OnLevelFailed -= RemoveAllIcons;
-        GameManager.OnBlockEndedBehaviour -= DecrementMove;
+        GameManager.OnNextMoveRequired -= DecrementMove;
+        GameManager.OnCharacterRanOutOfMoves -= DecrementMove;
         GameManager.OnPlayerTurnStarted -= ResetMove;
     }
 
-    private void DecrementMove(Block trackingBlock)
+    private void DecrementMove(CharacterBlock trackingBlock)
     {
         if (trackingBlock != trackingCharacter) { return; }
         if (_currentIcons == 0) { return; }

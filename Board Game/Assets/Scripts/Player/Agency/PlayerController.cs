@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
         GameManager.OnLevelLoadingStarted += PreventInputOnLevelLoaded;
         GameManager.OnLevelStarted += AllowInput;
         GameManager.OnPlayerTurnStarted += AllowInput;
+        GameManager.OnPlayerTurnStarted += FocusCellBackToPlayer;
         GameManager.OnLevelFinished += PreventInput;
         GameManager.OnLevelFailed += PreventInput;
         GameManager.OnCharacterRanOutOfMoves += CallPlayerIsFinished;
@@ -44,6 +45,7 @@ public class PlayerController : MonoBehaviour
         GameManager.OnLevelLoadingStarted -= PreventInputOnLevelLoaded;
         GameManager.OnLevelStarted -= AllowInput;
         GameManager.OnPlayerTurnStarted -= AllowInput;
+        GameManager.OnPlayerTurnStarted -= FocusCellBackToPlayer;
         GameManager.OnLevelFinished -= PreventInput;
         GameManager.OnLevelFailed -= PreventInput;
         GameManager.OnCharacterRanOutOfMoves -= CallPlayerIsFinished;
@@ -238,7 +240,7 @@ public class PlayerController : MonoBehaviour
     {
         if(compareBlock != playerBlock) { return ; }
         playerBlock.ResetCurrentMoves();
-        Debug.Log($"Player of {playerBlock.name} is finished with his/her moves");
+        Debug.Log($"Player Controller: {playerBlock.name} is finished with his/her moves");
         if(OnPlayerIsFinished != null)
             OnPlayerIsFinished();
     }

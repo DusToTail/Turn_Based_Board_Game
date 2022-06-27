@@ -9,35 +9,31 @@ public class AIController : MonoBehaviour
 {
     public static List<AIController> AIs = new List<AIController>();
     public static int completedAICount = 0;
-
     public delegate void AIsAreFinished();
     public static event AIsAreFinished OnAIsAreFinished;
-
     public delegate void AIIsFinished(AIController finishedAI);
     public static event AIIsFinished OnAIIsFinished;
 
-
     public int actionSortingID;
     public CharacterBlock controlBlock;
-
     public CharacterBlock target;
 
+    public IEnumerator BehaviourTreeAction { get { return _behaviourTreeRunner.RunTree(); } }
     private GameManager _gameManager;
     private PlayerController _playerController;
     private BehaviourTreeRunner _behaviourTreeRunner;
 
-    private void Start()
+    private void Awake()
     {
         _gameManager = FindObjectOfType<GameManager>();
         _playerController = FindObjectOfType<PlayerController>();
         _behaviourTreeRunner = GetComponent<BehaviourTreeRunner>();
-
-        target = _playerController.playerBlock;
         controlBlock = GetComponent<CharacterBlock>();
-
-        
     }
-
+    private void Start()
+    {
+        target = _playerController.playerBlock;
+    }
     private void OnEnable()
     {
         GameManager.OnCharacterRanOutOfMoves += CallAIIsFinished;
@@ -49,7 +45,6 @@ public class AIController : MonoBehaviour
 
         OnAIIsFinished += IncrementCompletedAICount;
     }
-
     private void OnDisable()
     {
         GameManager.OnCharacterRanOutOfMoves -= CallAIIsFinished;
@@ -62,15 +57,7 @@ public class AIController : MonoBehaviour
         OnAIIsFinished -= IncrementCompletedAICount;
     }
 
-    /// <summary>
-    /// Start running the behaviour tree to perform an action
-    /// </summary>
-    public void PerformAction()
-    {
-        Debug.Log($"AI {name} performs something");
-        StartCoroutine(_behaviourTreeRunner.RunTree());
-    }
-
+    public void PerformAction() => StartCoroutine(_behaviourTreeRunner.RunTree());
 
     /// <summary>
     /// Perform action via behaviour tree runner when GameManager.OnNextMoveRequired event is sent 
@@ -113,9 +100,7 @@ public class AIController : MonoBehaviour
                 OnAIsAreFinished();
         }
         else
-        {
             StartNextAIPerform();
-        }
     }
 
     /// <summary>
@@ -137,18 +122,12 @@ public class AIController : MonoBehaviour
     public static void ResetAIsMoves()
     {
         foreach (AIController ai in AIs)
-        {
             ai.controlBlock.ResetCurrentMoves();
-        }
 
         completedAICount = 0;
-
         StartNextAIPerform();
     }
 
-    /// <summary>
-    /// Start next AI's action
-    /// </summary>
     public static void StartNextAIPerform()
     {
         if(AIs.Count == 0) 

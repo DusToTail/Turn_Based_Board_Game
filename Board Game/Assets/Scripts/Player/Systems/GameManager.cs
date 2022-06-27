@@ -57,13 +57,6 @@ public class GameManager : MonoBehaviour
     public delegate void NextMoveRequired(CharacterBlock needMovesBlock);
     public static event NextMoveRequired OnNextMoveRequired;
 
-    // Blocks
-    public delegate void BlockStartedBehaviour(Block behavingBlock);
-    public static event BlockStartedBehaviour OnBlockStartedBehaviour;
-    public delegate void BlockEndedBehaviour(Block behavingBlock);
-    public static event BlockEndedBehaviour OnBlockEndedBehaviour;
-
-
     private void Start()
     {
         ui.PlayGameOpeningScene();
@@ -175,28 +168,27 @@ public class GameManager : MonoBehaviour
 
     public void CallLevelStarted()
     {
-        Debug.Log("Level Started");
+        Debug.Log("Game Manager: Level Started");
         if (OnLevelStarted != null)
             OnLevelStarted();
     }
 
     public void CallLevelFinished()
     {
-        Debug.Log("Level Finished");
+        Debug.Log("Game Manager: Level Finished");
         if (OnLevelFinished != null)
             OnLevelFinished();
     }
 
     public void CallLevelFailed()
     {
-        Debug.Log("Level Failed");
+        Debug.Log("Game Manager: Level Failed");
         if (OnLevelFailed != null)
             OnLevelFailed();
     }
-
     public void CallPlayerTurnStarted()
     {
-        Debug.Log("Player Turn Started");
+        Debug.Log("Game Manager: Player Turn Started");
         if(ui.tipUI != null)
             ui.tipUI.DisplayPlayerText();
         if (OnPlayerTurnStarted != null)
@@ -205,14 +197,14 @@ public class GameManager : MonoBehaviour
 
     public void CallPlayerTurnEnded()
     {
-        Debug.Log("Player Turn Ended");
+        Debug.Log("Game Manager: Player Turn Ended");
         if (OnPlayerTurnEnded != null)
             OnPlayerTurnEnded();
     }
 
     public void CallAITurnStarted()
     {
-        Debug.Log("AI Turn Started");
+        Debug.Log("Game Manager: AI Turn Started");
         if (ui.tipUI != null)
             ui.tipUI.DisplayWaitingText();
         if (OnAITurnStarted != null)
@@ -221,37 +213,23 @@ public class GameManager : MonoBehaviour
 
     public void CallAITurnEnded()
     {
-        Debug.Log("AI Turn Ended");
+        Debug.Log("Game Manager: AI Turn Ended");
         if (OnAITurnEnded != null)
             OnAITurnEnded();
     }
 
     public void CallCharacterRanOutOfMoves(CharacterBlock noMovesBlock)
     {
-        Debug.Log($"{noMovesBlock.name} ran out of moves");
+        Debug.Log($"Game Manager: {noMovesBlock.name} ran out of moves");
         if (OnCharacterRanOutOfMoves != null)
             OnCharacterRanOutOfMoves(noMovesBlock);
     }
 
-    public void CallNextMoveRequired(CharacterBlock needMovesBlock)
+    public void CallCharacterRequiresNextMove(CharacterBlock needMovesBlock)
     {
-        Debug.Log($"{needMovesBlock.name} need more moves");
+        Debug.Log($"Game Manager: {needMovesBlock.name} need more moves");
         if (OnNextMoveRequired != null)
             OnNextMoveRequired(needMovesBlock);
-    }
-
-    public void CallBlockStartedBehaviour(Block behavingBlock)
-    {
-        Debug.Log($"{behavingBlock.name}'s behaviour started");
-        if (OnBlockStartedBehaviour != null)
-            OnBlockStartedBehaviour(behavingBlock);
-    }
-
-    public void CallBlockEndedBehaviour(Block behavingBlock)
-    {
-        Debug.Log($"{behavingBlock.name}'s behaviour ended");
-        if (OnBlockEndedBehaviour != null)
-            OnBlockEndedBehaviour(behavingBlock);
     }
 
     private void InitializeGridController(GridController gridController, LevelDesign levelDesign)

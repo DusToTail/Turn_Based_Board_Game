@@ -28,11 +28,9 @@ public class StairBehaviour : MonoBehaviour, IActivationOnCollision
                 break;
             case -1:
                 // Cant Use
-                gameManager.CallBlockEndedBehaviour(stairObject);
                 stairObject.isFinished = true;
                 break;
             default:
-                gameManager.CallBlockEndedBehaviour(stairObject);
                 stairObject.isFinished = true;
                 break;
         }
@@ -40,14 +38,25 @@ public class StairBehaviour : MonoBehaviour, IActivationOnCollision
 
     private IEnumerator UseStairCoroutine(ObjectBlock objectBlock, CharacterBlock userBlock, bool moveUp)
     {
+        ObjectBlock finalStair = objectBlock;
         Cell toCell = objectBlock.cell;
-        if(moveUp)
+        while (finalStair != null && finalStair.activationBehaviour.GetComponent<StairBehaviour>() != null)
         {
-            toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, GridDirection.Up);
-            toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, objectBlock.forwardDirection);
+            if (moveUp)
+            {
+                toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, GridDirection.Up);
+                toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, objectBlock.forwardDirection);
+            }
+            else
+            {
+                toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, GridDirection.Down);
+                toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, -objectBlock.forwardDirection);
+            }
+            finalStair = gameManager.objectPlane.GetBlockFromCell(toCell);
         }
-        else
-            toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, -objectBlock.forwardDirection);
+
+        if (!moveUp)
+            toCell = gameManager.gridController.GetCellFromCellWithDirection(toCell, GridDirection.Up);
 
         GridDirection direction = moveUp? objectBlock.forwardDirection : -objectBlock.forwardDirection;
         userBlock.movementController.InitializeMovement(userBlock.transform, direction, userBlock.cell, toCell, BlockMovementController.MovementType.Slide);
@@ -95,7 +104,6 @@ public class StairBehaviour : MonoBehaviour, IActivationOnCollision
             userBlock.animator.SetTrigger("Idle");
         }
         Debug.Log($"{userBlock.name} jumped to {toCell.gridPosition} by stair");
-        gameManager.CallBlockEndedBehaviour(objectBlock);
         yield return ExistsOnStepObjectCoroutine(toCell);
         objectBlock.isFinished = true;
     }

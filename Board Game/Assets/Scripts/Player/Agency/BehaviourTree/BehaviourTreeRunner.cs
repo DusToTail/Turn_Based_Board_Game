@@ -20,15 +20,6 @@ public class BehaviourTreeRunner : MonoBehaviour
         GameManager.OnNextMoveRequired -= SetBehaviourIsFinished;
     }
 
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-    }
-
     public IEnumerator RunTree()
     {
         Debug.Log($"Start run tree");

@@ -12,10 +12,6 @@ public class CharacterBlock : Block
     public static event CharacterAdded OnCharacterAdded;
     public delegate void CharacterRemoved();
     public static event CharacterRemoved OnCharacterRemoved;
-    public delegate void CharacterRanOutOfMoves(CharacterBlock thisBlock);
-    public static event CharacterRanOutOfMoves OnCharacterRanOutOfMoves;
-    public delegate void NextMoveRequired(CharacterBlock thisBlock);
-    public static event NextMoveRequired OnNextMoveRequired;
     public delegate void PositionUpdated(CharacterBlock thisBlock, Cell targetCell);
     public static event PositionUpdated OnPositionUpdated;
     public delegate void DamageTaken(CharacterBlock thisBlock, int damageTaken);
@@ -27,7 +23,6 @@ public class CharacterBlock : Block
     public Animator animator;
     public GameManager gameManager;
     public BlockMovementController movementController;
-    
     [HideInInspector] public int movesPerTurn;
     [HideInInspector] public int maxHealth;
     [HideInInspector] public int visionRange;
@@ -39,13 +34,9 @@ public class CharacterBlock : Block
     private int _curHealth;
     private int _curMovesLeft;
 
-    
-
     private void OnEnable()
     {
         GameManager.OnLevelFinished += StopBehaviour;
-        OnCharacterRanOutOfMoves += gameManager.CallCharacterRanOutOfMoves;
-        OnNextMoveRequired += gameManager.CallNextMoveRequired;
         if (OnCharacterAdded != null)
             OnCharacterAdded();
     }
@@ -53,8 +44,6 @@ public class CharacterBlock : Block
     private void OnDisable()
     {
         GameManager.OnLevelFinished -= StopBehaviour;
-        OnCharacterRanOutOfMoves -= gameManager.CallCharacterRanOutOfMoves;
-        OnNextMoveRequired -= gameManager.CallNextMoveRequired;
         if (OnCharacterRemoved != null)
             OnCharacterRemoved();
     }
@@ -106,19 +95,6 @@ public class CharacterBlock : Block
     public void HealHealth(int healAmount) => PlusHealth(healAmount);
     public void ResetHealth() => _curHealth = maxHealth;
     public void ResetCurrentMoves() => _curMovesLeft = movesPerTurn;
-    public void CallMovesSituation()
-    {
-        if(NoMoreMoves())
-        {
-            if(OnCharacterRanOutOfMoves != null)
-                OnCharacterRanOutOfMoves(this);
-            return;
-        }
-
-        if (OnNextMoveRequired != null)
-            OnNextMoveRequired(this);
-        return;
-    }
     public void CallOnPositionUpdated(Cell toCell) { OnPositionUpdated(this, toCell); }
     private IEnumerator MovementCoroutine(int moveCost, Cell from, Cell to)
     {
@@ -128,17 +104,15 @@ public class CharacterBlock : Block
             Cell collidedBlockCell = gameManager.gridController.GetCellFromCellWithDirection(cell, forwardDirection);
             Cell belowCell = gameManager.gridController.GetCellFromCellWithDirection(collidedBlockCell, GridDirection.Down);
             bool isFinished = false;
-            yield return ExistsCollisionObjectCoroutine(collidedBlockCell, x => isFinished = x);
+            yield return StartCoroutine(ExistsCollisionObjectCoroutine(collidedBlockCell, x => isFinished = x));
             if(isFinished)
             {
-                gameManager.CallBlockEndedBehaviour(this);
                 MinusMoves(moveCost);
                 yield break;
             }
-            yield return ExistsCollisionObjectCoroutine(belowCell, x => isFinished = x);
+            yield return StartCoroutine(ExistsCollisionObjectCoroutine(belowCell, x => isFinished = x));
             if (isFinished)
             {
-                gameManager.CallBlockEndedBehaviour(this);
                 MinusMoves(moveCost);
                 yield break;
             }
@@ -187,9 +161,8 @@ public class CharacterBlock : Block
             }
             animator.SetTrigger("Idle");
         }
-        gameManager.CallBlockEndedBehaviour(this);
         CallOnPositionUpdated(steppedOnCell);
-        yield return ExistsOnStepObjectCoroutine(steppedOnCell);
+        yield return StartCoroutine(ExistsOnStepObjectCoroutine(steppedOnCell));
         MinusMoves(moveCost);
     }
     private IEnumerator ExistsCollisionObjectCoroutine(Cell cell, System.Action<bool> callback)
@@ -197,32 +170,33 @@ public class CharacterBlock : Block
         ObjectBlock collidedObject = gameManager.objectPlane.GetBlockFromCell(cell);
         if (collidedObject != null && collidedObject.activationBehaviour.GetComponent<IActivationOnCollision>() != null)
         {
-            Debug.Log($"{gameObject.name} waiting for {collidedObject.name} to finish");
+            //Debug.Log($"{gameObject.name} waiting for {collidedObject.name} to finish");
             collidedObject.activationBehaviour.GetComponent<IActivationOnCollision>().OnCollision(collidedObject, this);
             yield return new WaitUntil(() => collidedObject.isFinished == true);
             callback.Invoke(true);
             yield break;
         }
-        Debug.Log($"There is no object at {cell.gridPosition} to wait");
+        //Debug.Log($"There is no object at {cell.gridPosition} to wait");
         callback.Invoke(false);
     }
     private IEnumerator ExistsOnStepObjectCoroutine(Cell cell)
     {
         ObjectBlock onStepObject = gameManager.objectPlane.GetBlockFromCell(cell);
-        if (onStepObject != null && onStepObject.activationBehaviour.GetComponent<IActivationOnStep>() != null)
+        IActivationOnStep trigger = onStepObject?.activationBehaviour.GetComponent<IActivationOnStep>();
+        if (onStepObject != null && trigger != null)
         {
-            Debug.Log($"{gameObject.name} waiting for {onStepObject.name} to finish");
+            trigger.OnStepped(onStepObject, this);
+            //Debug.Log($"{gameObject.name}: Waiting for {onStepObject.name} to finish");
             yield return new WaitUntil(() => onStepObject.isFinished == true);
             yield break;
         }
-        Debug.Log($"There is no object at {cell.gridPosition} to wait");
+        //Debug.Log($"{gameObject.name}: There is no object at {cell.gridPosition} to wait");
     }
     private IEnumerator ActivateForwardCoroutine()
     {
         Cell forwardCell = gameManager.gridController.GetCellFromCellWithDirection(cell, forwardDirection);
         GameObject objectBlock = gameManager.objectPlane.GetCellAndBlockFromCell(forwardCell).block;
         objectBlock.GetComponent<ObjectBlock>().ActivateOnTriggered(this);
-        gameManager.CallBlockEndedBehaviour(this);
         if (objectBlock != null)
             yield return new WaitUntil(() => objectBlock.GetComponent<ObjectBlock>().isFinished == true);
         MinusMoves(1);
@@ -234,7 +208,6 @@ public class CharacterBlock : Block
         animator.SetFloat("Speed Multiplier", movementController.speed);
         yield return new WaitUntil(() => GetComponentInChildren<AttackImpactEventTrigger>().isTriggered);
         yield return new WaitUntil(() => curAttackedEntityCount >= attackedEntityCount);
-        gameManager.CallBlockEndedBehaviour(this);
         MinusMoves(weaponHandler.weapon.usageCost);
     }
     private IEnumerator TakeDamageCoroutine(CharacterBlock fromCharacter, int damageAmount)
@@ -258,8 +231,7 @@ public class CharacterBlock : Block
     private IEnumerator SkipActionCoroutine()
     {
         Cell steppedOnCell = cell;
-        gameManager.CallBlockEndedBehaviour(this);
-        yield return ExistsOnStepObjectCoroutine(steppedOnCell);
+        yield return StartCoroutine(ExistsOnStepObjectCoroutine(steppedOnCell));
         MinusMoves(1);
     }
     private void MinusHealth(int amount)
@@ -285,18 +257,21 @@ public class CharacterBlock : Block
     private bool HealthIsZero() { return _curHealth == 0; }
     private void MinusMoves(int movesNum)
     {
-        if (movesNum < 0) { return; }
+        if (NoMoreMoves()) { return; }
         _curMovesLeft -= movesNum;
         if (_curMovesLeft < 0) { _curMovesLeft = 0; }
-
-        CallMovesSituation();
+        GoToNextMoveOrTurn();
     }
-    private void PlusMoves(int movesNum)
+    private void GoToNextMoveOrTurn()
     {
-        if (movesNum < 0) { return; }
-        _curMovesLeft += movesNum;
+        if (NoMoreMoves())
+        {
+            gameManager.CallCharacterRanOutOfMoves(this);
+            return;
+        }
+        gameManager.CallCharacterRequiresNextMove(this);
+        return;
     }
-    private void ResetMovesPerTurn() { _curMovesLeft = movesPerTurn; }
     private bool NoMoreMoves() { return _curMovesLeft == 0; }
     private void StopBehaviour() => StopAllCoroutines();
     private void OnDrawGizmos()

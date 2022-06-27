@@ -59,7 +59,8 @@ public class TerrainPlane : MonoBehaviour
     public Block GetBlockFromCell(Cell cell)
     {
         Block result = null;
-        result = grid[cell.gridPosition.y, cell.gridPosition.z, cell.gridPosition.x].block?.GetComponent<Block>();
+        if(GetCellAndBlockFromCell(cell).block != null)
+        result = GetCellAndBlockFromCell(cell).block.GetComponent<Block>();
         return result;
     }
     public CellAndBlock GetCellAndBlockFromCell(Cell cell)

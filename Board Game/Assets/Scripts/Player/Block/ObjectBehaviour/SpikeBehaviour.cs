@@ -30,7 +30,6 @@ public class SpikeBehaviour : MonoBehaviour, IActivationOnStep, IDamageOnActivat
         // Trigger sound effect
 
         yield return new WaitUntil(() => curAttackedCharacterCount >= attackedCharacterCount);
-        gameManager.CallBlockEndedBehaviour(objectBlock);
         objectBlock.isFinished = true;
     }
 

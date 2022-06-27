@@ -36,7 +36,6 @@ public class DestroyableBehaviour : MonoBehaviour, IDestroyableOnAttacked
         yield return null;
 
         attackingBlock.curAttackedEntityCount++;
-        gameManager.CallBlockEndedBehaviour(self);
         self.isFinished = true;
     }
 
@@ -48,7 +47,6 @@ public class DestroyableBehaviour : MonoBehaviour, IDestroyableOnAttacked
 
         yield return null;
         attackingBlock.curAttackedEntityCount++;
-        gameManager.CallBlockEndedBehaviour(self);
         self.isFinished = true;
         Destroy(self.gameObject);
     }

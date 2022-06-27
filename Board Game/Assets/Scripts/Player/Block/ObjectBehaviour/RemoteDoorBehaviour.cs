@@ -33,7 +33,6 @@ public class RemoteDoorBehaviour : MonoBehaviour, IRemoteActivation
 
         SetPassableBool(true);
         yield return null;
-        gameManager.CallBlockEndedBehaviour(self);
         self.isFinished = true;
     }
 
@@ -43,7 +42,6 @@ public class RemoteDoorBehaviour : MonoBehaviour, IRemoteActivation
 
         SetPassableBool(false);
         yield return null;
-        gameManager.CallBlockEndedBehaviour(self);
         self.isFinished = true;
     }
 

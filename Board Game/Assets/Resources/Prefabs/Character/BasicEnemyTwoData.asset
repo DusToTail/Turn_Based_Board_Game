@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movesPerTurn: 2
   maxHealth: 1
-  visionRange: 3
+  visionRange: 5
   defaultWeapon: {fileID: 11400000, guid: d040432dd1279e744b0a1901ecdf85ae, type: 2}
   soundEffects:
   - audioName: Movement
