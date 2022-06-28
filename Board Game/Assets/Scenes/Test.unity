@@ -1100,6 +1100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
+  audioHandler: {fileID: 0}
   maxHealth: 2
 --- !u!1 &24614042
 GameObject:
@@ -11104,7 +11105,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &253564342
 Transform:
   m_ObjectHideFlags: 0
@@ -50940,6 +50941,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
+  audioHandler: {fileID: 0}
+  model: {fileID: 0}
   isOpen: 0
 --- !u!4 &1147313516
 Transform:
@@ -69146,6 +69149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   toBeTriggeredBlock: {fileID: 1481665514}
+  audioHandler: {fileID: 0}
 --- !u!1 &1527580179
 GameObject:
   m_ObjectHideFlags: 0
