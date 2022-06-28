@@ -60,8 +60,8 @@ public class CharacterBlock : Block
         maxHealth = characterData.maxHealth;
         visionRange = characterData.visionRange;
         weaponHandler.weapon.data = characterData.defaultWeapon;
+        // TODO: Initialize according to level design
         weaponHandler.weapon.InitializeWeapon();
-        audioHandler.InitializeAudioSources(characterData.soundEffects);
     }
 
     public override void RotateHorizontally(Rotations rotation)

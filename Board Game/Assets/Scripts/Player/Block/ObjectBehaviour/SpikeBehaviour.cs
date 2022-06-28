@@ -6,6 +6,7 @@ public class SpikeBehaviour : MonoBehaviour, IActivationOnStep, IDamageOnActivat
 {
     public GameManager gameManager;
     public WeaponHandler weaponHandler;
+    public AudioHandler audioHandler;
 
     public int attackedCharacterCount { get; set; }
     public int curAttackedCharacterCount { get; set; }
@@ -28,7 +29,7 @@ public class SpikeBehaviour : MonoBehaviour, IActivationOnStep, IDamageOnActivat
 
         weaponHandler.UseWeapon(objectBlock);
         // Trigger sound effect
-
+        audioHandler.Play("Attack");
         yield return new WaitUntil(() => curAttackedCharacterCount >= attackedCharacterCount);
         objectBlock.isFinished = true;
     }

@@ -7,6 +7,7 @@ using UnityEngine;
 /// </summary>
 public class RevealAreaSkill : MonoBehaviour
 {
+    public AudioHandler audioHandler;
     public Transform moveTransform;
     public Transform from;
     public Transform controlPoint;
@@ -66,6 +67,9 @@ public class RevealAreaSkill : MonoBehaviour
         to.rotation = Quaternion.LookRotation(Vector3.up, Vector3.left);
         controlPoint.position = atCell.worldPosition - Vector3.up * 10;
         controlPoint.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
+
+        // Play sound effect
+        audioHandler.Play("Reveal");
 
         // movement depends on t
         // t depends on x

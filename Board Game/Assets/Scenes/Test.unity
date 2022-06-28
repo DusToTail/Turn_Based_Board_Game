@@ -1764,6 +1764,7 @@ MonoBehaviour:
   id: 400
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 444538591}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -6106,6 +6107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   weaponHandler: {fileID: 1907626265}
+  audioHandler: {fileID: 0}
 --- !u!1 &130084164
 GameObject:
   m_ObjectHideFlags: 0
@@ -10618,6 +10620,7 @@ MonoBehaviour:
   id: 201
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1420685871}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -10863,6 +10866,7 @@ MonoBehaviour:
   id: 201
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1608707928}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -11366,6 +11370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   weaponHandler: {fileID: 365092454}
+  audioHandler: {fileID: 0}
 --- !u!1 &259036533
 GameObject:
   m_ObjectHideFlags: 0
@@ -11789,6 +11794,7 @@ MonoBehaviour:
   id: 300
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1980137806}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 1
   isFinished: 0
@@ -12267,6 +12273,7 @@ MonoBehaviour:
   id: 201
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 204105976}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -12640,6 +12647,7 @@ MonoBehaviour:
   id: 203
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1525997390}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -13581,7 +13589,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 5120
+    m_Bits: 5121
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -15321,6 +15329,7 @@ MonoBehaviour:
   id: 530
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1202005810}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -15559,6 +15568,7 @@ MonoBehaviour:
   id: 400
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1241979995}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -19528,6 +19538,7 @@ MonoBehaviour:
   id: 300
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1331360264}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 1
   isFinished: 0
@@ -19999,6 +20010,7 @@ MonoBehaviour:
   id: 300
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1597736363}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 1
   isFinished: 0
@@ -20102,6 +20114,7 @@ MonoBehaviour:
   id: 400
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1360987275}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -23054,6 +23067,7 @@ MonoBehaviour:
   id: 201
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 633619592}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -32140,6 +32154,7 @@ MonoBehaviour:
   id: 300
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1395170276}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 1
   isFinished: 0
@@ -33869,7 +33884,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 5120
+    m_Bits: 5121
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -36202,6 +36217,7 @@ MonoBehaviour:
   id: 400
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1367384909}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -37768,6 +37784,7 @@ MonoBehaviour:
   id: 400
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 38700991}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -38573,6 +38590,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 0.01}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &902144103 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2700783368356208252, guid: 0fc0238f7cdce5646991e3b3d2d58e9b, type: 3}
+  m_PrefabInstance: {fileID: 6715209505047184118}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8098187f9b092ac439239a072283cb21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &902790816
 GameObject:
   m_ObjectHideFlags: 0
@@ -39412,6 +39440,7 @@ MonoBehaviour:
   id: 201
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1071525682}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -39796,7 +39825,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 4097
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -40634,6 +40663,7 @@ MonoBehaviour:
   id: 400
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1328141649}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -41824,7 +41854,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 8183
+    m_Bits: 5633
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -47014,6 +47044,7 @@ MonoBehaviour:
   id: 202
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 23225360}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -47428,7 +47459,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 5120
+    m_Bits: 5121
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -47993,6 +48024,7 @@ MonoBehaviour:
   id: 201
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 2063156802}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -48979,6 +49011,7 @@ MonoBehaviour:
   id: 400
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 2059129188}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -51307,6 +51340,7 @@ MonoBehaviour:
   id: 201
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1207200456}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -51940,6 +51974,7 @@ MonoBehaviour:
   id: 201
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1919294750}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -54172,6 +54207,7 @@ MonoBehaviour:
   id: 300
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 258982681}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 1
   isFinished: 0
@@ -59816,6 +59852,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   weaponHandler: {fileID: 1517055248}
+  audioHandler: {fileID: 0}
 --- !u!1 &1335752199
 GameObject:
   m_ObjectHideFlags: 0
@@ -62667,6 +62704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   weaponHandler: {fileID: 1734269867}
+  audioHandler: {fileID: 0}
 --- !u!1 &1398217857
 GameObject:
   m_ObjectHideFlags: 0
@@ -64924,7 +64962,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 5120
+    m_Bits: 5121
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -66600,6 +66638,7 @@ MonoBehaviour:
   id: 204
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1147313514}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -71734,6 +71773,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   weaponHandler: {fileID: 1636709385}
+  audioHandler: {fileID: 0}
 --- !u!1 &1601539950
 GameObject:
   m_ObjectHideFlags: 0
@@ -76894,6 +76934,7 @@ MonoBehaviour:
   id: 300
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 129151087}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 1
   isFinished: 0
@@ -82273,6 +82314,7 @@ MonoBehaviour:
   id: 201
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 2045295736}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -83575,6 +83617,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   weaponHandler: {fileID: 860574598}
+  audioHandler: {fileID: 0}
 --- !u!1 &1893109770
 GameObject:
   m_ObjectHideFlags: 0
@@ -87476,6 +87519,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   weaponHandler: {fileID: 2062777425}
+  audioHandler: {fileID: 0}
 --- !u!1 &1980403678
 GameObject:
   m_ObjectHideFlags: 0
@@ -88773,6 +88817,7 @@ MonoBehaviour:
   id: 300
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1891122545}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 1
   isFinished: 0
@@ -88876,6 +88921,7 @@ MonoBehaviour:
   id: 201
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1977669953}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -92369,6 +92415,7 @@ MonoBehaviour:
   id: 400
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 1893109770}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -94256,6 +94303,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1630875268}
     - target: {fileID: 3342998143237366190, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
+      propertyPath: levelAudioHandler
+      value: 
+      objectReference: {fileID: 902144103}
+    - target: {fileID: 3342998143237366190, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
       propertyPath: remoteDoorManager
       value: 
       objectReference: {fileID: 1406916597}
@@ -94263,6 +94314,18 @@ PrefabInstance:
       propertyPath: remoteTriggerManager
       value: 
       objectReference: {fileID: 1739477403}
+    - target: {fileID: 3342998143237366190, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
+      propertyPath: levelsAudio.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3342998143237366190, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
+      propertyPath: levelsAudio.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: f92c9f99a0047ba438d57fcef2c5dd2d, type: 2}
+    - target: {fileID: 3342998143237366190, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
+      propertyPath: levelsAudio.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: f92c9f99a0047ba438d57fcef2c5dd2d, type: 2}
     - target: {fileID: 3342998143237366191, guid: 1e9fd8c1ec4dd2d48ba2f5be11597fa4, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -94774,9 +94837,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2700783368356208252, guid: 0fc0238f7cdce5646991e3b3d2d58e9b, type: 3}
+      propertyPath: audioData
+      value: 
+      objectReference: {fileID: 11400000, guid: f92c9f99a0047ba438d57fcef2c5dd2d, type: 2}
     - target: {fileID: 7487983093105813904, guid: 0fc0238f7cdce5646991e3b3d2d58e9b, type: 3}
       propertyPath: m_Name
-      value: AudioManager
+      value: LevelAudio
       objectReference: {fileID: 0}
     - target: {fileID: 7761711440698053397, guid: 0fc0238f7cdce5646991e3b3d2d58e9b, type: 3}
       propertyPath: m_RootOrder

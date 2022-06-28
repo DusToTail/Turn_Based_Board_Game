@@ -9,6 +9,7 @@ using UnityEngine;
 public class ObjectBlock : Block
 {
     public GameObject activationBehaviour;
+    public AudioHandler audioHandler;
     public GameManager gameManager;
     public bool isPassable;
     public bool isFinished;

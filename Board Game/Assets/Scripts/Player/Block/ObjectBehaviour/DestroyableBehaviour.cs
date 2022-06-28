@@ -5,6 +5,7 @@ using UnityEngine;
 public class DestroyableBehaviour : MonoBehaviour, IDestroyableOnAttacked
 {
     public GameManager gameManager;
+    public AudioHandler audioHandler;
     public int maxHealth;
     private int curHealth;
 
@@ -44,8 +45,9 @@ public class DestroyableBehaviour : MonoBehaviour, IDestroyableOnAttacked
         // Trigger animation
 
         // Trigger sound effect
+        audioHandler.Play("Break");
 
-        yield return null;
+        yield return new WaitForSeconds(1);
         attackingBlock.curAttackedEntityCount++;
         self.isFinished = true;
         Destroy(self.gameObject);

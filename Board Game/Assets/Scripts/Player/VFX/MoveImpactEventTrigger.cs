@@ -6,6 +6,7 @@ public class MoveImpactEventTrigger : AnimationEventTrigger
 {
     [SerializeField] private Transform pivot;
     [SerializeField] private Transform spawnPosition;
+    [SerializeField] private AudioHandler audioHandler;
 
     public void MoveImpact() => Trigger();
 
@@ -14,6 +15,7 @@ public class MoveImpactEventTrigger : AnimationEventTrigger
         Quaternion rotation = Quaternion.LookRotation((spawnPosition.position - pivot.position).normalized);
         GameObject effect = Instantiate(prefab, spawnPosition.position, rotation);
         _effects.Add(effect);
+        audioHandler.Play("Move");
     }
 
 }

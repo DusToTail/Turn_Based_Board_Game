@@ -7,6 +7,7 @@ public class AttackImpactEventTrigger : AnimationEventTrigger
     [SerializeField] private Transform pivot;
     [SerializeField] private Transform spawnPosition;
     [SerializeField] private WeaponHandler weaponHandler;
+    [SerializeField] private AudioHandler audioHandler;
     [SerializeField] private Block userBlock;
 
     public bool isTriggered { get; set; }
@@ -18,12 +19,12 @@ public class AttackImpactEventTrigger : AnimationEventTrigger
         Quaternion rotation = Quaternion.LookRotation((spawnPosition.position - pivot.position).normalized);
         GameObject effect = Instantiate(prefab, spawnPosition.position, rotation);
         _effects.Add(effect);
+        audioHandler.Play("Attack");
 
-        if(userBlock is CharacterBlock characterBlock)
+        if (userBlock is CharacterBlock characterBlock)
             weaponHandler.UseWeapon(characterBlock);
         else if(userBlock is ObjectBlock objectBlock)
             weaponHandler.UseWeapon(objectBlock);
-
         isTriggered = true;
     }
 

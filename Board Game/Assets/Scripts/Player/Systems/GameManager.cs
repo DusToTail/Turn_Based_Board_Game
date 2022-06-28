@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    public AudioHandler levelAudioHandler;
+    public AudioScriptableObject[] levelsAudio;
     public UIController ui;
     public GridController gridController;
     public TerrainPlane terrainPlane;
@@ -16,7 +18,6 @@ public class GameManager : MonoBehaviour
     public StairsManager stairsManager;
     public RemoteTriggerManager remoteTriggerManager;
     public RemoteDoorManager remoteDoorManager;
-
     public LevelDesign currentLevelDesign;
 
     public const string levelFileNameFormat = "Level";
@@ -108,6 +109,10 @@ public class GameManager : MonoBehaviour
     {
         _currentPrepCount = 0;
         loadLevelIndex = levelIndex;
+        levelAudioHandler.audioData = levelsAudio[levelIndex];
+        levelAudioHandler.InitializeAudioSources();
+        levelAudioHandler.Stop("Level Theme");
+        levelAudioHandler.Stop("Level Ambience");
         if (gridController == null || terrainPlane == null || characterPlane == null)
         {
             Debug.Log("Grid is not initialized in the editor");
@@ -169,6 +174,8 @@ public class GameManager : MonoBehaviour
     public void CallLevelStarted()
     {
         Debug.Log("Game Manager: Level Started");
+        levelAudioHandler.Play("Level Theme");
+        levelAudioHandler.Play("Level Ambience");
         if (OnLevelStarted != null)
             OnLevelStarted();
     }

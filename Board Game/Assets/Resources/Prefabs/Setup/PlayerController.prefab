@@ -367,6 +367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8098187f9b092ac439239a072283cb21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioData: {fileID: 11400000, guid: b830561f227601447bd483289cf86ffe, type: 2}
   datas: []
   sources: []
 --- !u!1 &7581973232906207416
@@ -538,6 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f4e6c83d3855f041b5c0c1365cbcfa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioHandler: {fileID: 3418429847999567561}
   moveTransform: {fileID: 1809598880}
   from: {fileID: 461549522}
   controlPoint: {fileID: 2052637275}

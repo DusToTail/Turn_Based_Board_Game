@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71823f144ad43d04d9cce64e4689e237, type: 3}
+  m_Name: PlayerAudioForestData
+  m_EditorClassIdentifier: 
+  sources:
+  - audioName: Move
+    clip: {fileID: 8300000, guid: 9e3f6e71e1c29e841b943e91b1721698, type: 3}
+    volume: 0.1
+    pitch: 1
+    isLoop: 0
+  - audioName: Attack
+    clip: {fileID: 8300000, guid: ef57fda6a044ffe4785e48420f2b23e2, type: 3}
+    volume: 0.2
+    pitch: 1
+    isLoop: 0
+  - audioName: Die
+    clip: {fileID: 0}
+    volume: 0.2
+    pitch: 1
+    isLoop: 0

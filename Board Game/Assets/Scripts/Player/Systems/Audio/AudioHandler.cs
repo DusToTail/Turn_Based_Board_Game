@@ -7,24 +7,46 @@ using UnityEngine;
 /// </summary>
 public class AudioHandler : MonoBehaviour
 {
-    public AudioData[] datas;
-    public AudioSource[] sources;
+    public AudioScriptableObject audioData;
+    [HideInInspector] public AudioData[] datas;
+    [HideInInspector] public AudioSource[] sources;
 
-    public void InitializeAudioSources(AudioData[] dataArray)
+    private void Start()
     {
-        datas = new AudioData[dataArray.Length];
-        sources = new AudioSource[dataArray.Length];
+        InitializeAudioSources();
+    }
 
-        for(int i = 0; i < dataArray.Length; i++)
+    public void InitializeAudioSources()
+    {
+        for(int i = 0; i < sources.Length; i++)
         {
-            datas[i] = dataArray[i];
+            Destroy(sources[i]);
+        }
+
+        datas = new AudioData[audioData.sources.Length];
+        sources = new AudioSource[audioData.sources.Length];
+
+        for(int i = 0; i < audioData.sources.Length; i++)
+        {
+            datas[i] = audioData.sources[i];
             AudioSource source = gameObject.AddComponent<AudioSource>();
-            source.volume = dataArray[i].volume;
-            source.clip = dataArray[i].clip;
-            source.pitch = dataArray[i].pitch;
-            source.loop = dataArray[i].isLoop;
+            source.volume = audioData.sources[i].volume;
+            source.clip = audioData.sources[i].clip;
+            source.pitch = audioData.sources[i].pitch;
+            source.loop = audioData.sources[i].isLoop;
+            source.playOnAwake = false;
             sources[i] = source;
         }
+    }
+    public void Play(string audioName, float volumn, float pitch, bool loop)
+    {
+        AudioSource source = GetSourceFromName(audioName);
+        if (source == null) { return; }
+        source.volume = volumn;
+        source.pitch = pitch;
+        source.loop = loop;
+        Debug.Log($"Play audio called {audioName}");
+        source.Play();
     }
 
     public void Play(string audioName)
@@ -34,7 +56,7 @@ public class AudioHandler : MonoBehaviour
         Debug.Log($"Play audio called {audioName}"); 
         source.Play();
     }
-
+    
     public void Stop(string audioName)
     {
         AudioSource source = GetSourceFromName(audioName);

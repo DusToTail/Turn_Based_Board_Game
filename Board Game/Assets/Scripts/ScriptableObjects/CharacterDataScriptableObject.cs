@@ -9,6 +9,4 @@ public class CharacterDataScriptableObject : ScriptableObject
     public int maxHealth;
     public int visionRange;
     public WeaponScriptableObject defaultWeapon;
-
-    public AudioData[] soundEffects;
 }

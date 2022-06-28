@@ -5,6 +5,8 @@ using UnityEngine;
 public class RemoteDoorBehaviour : MonoBehaviour, IRemoteActivation
 {
     public GameManager gameManager;
+    public AudioHandler audioHandler;
+    public GameObject model;
     public bool isOpen;
 
     private void Start()
@@ -30,7 +32,9 @@ public class RemoteDoorBehaviour : MonoBehaviour, IRemoteActivation
     private IEnumerator OpenDoor(ObjectBlock self, ObjectBlock trigger, CharacterBlock userBlock)
     {
         // Trigger animation
-
+        audioHandler.Play("Open");
+        yield return new WaitForSeconds(3);
+        model.SetActive(false);
         SetPassableBool(true);
         yield return null;
         self.isFinished = true;
@@ -39,7 +43,9 @@ public class RemoteDoorBehaviour : MonoBehaviour, IRemoteActivation
     private IEnumerator CloseDoor(ObjectBlock self, ObjectBlock trigger, CharacterBlock userBlock)
     {
         // Trigger animation
-
+        audioHandler.Play("Close");
+        yield return new WaitForSeconds(3);
+        model.SetActive(true);
         SetPassableBool(false);
         yield return null;
         self.isFinished = true;
