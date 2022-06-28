@@ -376,7 +376,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5ac8da294e25b4644b814d70dfe19196, type: 3}
       propertyPath: m_Name
-      value: DirtBlock
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5ac8da294e25b4644b814d70dfe19196, type: 3}
       propertyPath: m_Layer
@@ -411,3 +411,25 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.0000002, z: 1.0000002}
   m_Center: {x: 0, y: 0, z: 0.5000001}
+--- !u!114 &8154173082554017564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3296666694823950525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffc9a816652b7b488e58031a5f9f990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  opaque: {fileID: 2100000, guid: cc9731235b5984a499837836644196b2, type: 2}
+  transparent: {fileID: 2100000, guid: 7d67a122eef2a9346a53167c925e2949, type: 2}
+  meshRenderer: {fileID: 3945400200934725992}
+  target: {fileID: 0}
+  self: {fileID: 6877765593996939565}
+--- !u!23 &3945400200934725992 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 5ac8da294e25b4644b814d70dfe19196, type: 3}
+  m_PrefabInstance: {fileID: 2378310951202620908}
+  m_PrefabAsset: {fileID: 0}

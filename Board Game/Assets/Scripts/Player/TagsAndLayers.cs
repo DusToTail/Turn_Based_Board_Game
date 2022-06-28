@@ -16,6 +16,7 @@ public class TagsAndLayers
     public static readonly string DISCOVERED_LAYER = "Discovered";
     public static readonly string UNDISCOVERED_LAYER = "Undiscovered";
     public static readonly string NEARLIGHT_LAYER = "NearLight";
+    public static readonly string SEETHROUGH_LAYER = "SeeThrough";
 
 
 

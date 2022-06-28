@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4498308721970921829}
   - component: {fileID: 7491755911662812148}
   - component: {fileID: 1949447719720800873}
+  - component: {fileID: 7641725560517952079}
   m_Layer: 11
   m_Name: Model
   m_TagString: Model
@@ -97,6 +98,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7641725560517952079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2372670484759285620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffc9a816652b7b488e58031a5f9f990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  opaque: {fileID: 2100000, guid: 38fcb939db4d7a244b7321ae869aa75e, type: 2}
+  transparent: {fileID: 2100000, guid: d12cad4b3dace9f4d95fcd2c1a8f243f, type: 2}
+  meshRenderer: {fileID: 7491755911662812148}
+  target: {fileID: 0}
+  self: {fileID: 4406024827266252975}
 --- !u!1 &6377975956786101628
 GameObject:
   m_ObjectHideFlags: 0
@@ -467,6 +485,7 @@ MonoBehaviour:
   id: 530
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 6377975956786101628}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0

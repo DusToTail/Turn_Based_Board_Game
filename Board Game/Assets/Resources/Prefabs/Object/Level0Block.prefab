@@ -55,6 +55,7 @@ MonoBehaviour:
   id: 500
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 8389349334700845728}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -116,6 +117,7 @@ GameObject:
   - component: {fileID: 3362197232852265621}
   - component: {fileID: 1746122035312552410}
   - component: {fileID: 8435931111511960966}
+  - component: {fileID: 6610553040998953979}
   m_Layer: 11
   m_Name: Model
   m_TagString: Model
@@ -201,6 +203,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6610553040998953979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8496091336906160776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffc9a816652b7b488e58031a5f9f990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  opaque: {fileID: 2100000, guid: 0d424d70089792941b7d4450c8dfdae3, type: 2}
+  transparent: {fileID: 2100000, guid: 22fd4b65cdde8834ea2b6e67a4262834, type: 2}
+  meshRenderer: {fileID: 1746122035312552410}
+  target: {fileID: 0}
+  self: {fileID: 1282034604541646707}
 --- !u!1 &8548606091552180664
 GameObject:
   m_ObjectHideFlags: 0

@@ -139,6 +139,7 @@ public class CharacterBlock : Block
                 t += Time.deltaTime * movementController.speed;
                 MovementUtilities.MoveQuadraticBezierLerp(transform, one, third, second, t, true);
             }
+            audioHandler.Play("Move");
         }
         else if (movementController.movementType == BlockMovementController.MovementType.Slide)
         {

@@ -55,6 +55,7 @@ MonoBehaviour:
   id: 201
   cellBasedSize: {x: 1, y: 1, z: 1}
   activationBehaviour: {fileID: 2374555619433676130}
+  audioHandler: {fileID: 0}
   gameManager: {fileID: 0}
   isPassable: 0
   isFinished: 0
@@ -461,3 +462,25 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &8206362220769946771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8042419786522900247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffc9a816652b7b488e58031a5f9f990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  opaque: {fileID: 2100000, guid: 6e9c062205df3c442ab96332dcc33699, type: 2}
+  transparent: {fileID: 2100000, guid: 0a36fbb11735a6547b68ba018372492a, type: 2}
+  meshRenderer: {fileID: 8402756341024331458}
+  target: {fileID: 0}
+  self: {fileID: 8926846821000137809}
+--- !u!23 &8402756341024331458 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: f7edcdeb23fa10d48854c97a44ced819, type: 3}
+  m_PrefabInstance: {fileID: 7159883374365510214}
+  m_PrefabAsset: {fileID: 0}

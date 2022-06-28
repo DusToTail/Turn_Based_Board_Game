@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
     public static event PlayerIsFinished OnPlayerIsFinished;
     public delegate void ControlModeSwitched(ControlMode mode);
     public static event ControlModeSwitched OnControlModeSwitched;
+    public delegate void PlayerIsInitialized(PlayerController player);
+    public static event PlayerIsInitialized OnPlayerIsInitialized;
     public ControlMode Mode { get { return _controlMode; } }
     public bool CanControl { get { return _canControl; } }
     [SerializeField] private bool displayGizmos;
@@ -254,6 +256,8 @@ public class PlayerController : MonoBehaviour
             OnControlModeSwitched(_controlMode);
         FindObjectOfType<LightingManager>().playerBlockTransform = playerBlock.transform;
         FindObjectOfType<CameraController>().playerController = this;
+        if(OnPlayerIsInitialized != null)
+            OnPlayerIsInitialized(this);
     }
     private void ResetStats()
     {
